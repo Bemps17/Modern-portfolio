@@ -4,7 +4,7 @@ import { Toaster } from 'sonner'
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
-import { getPayloadClient } from '@/lib/payload'
+import { getPayloadClientSafe } from '@/lib/payload'
 
 import './styles.css'
 
@@ -29,16 +29,18 @@ const spaceGrotesk = Space_Grotesk({
 export const revalidate = 3600
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const payload = await getPayloadClient()
+  const payload = await getPayloadClientSafe()
   let siteName = 'Portfolio'
   let email: string | null = null
 
-  try {
-    const settings = await payload.findGlobal({ slug: 'site-settings' })
-    siteName = settings.siteName || siteName
-    email = settings.email || null
-  } catch {
-    // Globals may be empty before first admin seed.
+  if (payload) {
+    try {
+      const settings = await payload.findGlobal({ slug: 'site-settings' })
+      siteName = settings.siteName || siteName
+      email = settings.email || null
+    } catch {
+      // Globals may be empty before first admin seed.
+    }
   }
 
   return (

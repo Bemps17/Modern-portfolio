@@ -6,13 +6,17 @@ import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { Button } from '@/components/ui/Button'
-import { getPayloadClient } from '@/lib/payload'
+import { getPayloadClientSafe } from '@/lib/payload'
 import type { Media } from '@/payload-types'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayloadClient()
+  const payload = await getPayloadClientSafe()
+  if (!payload) {
+    return { title: 'Portfolio' }
+  }
+
   const [settings, seo] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload.findGlobal({ slug: 'seo-defaults' }).catch(() => null),
@@ -33,20 +37,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const payload = await getPayloadClient()
+  const payload = await getPayloadClientSafe()
 
-  const [settings, featured] = await Promise.all([
-    payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({
-      collection: 'projects',
-      where: {
-        and: [{ status: { equals: 'published' } }, { featured: { equals: true } }],
-      },
-      sort: 'order',
-      depth: 1,
-      limit: 6,
-    }),
-  ])
+  const [settings, featured] = payload
+    ? await Promise.all([
+        payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
+        payload.find({
+          collection: 'projects',
+          where: {
+            and: [{ status: { equals: 'published' } }, { featured: { equals: true } }],
+          },
+          sort: 'order',
+          depth: 1,
+          limit: 6,
+        }),
+      ])
+    : [null, { docs: [] }]
 
   const siteName = settings?.siteName || 'Portfolio'
   const tagline = settings?.tagline || 'Créateur digital'

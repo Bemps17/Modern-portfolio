@@ -4,13 +4,15 @@ import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
-import { getPayloadClient } from '@/lib/payload'
+import { getPayloadClientSafe } from '@/lib/payload'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayloadClient()
-  const settings = await payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
+  const payload = await getPayloadClientSafe()
+  const settings = payload
+    ? await payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
+    : null
   return {
     title: 'À propos',
     description: settings?.aboutIntro || settings?.tagline || 'À propos',
@@ -18,12 +20,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const payload = await getPayloadClient()
-  const [settings, experiences, skills] = await Promise.all([
-    payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({ collection: 'experiences', sort: '-dateStart', limit: 50 }),
-    payload.find({ collection: 'skills', sort: 'name', limit: 100, depth: 1 }),
-  ])
+  const payload = await getPayloadClientSafe()
+  const [settings, experiences, skills] = payload
+    ? await Promise.all([
+        payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
+        payload.find({ collection: 'experiences', sort: '-dateStart', limit: 50 }),
+        payload.find({ collection: 'skills', sort: 'name', limit: 100, depth: 1 }),
+      ])
+    : [null, { docs: [] }, { docs: [] }]
 
   const jsonLd = {
     '@context': 'https://schema.org',

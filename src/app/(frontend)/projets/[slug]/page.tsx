@@ -6,6 +6,7 @@ import { RichTextRenderer } from '@/components/sections/RichTextRenderer'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
+import { isPayloadConfigured } from '@/lib/payload-env'
 import { getPayloadClient } from '@/lib/payload'
 import type { Media, Project } from '@/payload-types'
 
@@ -29,6 +30,8 @@ async function getProject(slug: string): Promise<Project | null> {
 }
 
 export async function generateStaticParams() {
+  if (!isPayloadConfigured()) return []
+
   const payload = await getPayloadClient()
   const projects = await payload.find({
     collection: 'projects',
