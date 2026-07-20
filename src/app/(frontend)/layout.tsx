@@ -1,4 +1,5 @@
 import { Syne, DM_Sans, Space_Grotesk } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
@@ -27,6 +28,20 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const revalidate = 3600
+
+export const metadata: Metadata = {
+  icons: {
+    icon: [
+      { url: '/brand/favicon.svg', type: 'image/svg+xml' },
+      { url: '/brand/favicon.png', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#050505',
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettingsContent()

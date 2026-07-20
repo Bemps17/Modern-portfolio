@@ -30,7 +30,7 @@ export function BottomTabBar() {
                 aria-current={active ? 'page' : undefined}
                 className={cn(
                   'flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition',
-                  active ? 'text-cyan-300' : 'text-[var(--muted)]',
+                  active ? 'text-[var(--accent)]' : 'text-[var(--muted)]',
                 )}
                 href={href}
               >

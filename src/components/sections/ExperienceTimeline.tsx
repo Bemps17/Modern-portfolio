@@ -19,12 +19,12 @@ export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
         const end = experience.current ? 'Présent' : formatDate(experience.dateEnd)
         return (
           <li className="relative" key={experience.id}>
-            <span className="absolute top-1.5 -left-[1.7rem] h-3 w-3 rounded-full bg-cyan-300" />
+            <span className="absolute top-1.5 -left-[1.7rem] h-3 w-3 rounded-full bg-[var(--accent)]" />
             <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--muted)] uppercase">
               {start} — {end}
             </p>
             <h3 className="mt-1 font-[family-name:var(--font-syne)] text-xl font-semibold">{experience.title}</h3>
-            <p className="text-sm text-cyan-200/80">{experience.company}</p>
+            <p className="text-sm text-[var(--accent-soft)]/90">{experience.company}</p>
             <p className="mt-2 text-sm text-[var(--muted)]">{experience.description}</p>
           </li>
         )

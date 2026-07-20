@@ -27,7 +27,7 @@ export function ContactForm() {
           </label>
           <input
             autoComplete="name"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-cyan-300/50"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-[color:var(--accent)]/50"
             id="name"
             name="name"
             required
@@ -40,7 +40,7 @@ export function ContactForm() {
           </label>
           <input
             autoComplete="email"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-cyan-300/50"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-[color:var(--accent)]/50"
             id="email"
             name="email"
             required
@@ -52,7 +52,7 @@ export function ContactForm() {
             Message
           </label>
           <textarea
-            className="min-h-36 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-cyan-300/50"
+            className="min-h-36 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-[color:var(--accent)]/50"
             id="message"
             name="message"
             required

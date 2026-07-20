@@ -36,20 +36,20 @@ export function ProjectGrid({ projects, enableFilters = false }: ProjectGridProp
       {enableFilters && tags.length ? (
         <div className="flex flex-wrap gap-2">
           <button
-            className={cn(!active && 'ring-1 ring-cyan-300/50')}
+            className={cn(!active && 'ring-1 ring-[color:var(--accent)]/50')}
             onClick={() => setActive(null)}
             type="button"
           >
-            <Badge className={!active ? 'text-cyan-200' : undefined}>Tous</Badge>
+            <Badge className={!active ? 'text-[var(--accent-soft)]' : undefined}>Tous</Badge>
           </button>
           {tags.map((tag) => (
             <button
-              className={cn(active === tag && 'ring-1 ring-cyan-300/50')}
+              className={cn(active === tag && 'ring-1 ring-[color:var(--accent)]/50')}
               key={tag}
               onClick={() => setActive(tag)}
               type="button"
             >
-              <Badge className={active === tag ? 'text-cyan-200' : undefined}>{tag}</Badge>
+              <Badge className={active === tag ? 'text-[var(--accent-soft)]' : undefined}>{tag}</Badge>
             </button>
           ))}
         </div>

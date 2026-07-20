@@ -33,7 +33,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     typeof project.cover === 'object' && project.cover?.alt ? project.cover.alt : project.title
 
   return (
-    <GlassCard as="article" className="group overflow-hidden transition duration-300 hover:scale-[1.01] hover:border-cyan-300/30">
+    <GlassCard as="article" className="group overflow-hidden transition duration-300 hover:scale-[1.01] hover:border-[color:var(--accent)]/30">
       <Link className="block" href={`/projets/${project.slug}`}>
         <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
           {coverUrl ? (

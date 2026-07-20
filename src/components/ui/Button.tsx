@@ -16,10 +16,10 @@ type ButtonProps = {
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-cyan-400 to-violet-400 text-black hover:brightness-110 focus-visible:ring-cyan-300',
+    'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-secondary)] text-white hover:brightness-110 focus-visible:ring-[var(--accent-soft)]',
   ghost: 'bg-transparent text-white hover:bg-white/10 focus-visible:ring-white/40',
   glass:
-    'border border-white/15 bg-white/10 text-white backdrop-blur-md hover:bg-white/15 focus-visible:ring-white/40',
+    'border border-white/15 bg-white/10 text-white backdrop-blur-md hover:border-[color:var(--accent)]/35 hover:bg-white/15 focus-visible:ring-white/40',
 }
 
 export function Button({
