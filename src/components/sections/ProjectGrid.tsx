@@ -31,9 +31,9 @@ type ProjectGridProps = {
 }
 
 function masonryClass(project: Project, index: number): string {
-  if (project.featured && index === 0) return 'xl:col-span-8 xl:row-span-2'
+  if (project.featured && index === 0) return 'md:col-span-2 xl:col-span-8 xl:row-span-2'
   if (project.featured && index === 1) return 'xl:col-span-4 xl:row-span-2'
-  return 'xl:col-span-4'
+  return 'md:col-span-1 xl:col-span-4'
 }
 
 export function ProjectGrid({
@@ -114,7 +114,7 @@ export function ProjectGrid({
       <div
         className={cn(
           layoutMode === 'masonry'
-            ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-12 xl:auto-rows-[minmax(180px,auto)]'
+            ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-12 xl:auto-rows-[minmax(220px,auto)]'
             : 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3',
         )}
       >

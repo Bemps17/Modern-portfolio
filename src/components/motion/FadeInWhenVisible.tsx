@@ -18,9 +18,9 @@ export function FadeInWhenVisible({ children, className, delay = 0 }: FadeInWhen
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 1, y: 20 }}
       transition={{ duration: 0.5, delay, ease: 'easeOut' }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.08, margin: '0px 0px -80px 0px' }}
       whileInView={{ opacity: 1, y: 0 }}
     >
       {children}

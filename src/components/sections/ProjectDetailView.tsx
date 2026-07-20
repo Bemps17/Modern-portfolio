@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -62,10 +61,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
         <div className="lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           <div className="lg:sticky lg:top-24 lg:self-start">
             {cover?.url ? (
-              <motion.div
-                className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 lg:aspect-[3/4]"
-                layoutId={`project-cover-${project.slug}`}
-              >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 lg:aspect-[3/4]">
                 <Image
                   alt={cover.alt || project.title}
                   className="object-cover"
@@ -74,7 +70,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
                   sizes="(max-width: 1024px) 100vw, 45vw"
                   src={cover.url}
                 />
-              </motion.div>
+              </div>
             ) : null}
           </div>
 

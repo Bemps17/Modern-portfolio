@@ -100,12 +100,11 @@ export function ProjectCard({ project, large = false, enablePreview = false }: P
           />
         ) : null}
         <Link className="relative block" data-cursor="view" href={`/projets/${project.slug}`}>
-          <motion.div
+          <div
             className={cn(
               'relative overflow-hidden bg-white/5',
               large ? 'aspect-[16/11] min-h-[280px]' : 'aspect-[16/10]',
             )}
-            layoutId={`project-cover-${project.slug}`}
           >
             {coverUrl ? (
               <Image
@@ -116,7 +115,7 @@ export function ProjectCard({ project, large = false, enablePreview = false }: P
                 src={coverUrl}
               />
             ) : null}
-          </motion.div>
+          </div>
           <div className="space-y-3 p-5">
             <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">{project.title}</h3>
             <p className="line-clamp-2 text-sm text-[var(--muted)]">{project.excerpt}</p>
@@ -136,7 +135,9 @@ export function ProjectCard({ project, large = false, enablePreview = false }: P
           className="pointer-events-none fixed z-[60] hidden h-36 w-52 overflow-hidden rounded-xl border border-white/15 shadow-2xl lg:block"
           style={{ left: preview.x + 18, top: preview.y - 40 }}
         >
-          <Image alt="" className="object-cover" fill src={coverUrl} />
+          <div className="relative h-full w-full">
+            <Image alt="" className="object-cover" fill src={coverUrl} />
+          </div>
         </div>
       ) : null}
     </motion.div>

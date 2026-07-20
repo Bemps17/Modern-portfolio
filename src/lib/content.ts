@@ -51,7 +51,15 @@ export async function getFeaturedProjects(): Promise<Project[]> {
       depth: 1,
       limit: 6,
     })
-    return result.docs
+    if (result.docs.length > 0) return result.docs
+    const fallback = await payload.find({
+      collection: 'projects',
+      where: { status: { equals: 'published' } },
+      sort: 'order',
+      depth: 1,
+      limit: 6,
+    })
+    return fallback.docs
   }
   return portfolioFallback.projects.filter((project) => project.featured)
 }

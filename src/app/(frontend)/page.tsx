@@ -83,20 +83,18 @@ export default async function HomePage() {
       </div>
       <SectionDivider />
       <div className="px-6 py-20 xl:px-16">
-        <FadeInWhenVisible>
-          <SectionTitle
-            editorial
-            eyebrow="Portfolio"
-            subtitle="Une sélection de réalisations récentes."
-            title="Projets à la une"
-          />
-          <ProjectGrid breatheFeatured enablePreview layoutMode="masonry" projects={featured} />
-          <div className="mt-10">
-            <Button href="/projets" variant="glass">
-              Tous les projets
-            </Button>
-          </div>
-        </FadeInWhenVisible>
+        <SectionTitle
+          editorial
+          eyebrow="Portfolio"
+          subtitle="Une sélection de réalisations récentes."
+          title="Projets à la une"
+        />
+        <ProjectGrid breatheFeatured layoutMode="masonry" projects={featured} />
+        <div className="mt-10">
+          <Button href="/projets" variant="glass">
+            Tous les projets
+          </Button>
+        </div>
       </div>
       <SectionDivider />
       <div className="px-6 pb-20 xl:px-16">
