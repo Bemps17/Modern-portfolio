@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { SITE_VERSION } from '@/lib/site-version'
+
 type FooterProps = {
   siteName: string
   email?: string | null
@@ -15,7 +17,15 @@ export function Footer({ siteName, email }: FooterProps) {
             {email}
           </Link>
         ) : null}
-        <p className="text-xs text-[var(--muted)]">© {new Date().getFullYear()}</p>
+        <div className="flex items-center gap-3 text-xs text-[var(--muted)]">
+          <span>© {new Date().getFullYear()}</span>
+          <span aria-hidden className="text-white/15">
+            ·
+          </span>
+          <span className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-wider text-[var(--muted)]/45 tabular-nums">
+            v{SITE_VERSION}
+          </span>
+        </div>
       </div>
     </footer>
   )
