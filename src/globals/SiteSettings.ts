@@ -1,5 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
+import { revalidateGlobals } from '../lib/revalidate'
+
 const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user)
 
 export const SiteSettings: GlobalConfig = {
@@ -78,4 +80,7 @@ export const SiteSettings: GlobalConfig = {
       },
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobals],
+  },
 }

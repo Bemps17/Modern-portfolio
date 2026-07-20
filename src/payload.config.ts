@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -16,6 +17,8 @@ import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN
 
 export default buildConfig({
   admin: {
@@ -38,4 +41,16 @@ export default buildConfig({
     push: process.env.NODE_ENV !== 'production',
   }),
   sharp,
+  plugins: [
+    ...(blobToken
+      ? [
+          vercelBlobStorage({
+            collections: {
+              media: true,
+            },
+            token: blobToken,
+          }),
+        ]
+      : []),
+  ],
 })

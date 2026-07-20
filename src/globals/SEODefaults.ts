@@ -1,5 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
+import { revalidateGlobals } from '../lib/revalidate'
+
 const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user)
 
 export const SEODefaults: GlobalConfig = {
@@ -30,4 +32,7 @@ export const SEODefaults: GlobalConfig = {
       relationTo: 'media',
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobals],
+  },
 }

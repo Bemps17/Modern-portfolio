@@ -1,62 +1,81 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+import type { Metadata } from 'next'
 
-import config from '@/payload.config'
-import './styles.css'
+import { Hero } from '@/components/sections/Hero'
+import { ProjectGrid } from '@/components/sections/ProjectGrid'
+import { Container } from '@/components/ui/Container'
+import { SectionTitle } from '@/components/ui/SectionTitle'
+import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
+import { Button } from '@/components/ui/Button'
+import { getPayloadClient } from '@/lib/payload'
+import type { Media } from '@/payload-types'
+
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const payload = await getPayloadClient()
+  const [settings, seo] = await Promise.all([
+    payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
+    payload.findGlobal({ slug: 'seo-defaults' }).catch(() => null),
+  ])
+
+  const og =
+    seo?.ogImage && typeof seo.ogImage === 'object' ? (seo.ogImage as Media).url || undefined : undefined
+
+  return {
+    title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
+    description: seo?.defaultDescription || settings?.tagline || undefined,
+    openGraph: {
+      title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
+      description: seo?.defaultDescription || settings?.tagline || undefined,
+      images: og ? [{ url: og }] : undefined,
+    },
+  }
+}
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+  const payload = await getPayloadClient()
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const [settings, featured] = await Promise.all([
+    payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
+    payload.find({
+      collection: 'projects',
+      where: {
+        and: [{ status: { equals: 'published' } }, { featured: { equals: true } }],
+      },
+      sort: 'order',
+      depth: 1,
+      limit: 6,
+    }),
+  ])
+
+  const siteName = settings?.siteName || 'Portfolio'
+  const tagline = settings?.tagline || 'Créateur digital'
+  const aboutIntro = settings?.aboutIntro
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
+    <>
+      <Hero aboutIntro={aboutIntro} siteName={siteName} tagline={tagline} />
+      <Container className="py-20">
+        <FadeInWhenVisible>
+          <SectionTitle
+            eyebrow="Portfolio"
+            subtitle="Une sélection de réalisations récentes."
+            title="Projets à la une"
           />
-        </picture>
-        {!user || !('email' in user) ? (
-          <h1>Welcome to your new project.</h1>
-        ) : (
-          <h1>Welcome back, {user.email}</h1>
-        )}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+          <ProjectGrid projects={featured.docs} />
+          <div className="mt-10">
+            <Button href="/projets" variant="glass">
+              Tous les projets
+            </Button>
+          </div>
+        </FadeInWhenVisible>
+      </Container>
+      <Container className="pb-20">
+        <FadeInWhenVisible>
+          <SectionTitle title="Travaillons ensemble" subtitle="Un projet en tête ? Écrivons-nous." />
+          <Button href="/contact">Me contacter</Button>
+        </FadeInWhenVisible>
+      </Container>
+    </>
   )
 }

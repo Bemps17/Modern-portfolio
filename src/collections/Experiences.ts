@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { revalidateContentPages } from '../lib/revalidate'
+
 const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user)
 
 export const Experiences: CollectionConfig = {
@@ -59,4 +61,7 @@ export const Experiences: CollectionConfig = {
       required: true,
     },
   ],
+  hooks: {
+    afterChange: [revalidateContentPages],
+  },
 }

@@ -1,6 +1,7 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { slugify } from '../lib/utils'
+import { revalidateProjects } from '../lib/revalidate'
 
 const isAuthenticated: Access = ({ req: { user } }) => Boolean(user)
 
@@ -154,5 +155,6 @@ export const Projects: CollectionConfig = {
         return data
       },
     ],
+    afterChange: [revalidateProjects],
   },
 }
