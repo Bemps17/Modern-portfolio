@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useState } from 'react'
 
+import { Breathing } from '@/components/motion/Breathing'
 import { ProjectCard } from '@/components/sections/ProjectCard'
 import { Badge } from '@/components/ui/Badge'
 import type { Project } from '@/payload-types'
@@ -24,9 +25,10 @@ const STACK_LABELS: Record<string, string> = {
 type ProjectGridProps = {
   projects: Project[]
   enableFilters?: boolean
+  breatheFeatured?: boolean
 }
 
-export function ProjectGrid({ projects, enableFilters = false }: ProjectGridProps) {
+export function ProjectGrid({ projects, enableFilters = false, breatheFeatured = false }: ProjectGridProps) {
   const [active, setActive] = useState<string | null>(null)
 
   const tags = useMemo(() => {
@@ -96,9 +98,17 @@ export function ProjectGrid({ projects, enableFilters = false }: ProjectGridProp
         </div>
       ) : null}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+        {filtered.map((project, index) => {
+          const card = <ProjectCard project={project} />
+          if (breatheFeatured && index === 0) {
+            return <Breathing key={project.id}>{card}</Breathing>
+          }
+          return (
+            <div key={project.id}>
+              {card}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

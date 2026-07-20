@@ -26,12 +26,21 @@ export function MouseGlow() {
   if (!enabled) return null
 
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-0 transition-[background] duration-300 ease-out"
-      style={{
-        background: `radial-gradient(600px circle at ${position.x}% ${position.y}%, var(--accent-glow) 0%, transparent 65%)`,
-      }}
-    />
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[1] transition-[background] duration-500 ease-out"
+        style={{
+          background: `radial-gradient(720px circle at ${position.x}% ${position.y}%, rgba(255, 107, 26, 0.09) 0%, transparent 62%)`,
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[1] transition-[background] duration-200 ease-out"
+        style={{
+          background: `radial-gradient(280px circle at ${position.x}% ${position.y}%, rgba(255, 179, 71, 0.12) 0%, transparent 70%)`,
+        }}
+      />
+    </>
   )
 }

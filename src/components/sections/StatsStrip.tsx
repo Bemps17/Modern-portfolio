@@ -1,6 +1,6 @@
 'use client'
 
-import { CountUp } from '@/components/motion/CountUp'
+import { Odometer } from '@/components/motion/Odometer'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { GlassCard } from '@/components/ui/GlassCard'
 
@@ -25,7 +25,7 @@ export function StatsStrip({ projectCount, skillCount, yearsExperience }: StatsS
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {items.map((item) => (
           <GlassCard className="p-6 text-center" key={item.label}>
-            <CountUp suffix={item.suffix} value={item.value} />
+            <Odometer suffix={item.suffix} value={item.value} />
             <p className="mt-2 font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--muted)] uppercase">
               {item.label}
             </p>

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 
 import { BootSequence } from '@/components/motion/BootSequence'
+import { SectionDivider } from '@/components/motion/RevealText'
 import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
 import { StatsStrip } from '@/components/sections/StatsStrip'
+import { TechMarquee } from '@/components/sections/TechMarquee'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
@@ -59,10 +61,12 @@ export default async function HomePage() {
   const siteName = settings?.siteName || 'Portfolio'
   const tagline = settings?.tagline || 'Créateur digital'
   const aboutIntro = settings?.aboutIntro
+  const techItems = skills.map((skill) => skill.name)
 
   return (
     <BootSequence>
       <Hero aboutIntro={aboutIntro} siteName={siteName} tagline={tagline} />
+      <TechMarquee items={techItems} />
       <Container className="py-16">
         <FadeInWhenVisible>
           <SectionTitle
@@ -77,6 +81,7 @@ export default async function HomePage() {
           />
         </FadeInWhenVisible>
       </Container>
+      <SectionDivider />
       <Container className="py-20">
         <FadeInWhenVisible>
           <SectionTitle
@@ -84,7 +89,7 @@ export default async function HomePage() {
             subtitle="Une sélection de réalisations récentes."
             title="Projets à la une"
           />
-          <ProjectGrid projects={featured} />
+          <ProjectGrid breatheFeatured projects={featured} />
           <div className="mt-10">
             <Button href="/projets" variant="glass">
               Tous les projets
@@ -92,6 +97,7 @@ export default async function HomePage() {
           </div>
         </FadeInWhenVisible>
       </Container>
+      <SectionDivider />
       <Container className="pb-20">
         <FadeInWhenVisible>
           <SectionTitle title="Travaillons ensemble" subtitle="Un projet en tête ? Écrivons-nous." />
