@@ -95,4 +95,5 @@ Sans `PAYLOAD_SECRET` / `DATABASE_URI`, le build et le site public fonctionnent 
 
 ## Plan
 
-Voir `docs/plans/2026-07-20-001-feat-modern-portfolio-cms-plan.md`.
+- **Guide de développement & bonnes pratiques :** `docs/DEVELOPMENT.md`
+- Plan d’implémentation : `docs/plans/2026-07-20-001-feat-modern-portfolio-cms-plan.md`
