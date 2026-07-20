@@ -5,6 +5,8 @@ import { getPayload } from 'payload'
 import { portfolioFallback } from '../src/data/portfolio-fallback'
 import config from '../src/payload.config'
 
+const REMOVED_PROJECT_SLUGS = ['portfolio-bemps-cms']
+
 const LEGACY_SITE = 'https://projet-refonte-portfolio-persov1-0.vercel.app'
 
 function textToLexical(text: string) {
@@ -107,9 +109,7 @@ async function upsertProject(
         ? 'https://bscl-project.vercel.app/favicon.ico'
         : project.slug === 'modern-portfolio'
           ? '/images/profil-picNb.png'
-          : project.slug === 'portfolio-bemps-cms'
-            ? '/images/hero-person.jpg'
-            : `/projects/${project.slug}-cover.jpg`
+          : `/projects/${project.slug}-cover.jpg`
 
   const existing = await payload.find({
     collection: 'projects',
@@ -212,6 +212,18 @@ async function seed() {
   }
 
   console.log('Syncing projects…')
+  for (const slug of REMOVED_PROJECT_SLUGS) {
+    const removed = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: slug } },
+      limit: 1,
+    })
+    if (removed.docs[0]) {
+      await payload.delete({ collection: 'projects', id: removed.docs[0].id })
+      console.log(`Removed project: ${slug}`)
+    }
+  }
+
   for (let index = 0; index < projects.length; index++) {
     await upsertProject(payload, projects[index], index)
   }

@@ -56,16 +56,6 @@ const legacyProjects: LegacyProject[] = [
     github: 'https://github.com/Bemps17/Modern-portfolio',
   },
   {
-    id: 'portfolio-bemps-cms',
-    title: 'Portfolio Bemps CMS',
-    description:
-      'Première itération CMS du portfolio avec Next.js et Payload, base Postgres Neon et interface admin. Prototype développé avec Cursor.',
-    tags: ['Next.js', 'Payload', 'React', 'PostgreSQL', 'Vercel'],
-    image: '/images/hero-person.jpg',
-    link: 'https://portfolio-bemps-cms.vercel.app/',
-    github: null,
-  },
-  {
     id: 'ahistory',
     title: 'AHistory',
     description:
