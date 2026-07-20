@@ -1,15 +1,34 @@
 import type { Metadata } from 'next'
 
+import { BootSequence } from '@/components/motion/BootSequence'
 import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
+import { StatsStrip } from '@/components/sections/StatsStrip'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { Button } from '@/components/ui/Button'
-import { getFeaturedProjects, getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
-import type { Media } from '@/payload-types'
+import {
+  getExperiences,
+  getFeaturedProjects,
+  getPublishedProjects,
+  getSeoDefaultsContent,
+  getSiteSettingsContent,
+  getSkills,
+} from '@/lib/content'
+import type { Experience, Media } from '@/payload-types'
 
 export const revalidate = 3600
+
+function yearsFromExperiences(experiences: Experience[]): number {
+  const years = experiences
+    .map((experience) => experience.dateStart)
+    .filter(Boolean)
+    .map((date) => new Date(date).getFullYear())
+
+  if (!years.length) return 10
+  return new Date().getFullYear() - Math.min(...years)
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
@@ -29,15 +48,35 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [settings, featured] = await Promise.all([getSiteSettingsContent(), getFeaturedProjects()])
+  const [settings, featured, allProjects, experiences, skills] = await Promise.all([
+    getSiteSettingsContent(),
+    getFeaturedProjects(),
+    getPublishedProjects(),
+    getExperiences(),
+    getSkills(),
+  ])
 
   const siteName = settings?.siteName || 'Portfolio'
   const tagline = settings?.tagline || 'Créateur digital'
   const aboutIntro = settings?.aboutIntro
 
   return (
-    <>
+    <BootSequence>
       <Hero aboutIntro={aboutIntro} siteName={siteName} tagline={tagline} />
+      <Container className="py-16">
+        <FadeInWhenVisible>
+          <SectionTitle
+            eyebrow="En chiffres"
+            subtitle="Un aperçu rapide de mon parcours et de ma production."
+            title="Ce que je fais"
+          />
+          <StatsStrip
+            projectCount={allProjects.length}
+            skillCount={skills.length}
+            yearsExperience={yearsFromExperiences(experiences)}
+          />
+        </FadeInWhenVisible>
+      </Container>
       <Container className="py-20">
         <FadeInWhenVisible>
           <SectionTitle
@@ -59,6 +98,6 @@ export default async function HomePage() {
           <Button href="/contact">Me contacter</Button>
         </FadeInWhenVisible>
       </Container>
-    </>
+    </BootSequence>
   )
 }

@@ -5,6 +5,7 @@ import { Toaster } from 'sonner'
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import { FunEffects } from '@/components/motion/FunEffects'
 import { getSiteSettingsContent } from '@/lib/content'
 
 import './styles.css'
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#050505',
+  themeColor: '#0a0a0a',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -51,10 +52,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
       <body>
-        <Header siteName={siteName} />
-        <main className="min-h-screen pb-20 lg:pb-0">{children}</main>
-        <Footer email={email} siteName={siteName} />
-        <BottomTabBar />
+        <FunEffects />
+        <div className="relative z-10">
+          <Header siteName={siteName} />
+          <main className="min-h-screen pb-20 lg:pb-0">{children}</main>
+          <Footer email={email} siteName={siteName} />
+          <BottomTabBar />
+        </div>
         <Toaster position="bottom-center" theme="dark" />
       </body>
     </html>
