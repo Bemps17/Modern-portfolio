@@ -14,6 +14,7 @@ type ProjectCardProps = {
   project: Project
   large?: boolean
   enablePreview?: boolean
+  showStack?: boolean
 }
 
 function mediaUrl(media: number | Media | null | undefined): string | null {
@@ -34,7 +35,12 @@ const STACK_LABELS: Record<string, string> = {
   neon: 'Neon',
 }
 
-export function ProjectCard({ project, large = false, enablePreview = false }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  large = false,
+  enablePreview = false,
+  showStack = true,
+}: ProjectCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useMotionValue(0)
   const rotateY = useMotionValue(0)
@@ -119,7 +125,7 @@ export function ProjectCard({ project, large = false, enablePreview = false }: P
           <div className="space-y-3 p-5">
             <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">{project.title}</h3>
             <p className="line-clamp-2 text-sm text-[var(--muted)]">{project.excerpt}</p>
-            {project.stack?.length ? (
+            {showStack && project.stack?.length ? (
               <div className="flex flex-wrap gap-2">
                 {project.stack.map((item) => (
                   <Badge key={item}>{STACK_LABELS[item] ?? item}</Badge>

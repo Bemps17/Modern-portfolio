@@ -19,10 +19,10 @@ export default async function ProjetsPage() {
       <SectionTitle
         editorial
         eyebrow="Work"
-        subtitle="Filtrez par stack — survolez pour prévisualiser."
+        subtitle="Survolez pour prévisualiser — filtrez par stack si besoin."
         title="Projets"
       />
-      <ProjectGrid enableFilters enablePreview layoutMode="masonry" projects={projects} />
+      <ProjectGrid enableFilters enablePreview layoutMode="masonry" projects={projects} showStackChips={false} />
     </div>
   )
 }

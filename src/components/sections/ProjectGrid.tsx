@@ -1,11 +1,13 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
+import { SlidersHorizontal, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 import { Breathing } from '@/components/motion/Breathing'
 import { ProjectCard } from '@/components/sections/ProjectCard'
 import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 import type { Project } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
@@ -28,6 +30,7 @@ type ProjectGridProps = {
   breatheFeatured?: boolean
   layoutMode?: 'grid' | 'masonry'
   enablePreview?: boolean
+  showStackChips?: boolean
 }
 
 function masonryClass(project: Project, index: number): string {
@@ -42,8 +45,10 @@ export function ProjectGrid({
   breatheFeatured = false,
   layoutMode = 'grid',
   enablePreview = false,
+  showStackChips = true,
 }: ProjectGridProps) {
   const [active, setActive] = useState<string | null>(null)
+  const [filtersOpen, setFiltersOpen] = useState(false)
 
   const tags = useMemo(() => {
     const set = new Set<string>()
@@ -61,54 +66,109 @@ export function ProjectGrid({
     return <p className="text-[var(--muted)]">Aucun projet publié pour le moment.</p>
   }
 
+  const activeLabel = active ? (STACK_LABELS[active] ?? active) : null
+
   return (
     <div className="space-y-8">
       {enableFilters && tags.length ? (
         <div className="space-y-4">
-          <div className="flex flex-wrap gap-2">
-            <button
-              className={cn(!active && 'ring-1 ring-[color:var(--accent)]/60 shadow-[0_0_20px_var(--accent-glow)]')}
-              data-cursor="link"
-              onClick={() => setActive(null)}
-              type="button"
-            >
-              <Badge className={!active ? 'bg-[var(--accent)]/15 text-[var(--accent-soft)]' : undefined}>
-                Tous
-              </Badge>
-            </button>
-            {tags.map((tag) => (
+          <div className="flex flex-wrap items-center gap-3">
+            {!filtersOpen ? (
+              <Button
+                className="gap-2"
+                onClick={() => setFiltersOpen(true)}
+                type="button"
+                variant="glass"
+              >
+                <SlidersHorizontal aria-hidden className="size-4" />
+                Filtrer par stack
+                {activeLabel ? (
+                  <Badge className="bg-[var(--accent)]/15 text-[var(--accent-soft)]">{activeLabel}</Badge>
+                ) : null}
+              </Button>
+            ) : (
+              <Button
+                className="gap-2"
+                onClick={() => setFiltersOpen(false)}
+                type="button"
+                variant="ghost"
+              >
+                <X aria-hidden className="size-4" />
+                Masquer les filtres
+              </Button>
+            )}
+            {active && !filtersOpen ? (
               <button
-                className={cn(
-                  active === tag && 'ring-1 ring-[color:var(--accent)]/60 shadow-[0_0_20px_var(--accent-glow)]',
-                )}
+                className="text-sm text-[var(--muted)] underline-offset-4 hover:text-white hover:underline"
                 data-cursor="link"
-                key={tag}
-                onClick={() => setActive(tag)}
+                onClick={() => setActive(null)}
                 type="button"
               >
-                <Badge
-                  className={active === tag ? 'bg-[var(--accent)]/15 text-[var(--accent-soft)]' : undefined}
-                >
-                  {STACK_LABELS[tag] ?? tag}
-                </Badge>
+                Réinitialiser
               </button>
-            ))}
+            ) : null}
           </div>
-          <p className="font-[family-name:var(--font-space-grotesk)] text-sm text-[var(--muted)]">
-            <AnimatePresence mode="popLayout">
-              <motion.span
-                animate={{ opacity: 1, y: 0 }}
-                className="mr-2 inline-block font-bold text-[var(--accent-soft)]"
-                exit={{ opacity: 0, y: -6 }}
-                initial={{ opacity: 0, y: 6 }}
-                key={filtered.length}
-                transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+          <AnimatePresence initial={false}>
+            {filtersOpen ? (
+              <motion.div
+                animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-4 overflow-hidden"
+                exit={{ opacity: 0, height: 0 }}
+                initial={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
               >
-                {filtered.length}
-              </motion.span>
-            </AnimatePresence>
-            projet{filtered.length > 1 ? 's' : ''} affiché{filtered.length > 1 ? 's' : ''}
-          </p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    className={cn(
+                      !active && 'ring-1 ring-[color:var(--accent)]/60 shadow-[0_0_20px_var(--accent-glow)]',
+                    )}
+                    data-cursor="link"
+                    onClick={() => setActive(null)}
+                    type="button"
+                  >
+                    <Badge className={!active ? 'bg-[var(--accent)]/15 text-[var(--accent-soft)]' : undefined}>
+                      Tous
+                    </Badge>
+                  </button>
+                  {tags.map((tag) => (
+                    <button
+                      className={cn(
+                        active === tag &&
+                          'ring-1 ring-[color:var(--accent)]/60 shadow-[0_0_20px_var(--accent-glow)]',
+                      )}
+                      data-cursor="link"
+                      key={tag}
+                      onClick={() => setActive(tag)}
+                      type="button"
+                    >
+                      <Badge
+                        className={
+                          active === tag ? 'bg-[var(--accent)]/15 text-[var(--accent-soft)]' : undefined
+                        }
+                      >
+                        {STACK_LABELS[tag] ?? tag}
+                      </Badge>
+                    </button>
+                  ))}
+                </div>
+                <p className="font-[family-name:var(--font-space-grotesk)] text-sm text-[var(--muted)]">
+                  <AnimatePresence mode="popLayout">
+                    <motion.span
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mr-2 inline-block font-bold text-[var(--accent-soft)]"
+                      exit={{ opacity: 0, y: -6 }}
+                      initial={{ opacity: 0, y: 6 }}
+                      key={filtered.length}
+                      transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+                    >
+                      {filtered.length}
+                    </motion.span>
+                  </AnimatePresence>
+                  projet{filtered.length > 1 ? 's' : ''} affiché{filtered.length > 1 ? 's' : ''}
+                </p>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         </div>
       ) : null}
       <div
@@ -125,6 +185,7 @@ export function ProjectGrid({
               enablePreview={enablePreview}
               large={large}
               project={project}
+              showStack={showStackChips}
             />
           )
           const content =
