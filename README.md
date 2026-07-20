@@ -40,11 +40,24 @@ Ouvrir :
 
 ```bash
 pnpm dev
+pnpm verify          # gate PR : lint + typecheck + tests + tokens + build
 pnpm build
 pnpm test:int
+pnpm test:e2e
+pnpm check:tokens    # tokens CSS orphelins
 pnpm generate:types
 pnpm generate:importmap
 ```
+
+## Documentation
+
+| Doc | Contenu |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | Instructions agents Cursor |
+| [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Guide dev & Definition of Done |
+| [`docs/DESIGN.md`](docs/DESIGN.md) | Design system & tokens |
+| [`docs/how-to/`](docs/how-to/) | CMS, déploiement Vercel |
+| [`docs/decisions/`](docs/decisions/) | ADR (décisions d'architecture) |
 
 ## Contenu CMS
 
@@ -95,5 +108,4 @@ Sans `PAYLOAD_SECRET` / `DATABASE_URI`, le build et le site public fonctionnent 
 
 ## Plan
 
-- **Guide de développement & bonnes pratiques :** `docs/DEVELOPMENT.md`
 - Plan d’implémentation : `docs/plans/2026-07-20-001-feat-modern-portfolio-cms-plan.md`

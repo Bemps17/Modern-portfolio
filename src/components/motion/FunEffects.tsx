@@ -3,16 +3,10 @@
 import { BackgroundLayers } from '@/components/motion/BackgroundLayers'
 import { CustomCursor } from '@/components/motion/CustomCursor'
 import { MouseGlow } from '@/components/motion/MouseGlow'
-import { useEffect, useState } from 'react'
+import { useRichMotionEffects } from '@/lib/use-client-media'
 
 export function FunEffects() {
-  const [richEffects, setRichEffects] = useState(false)
-
-  useEffect(() => {
-    const finePointer = window.matchMedia('(pointer: fine)').matches
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    setRichEffects(finePointer && !reduceMotion)
-  }, [])
+  const richEffects = useRichMotionEffects()
 
   return (
     <>

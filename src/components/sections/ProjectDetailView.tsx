@@ -36,11 +36,6 @@ type ProjectDetailViewProps = {
   nextProject: AdjacentProject | null
 }
 
-function coverUrl(media: number | Media | null | undefined): string | null {
-  if (!media || typeof media === 'number') return null
-  return media.url ?? null
-}
-
 export function ProjectDetailView({ project, prevProject, nextProject }: ProjectDetailViewProps) {
   const cover = typeof project.cover === 'object' ? (project.cover as Media) : null
   const stackItems = (project.stack || []) as NonNullable<Project['stack']>

@@ -24,7 +24,7 @@ export function BootSequence({ children }: BootSequenceProps) {
   useEffect(() => {
     if (reduceMotion || sessionStorage.getItem(STORAGE_KEY)) return
 
-    setVisible(true)
+    const showTimer = window.setTimeout(() => setVisible(true), 0)
 
     const lineTimer = window.setInterval(() => {
       setLineIndex((current) => {
@@ -46,6 +46,7 @@ export function BootSequence({ children }: BootSequenceProps) {
     }, 900)
 
     return () => {
+      window.clearTimeout(showTimer)
       window.clearInterval(lineTimer)
       window.clearTimeout(safetyTimer)
     }

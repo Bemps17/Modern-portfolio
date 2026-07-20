@@ -3,6 +3,8 @@
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
+import { useRichMotionEffects } from '@/lib/use-client-media'
+
 type CursorMode = 'default' | 'view' | 'link' | 'open'
 
 const LABELS: Record<CursorMode, string> = {
@@ -18,14 +20,11 @@ export function CustomCursor() {
   const springX = useSpring(x, { stiffness: 420, damping: 32, mass: 0.4 })
   const springY = useSpring(y, { stiffness: 420, damping: 32, mass: 0.4 })
   const [mode, setMode] = useState<CursorMode>('default')
-  const [enabled, setEnabled] = useState(false)
+  const enabled = useRichMotionEffects()
 
   useEffect(() => {
-    const finePointer = window.matchMedia('(pointer: fine)').matches
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!finePointer || reduceMotion) return
+    if (!enabled) return
 
-    setEnabled(true)
     document.body.classList.add('custom-cursor-active')
 
     const onMove = (event: MouseEvent) => {
@@ -45,7 +44,7 @@ export function CustomCursor() {
       window.removeEventListener('mousemove', onMove)
       document.body.classList.remove('custom-cursor-active')
     }
-  }, [x, y])
+  }, [enabled, x, y])
 
   if (!enabled) return null
 

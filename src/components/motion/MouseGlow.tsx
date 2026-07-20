@@ -2,16 +2,14 @@
 
 import { useEffect, useState } from 'react'
 
+import { useRichMotionEffects } from '@/lib/use-client-media'
+
 export function MouseGlow() {
+  const enabled = useRichMotionEffects()
   const [position, setPosition] = useState({ x: 50, y: 20 })
-  const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
-    const finePointer = window.matchMedia('(pointer: fine)').matches
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!finePointer || reduceMotion) return
-
-    setEnabled(true)
+    if (!enabled) return
 
     const onMove = (event: MouseEvent) => {
       const x = (event.clientX / window.innerWidth) * 100
@@ -21,7 +19,7 @@ export function MouseGlow() {
 
     window.addEventListener('mousemove', onMove, { passive: true })
     return () => window.removeEventListener('mousemove', onMove)
-  }, [])
+  }, [enabled])
 
   if (!enabled) return null
 
