@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
-import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getPublishedProjects } from '@/lib/content'
 
@@ -16,13 +15,14 @@ export default async function ProjetsPage() {
   const projects = await getPublishedProjects()
 
   return (
-    <Container className="py-16">
+    <div className="px-6 py-16 xl:px-16">
       <SectionTitle
+        editorial
         eyebrow="Work"
-        subtitle="Filtrez par stack — tout est chargé une fois côté client."
+        subtitle="Filtrez par stack — survolez pour prévisualiser."
         title="Projets"
       />
-      <ProjectGrid enableFilters projects={projects} />
-    </Container>
+      <ProjectGrid enableFilters enablePreview layoutMode="masonry" projects={projects} />
+    </div>
   )
 }

@@ -8,9 +8,10 @@ import { useState } from 'react'
 type BrandLogoProps = {
   siteName: string
   className?: string
+  compact?: boolean
 }
 
-export function BrandLogo({ siteName, className }: BrandLogoProps) {
+export function BrandLogo({ siteName, className, compact = false }: BrandLogoProps) {
   const [clicks, setClicks] = useState(0)
   const [party, setParty] = useState(false)
   const reduceMotion = useReducedMotion()
@@ -49,11 +50,13 @@ export function BrandLogo({ siteName, className }: BrandLogoProps) {
         <Image
           alt=""
           className="rounded-lg ring-1 ring-[color:var(--accent)]/30"
-          height={32}
+          height={compact ? 36 : 32}
           src="/brand/favicon.png"
-          width={32}
+          width={compact ? 36 : 32}
         />
-        <span className={party ? 'text-[var(--accent-soft)]' : undefined}>{siteName}</span>
+        {!compact ? (
+          <span className={party ? 'text-[var(--accent-soft)]' : undefined}>{siteName}</span>
+        ) : null}
       </motion.span>
     </Link>
   )

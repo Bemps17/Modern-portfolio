@@ -26,9 +26,23 @@ type ProjectGridProps = {
   projects: Project[]
   enableFilters?: boolean
   breatheFeatured?: boolean
+  layoutMode?: 'grid' | 'masonry'
+  enablePreview?: boolean
 }
 
-export function ProjectGrid({ projects, enableFilters = false, breatheFeatured = false }: ProjectGridProps) {
+function masonryClass(project: Project, index: number): string {
+  if (project.featured && index === 0) return 'xl:col-span-8 xl:row-span-2'
+  if (project.featured && index === 1) return 'xl:col-span-4 xl:row-span-2'
+  return 'xl:col-span-4'
+}
+
+export function ProjectGrid({
+  projects,
+  enableFilters = false,
+  breatheFeatured = false,
+  layoutMode = 'grid',
+  enablePreview = false,
+}: ProjectGridProps) {
   const [active, setActive] = useState<string | null>(null)
 
   const tags = useMemo(() => {
@@ -97,15 +111,31 @@ export function ProjectGrid({ projects, enableFilters = false, breatheFeatured =
           </p>
         </div>
       ) : null}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div
+        className={cn(
+          layoutMode === 'masonry'
+            ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-12 xl:auto-rows-[minmax(180px,auto)]'
+            : 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3',
+        )}
+      >
         {filtered.map((project, index) => {
-          const card = <ProjectCard project={project} />
-          if (breatheFeatured && index === 0) {
-            return <Breathing key={project.id}>{card}</Breathing>
-          }
+          const large = layoutMode === 'masonry' && !!project.featured && index < 2
+          const card = (
+            <ProjectCard
+              enablePreview={enablePreview}
+              large={large}
+              project={project}
+            />
+          )
+          const content =
+            breatheFeatured && index === 0 ? <Breathing>{card}</Breathing> : card
+
           return (
-            <div key={project.id}>
-              {card}
+            <div
+              className={layoutMode === 'masonry' ? masonryClass(project, index) : undefined}
+              key={project.id}
+            >
+              {content}
             </div>
           )
         })}

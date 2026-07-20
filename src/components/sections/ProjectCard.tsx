@@ -8,9 +8,12 @@ import { useRef, useState } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { GlassCard } from '@/components/ui/GlassCard'
 import type { Media, Project } from '@/payload-types'
+import { cn } from '@/lib/utils'
 
 type ProjectCardProps = {
   project: Project
+  large?: boolean
+  enablePreview?: boolean
 }
 
 function mediaUrl(media: number | Media | null | undefined): string | null {
@@ -31,7 +34,7 @@ const STACK_LABELS: Record<string, string> = {
   neon: 'Neon',
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, large = false, enablePreview = false }: ProjectCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useMotionValue(0)
   const rotateY = useMotionValue(0)
@@ -39,6 +42,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const springRotateY = useSpring(rotateY, { stiffness: 260, damping: 22 })
   const reduceMotion = useReducedMotion()
   const [glow, setGlow] = useState({ x: 50, y: 50 })
+  const [preview, setPreview] = useState<{ x: number; y: number } | null>(null)
 
   const coverUrl = mediaUrl(project.cover)
   const coverAlt =
@@ -56,12 +60,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
     rotateX.set((y - centerY) / 18)
     rotateY.set((centerX - x) / 18)
     setGlow({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 })
+    if (enablePreview) setPreview({ x: event.clientX, y: event.clientY })
   }
 
   const onLeave = () => {
     rotateX.set(0)
     rotateY.set(0)
     setGlow({ x: 50, y: 50 })
+    setPreview(null)
   }
 
   return (
@@ -94,7 +100,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
           />
         ) : null}
         <Link className="relative block" data-cursor="view" href={`/projets/${project.slug}`}>
-          <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
+          <motion.div
+            className={cn(
+              'relative overflow-hidden bg-white/5',
+              large ? 'aspect-[16/11] min-h-[280px]' : 'aspect-[16/10]',
+            )}
+            layoutId={`project-cover-${project.slug}`}
+          >
             {coverUrl ? (
               <Image
                 alt={coverAlt}
@@ -104,7 +116,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 src={coverUrl}
               />
             ) : null}
-          </div>
+          </motion.div>
           <div className="space-y-3 p-5">
             <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">{project.title}</h3>
             <p className="line-clamp-2 text-sm text-[var(--muted)]">{project.excerpt}</p>
@@ -118,6 +130,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </Link>
       </GlassCard>
+      {enablePreview && preview && coverUrl ? (
+        <div
+          aria-hidden
+          className="pointer-events-none fixed z-[60] hidden h-36 w-52 overflow-hidden rounded-xl border border-white/15 shadow-2xl lg:block"
+          style={{ left: preview.x + 18, top: preview.y - 40 }}
+        >
+          <Image alt="" className="object-cover" fill src={coverUrl} />
+        </div>
+      ) : null}
     </motion.div>
   )
 }

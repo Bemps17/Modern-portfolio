@@ -2,9 +2,8 @@ import Image from 'next/image'
 
 import { Breathing } from '@/components/motion/Breathing'
 import { RevealText } from '@/components/motion/RevealText'
+import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { Button } from '@/components/ui/Button'
-import { Container } from '@/components/ui/Container'
-import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 
 type HeroProps = {
   siteName: string
@@ -14,55 +13,61 @@ type HeroProps = {
 
 export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
   return (
-    <section className="relative overflow-hidden border-b border-white/10">
-      <Container className="relative grid min-h-[78vh] items-center gap-10 py-20 lg:grid-cols-[1.1fr_0.9fr]">
-        <FadeInWhenVisible>
+    <section className="relative min-h-[100dvh] overflow-hidden border-b border-white/10">
+      <div
+        className="absolute inset-y-0 right-0 hidden w-[58%] lg:block"
+        style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 100%, 0% 100%)' }}
+      >
+        <Breathing className="relative h-full w-full">
+          <Image
+            alt={`Portrait de ${siteName}`}
+            className="object-cover object-top"
+            data-cursor="view"
+            fill
+            priority
+            sizes="58vw"
+            src="/images/bertrand-portrait.jpg"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[var(--background)]/80"
+          />
+        </Breathing>
+      </div>
+
+      <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-6 py-24 lg:w-[42%] lg:px-10 xl:px-16">
+        <EditorialTitle as="h1" bleed className="mb-5" text={siteName} />
+        <RevealText
+          as="p"
+          className="max-w-xl text-xl text-balance text-white/90 sm:text-2xl"
+          delay={0.15}
+          text={tagline}
+        />
+        {aboutIntro ? (
           <RevealText
             as="p"
-            className="mb-4 font-[family-name:var(--font-syne)] text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl"
-            text={siteName}
+            className="mt-5 max-w-lg text-base text-[var(--muted)] sm:text-lg"
+            delay={0.28}
+            text={aboutIntro}
           />
-          <RevealText
-            as="h1"
-            className="max-w-3xl text-2xl text-balance text-white/90 sm:text-3xl"
-            delay={0.12}
-            text={tagline}
-          />
-          {aboutIntro ? (
-            <RevealText
-              as="p"
-              className="mt-5 max-w-2xl text-base text-[var(--muted)] sm:text-lg"
-              delay={0.24}
-              text={aboutIntro}
-            />
-          ) : null}
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="/projets">Voir mes projets</Button>
-            <Button href="/contact" variant="glass">
-              Me contacter
-            </Button>
-          </div>
-        </FadeInWhenVisible>
-        <FadeInWhenVisible className="mx-auto w-full max-w-md lg:max-w-none">
-          <Breathing>
-            <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.55)] ring-1 ring-[color:var(--accent)]/20">
-              <Image
-                alt={`Portrait de ${siteName}`}
-                className="object-cover object-top"
-                data-cursor="view"
-                fill
-                priority
-                sizes="(max-width: 1024px) 90vw, 40vw"
-                src="/images/bertrand-portrait.jpg"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-transparent"
-              />
-            </div>
-          </Breathing>
-        </FadeInWhenVisible>
-      </Container>
+        ) : null}
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Button href="/projets">Voir mes projets</Button>
+          <Button href="/contact" variant="glass">
+            Me contacter
+          </Button>
+        </div>
+      </div>
+
+      <div className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/10 lg:hidden">
+        <Image
+          alt={`Portrait de ${siteName}`}
+          className="object-cover object-top"
+          fill
+          sizes="90vw"
+          src="/images/bertrand-portrait.jpg"
+        />
+      </div>
     </section>
   )
 }

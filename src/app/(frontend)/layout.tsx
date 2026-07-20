@@ -4,9 +4,10 @@ import { Toaster } from 'sonner'
 
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
 import { Footer } from '@/components/layout/Footer'
-import { Header } from '@/components/layout/Header'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
-import { getSiteSettingsContent } from '@/lib/content'
+import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
 
 import './styles.css'
 
@@ -45,20 +46,23 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSiteSettingsContent()
+  const [settings, projects] = await Promise.all([getSiteSettingsContent(), getPublishedProjects()])
   const siteName = settings?.siteName || 'Portfolio'
   const email = settings?.email || null
+  const socialLinks = settings?.socialLinks || []
+  const paletteProjects = projects.map((project) => ({ title: project.title, slug: project.slug }))
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
       <body>
         <FunEffects />
-        <div className="relative z-10">
-          <Header siteName={siteName} />
+        <CommandPalette projects={paletteProjects} />
+        <Sidebar siteName={siteName} socialLinks={socialLinks} />
+        <div className="relative z-10 min-h-screen lg:pl-[72px]">
           <main className="min-h-screen pb-20 lg:pb-0">{children}</main>
           <Footer email={email} siteName={siteName} />
-          <BottomTabBar />
         </div>
+        <BottomTabBar />
         <Toaster position="bottom-center" theme="dark" />
       </body>
     </html>

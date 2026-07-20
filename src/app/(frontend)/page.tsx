@@ -6,7 +6,6 @@ import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
 import { StatsStrip } from '@/components/sections/StatsStrip'
 import { TechMarquee } from '@/components/sections/TechMarquee'
-import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { Button } from '@/components/ui/Button'
@@ -67,9 +66,10 @@ export default async function HomePage() {
     <BootSequence>
       <Hero aboutIntro={aboutIntro} siteName={siteName} tagline={tagline} />
       <TechMarquee items={techItems} />
-      <Container className="py-16">
+      <div className="px-6 py-16 xl:px-16">
         <FadeInWhenVisible>
           <SectionTitle
+            editorial
             eyebrow="En chiffres"
             subtitle="Un aperçu rapide de mon parcours et de ma production."
             title="Ce que je fais"
@@ -80,30 +80,31 @@ export default async function HomePage() {
             yearsExperience={yearsFromExperiences(experiences)}
           />
         </FadeInWhenVisible>
-      </Container>
+      </div>
       <SectionDivider />
-      <Container className="py-20">
+      <div className="px-6 py-20 xl:px-16">
         <FadeInWhenVisible>
           <SectionTitle
+            editorial
             eyebrow="Portfolio"
             subtitle="Une sélection de réalisations récentes."
             title="Projets à la une"
           />
-          <ProjectGrid breatheFeatured projects={featured} />
+          <ProjectGrid breatheFeatured enablePreview layoutMode="masonry" projects={featured} />
           <div className="mt-10">
             <Button href="/projets" variant="glass">
               Tous les projets
             </Button>
           </div>
         </FadeInWhenVisible>
-      </Container>
+      </div>
       <SectionDivider />
-      <Container className="pb-20">
+      <div className="px-6 pb-20 xl:px-16">
         <FadeInWhenVisible>
           <SectionTitle title="Travaillons ensemble" subtitle="Un projet en tête ? Écrivons-nous." />
           <Button href="/contact">Me contacter</Button>
         </FadeInWhenVisible>
-      </Container>
+      </div>
     </BootSequence>
   )
 }
