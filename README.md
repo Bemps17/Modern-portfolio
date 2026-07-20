@@ -69,7 +69,7 @@ Dans **Project Settings → Environment Variables** (Production + Preview) :
 
 Optionnel : `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`.
 
-Sans `PAYLOAD_SECRET` / `DATABASE_URI`, le build échoue à l’étape « Collecting page data » (Payload ne peut pas démarrer).
+Sans `PAYLOAD_SECRET` / `DATABASE_URI`, le build et le site public fonctionnent en **mode démo** : contenu importé depuis le portfolio actuel (`projet-refonte-portfolio-persov1-0.vercel.app`). L’admin et le formulaire contact nécessitent les variables.
 
 1. Connecter le repo GitHub
 2. Intégration Neon Marketplace (ou coller `DATABASE_URI` manuellement)

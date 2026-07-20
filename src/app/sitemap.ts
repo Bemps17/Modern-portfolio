@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next'
 
-import { isPayloadConfigured } from '@/lib/payload-env'
-import { getPayloadClientSafe } from '@/lib/payload'
+import { getProjectSlugs } from '@/lib/content'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const slugs = await getProjectSlugs()
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, changeFrequency: 'weekly', priority: 1 },
@@ -13,20 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/contact`, changeFrequency: 'monthly', priority: 0.6 },
   ]
 
-  if (!isPayloadConfigured()) return staticRoutes
-
-  const payload = await getPayloadClientSafe()
-  if (!payload) return staticRoutes
-
-  const projects = await payload.find({
-    collection: 'projects',
-    where: { status: { equals: 'published' } },
-    limit: 200,
-  })
-
-  const projectRoutes = projects.docs.map((project) => ({
-    url: `${siteUrl}/projets/${project.slug}`,
-    lastModified: project.updatedAt ? new Date(project.updatedAt) : undefined,
+  const projectRoutes = slugs.map((slug) => ({
+    url: `${siteUrl}/projets/${slug}`,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
-import { getPayloadClientSafe } from '@/lib/payload'
+import { getPublishedProjects } from '@/lib/content'
 
 export const revalidate = 3600
 
@@ -13,16 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ProjetsPage() {
-  const payload = await getPayloadClientSafe()
-  const projects = payload
-    ? await payload.find({
-        collection: 'projects',
-        where: { status: { equals: 'published' } },
-        sort: 'order',
-        depth: 1,
-        limit: 100,
-      })
-    : { docs: [] }
+  const projects = await getPublishedProjects()
 
   return (
     <Container className="py-16">
@@ -31,7 +22,7 @@ export default async function ProjetsPage() {
         subtitle="Filtrez par stack — tout est chargé une fois côté client."
         title="Projets"
       />
-      <ProjectGrid enableFilters projects={projects.docs} />
+      <ProjectGrid enableFilters projects={projects} />
     </Container>
   )
 }

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ContactForm } from '@/components/sections/ContactForm'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
-import { getPayloadClientSafe } from '@/lib/payload'
+import { getSiteSettingsContent } from '@/lib/content'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -11,10 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ContactPage() {
-  const payload = await getPayloadClientSafe()
-  const settings = payload
-    ? await payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
-    : null
+  const settings = await getSiteSettingsContent()
 
   return (
     <Container className="py-16">

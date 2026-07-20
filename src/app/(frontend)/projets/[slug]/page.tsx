@@ -6,8 +6,7 @@ import { RichTextRenderer } from '@/components/sections/RichTextRenderer'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
-import { isPayloadConfigured } from '@/lib/payload-env'
-import { getPayloadClient } from '@/lib/payload'
+import { getProjectBySlug, getProjectSlugs } from '@/lib/content'
 import type { Media, Project } from '@/payload-types'
 
 export const revalidate = 3600
@@ -16,34 +15,27 @@ type PageProps = {
   params: Promise<{ slug: string }>
 }
 
-async function getProject(slug: string): Promise<Project | null> {
-  const payload = await getPayloadClient()
-  const result = await payload.find({
-    collection: 'projects',
-    where: {
-      and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }],
-    },
-    depth: 2,
-    limit: 1,
-  })
-  return result.docs[0] ?? null
+const STACK_LABELS: Record<string, string> = {
+  nextjs: 'Next.js',
+  react: 'React',
+  typescript: 'TypeScript',
+  payload: 'Payload CMS',
+  nodejs: 'Node.js',
+  postgres: 'PostgreSQL',
+  tailwind: 'Tailwind CSS',
+  'framer-motion': 'Framer Motion',
+  vercel: 'Vercel',
+  neon: 'Neon',
 }
 
 export async function generateStaticParams() {
-  if (!isPayloadConfigured()) return []
-
-  const payload = await getPayloadClient()
-  const projects = await payload.find({
-    collection: 'projects',
-    where: { status: { equals: 'published' } },
-    limit: 100,
-  })
-  return projects.docs.map((project) => ({ slug: project.slug }))
+  const slugs = await getProjectSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const project = await getProject(slug)
+  const project = await getProjectBySlug(slug)
   if (!project) return { title: 'Projet' }
 
   const cover = typeof project.cover === 'object' ? (project.cover as Media) : null
@@ -67,10 +59,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProjetDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const project = await getProject(slug)
+  const project = await getProjectBySlug(slug)
   if (!project) notFound()
 
   const cover = typeof project.cover === 'object' ? (project.cover as Media) : null
+  const stackItems = (project.stack || []) as NonNullable<Project['stack']>
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
@@ -90,10 +83,10 @@ export default async function ProjetDetailPage({ params }: PageProps) {
           {project.title}
         </h1>
         <p className="mt-4 text-lg text-[var(--muted)]">{project.excerpt}</p>
-        {project.stack?.length ? (
+        {stackItems.length ? (
           <div className="mt-5 flex flex-wrap gap-2">
-            {project.stack.map((item) => (
-              <Badge key={item}>{item}</Badge>
+            {stackItems.map((item) => (
+              <Badge key={item}>{STACK_LABELS[item] ?? item}</Badge>
             ))}
           </div>
         ) : null}

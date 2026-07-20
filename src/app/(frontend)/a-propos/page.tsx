@@ -4,15 +4,12 @@ import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
-import { getPayloadClientSafe } from '@/lib/payload'
+import { getExperiences, getSiteSettingsContent, getSkills } from '@/lib/content'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayloadClientSafe()
-  const settings = payload
-    ? await payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
-    : null
+  const settings = await getSiteSettingsContent()
   return {
     title: 'À propos',
     description: settings?.aboutIntro || settings?.tagline || 'À propos',
@@ -20,14 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const payload = await getPayloadClientSafe()
-  const [settings, experiences, skills] = payload
-    ? await Promise.all([
-        payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-        payload.find({ collection: 'experiences', sort: '-dateStart', limit: 50 }),
-        payload.find({ collection: 'skills', sort: 'name', limit: 100, depth: 1 }),
-      ])
-    : [null, { docs: [] }, { docs: [] }]
+  const [settings, experiences, skills] = await Promise.all([
+    getSiteSettingsContent(),
+    getExperiences(),
+    getSkills(),
+  ])
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -50,14 +44,19 @@ export default async function AboutPage() {
           title={settings?.siteName || 'À propos'}
         />
         {settings?.aboutIntro ? <p className="max-w-2xl text-lg text-[var(--muted)]">{settings.aboutIntro}</p> : null}
+        <p className="max-w-2xl text-base text-[var(--muted)]">
+          Mon parcours est atypique, et c&apos;est ma plus grande force. Après plus de 10 ans dans le commerce et la
+          logistique, j&apos;ai pivoté vers le numérique. Cette expérience m&apos;a appris la rigueur, la gestion de
+          projet et l&apos;importance de la relation client.
+        </p>
       </section>
       <section>
         <SectionTitle title="Parcours" />
-        <ExperienceTimeline experiences={experiences.docs} />
+        <ExperienceTimeline experiences={experiences} />
       </section>
       <section>
         <SectionTitle title="Compétences" />
-        <SkillBadgeList skills={skills.docs} />
+        <SkillBadgeList skills={skills} />
       </section>
     </Container>
   )

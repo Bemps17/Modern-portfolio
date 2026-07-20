@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.blob.vercel-storage.com',
+        hostname: 'projet-refonte-portfolio-persov1-0.vercel.app',
       },
     ],
   },

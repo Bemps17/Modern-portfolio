@@ -4,7 +4,7 @@ import { Toaster } from 'sonner'
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
-import { getPayloadClientSafe } from '@/lib/payload'
+import { getSiteSettingsContent } from '@/lib/content'
 
 import './styles.css'
 
@@ -29,19 +29,9 @@ const spaceGrotesk = Space_Grotesk({
 export const revalidate = 3600
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const payload = await getPayloadClientSafe()
-  let siteName = 'Portfolio'
-  let email: string | null = null
-
-  if (payload) {
-    try {
-      const settings = await payload.findGlobal({ slug: 'site-settings' })
-      siteName = settings.siteName || siteName
-      email = settings.email || null
-    } catch {
-      // Globals may be empty before first admin seed.
-    }
-  }
+  const settings = await getSiteSettingsContent()
+  const siteName = settings?.siteName || 'Portfolio'
+  const email = settings?.email || null
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
