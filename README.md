@@ -55,10 +55,26 @@ Le front utilise la **Local API** Payload (`getPayload`) — aucun contenu édit
 
 ## Déploiement Vercel
 
+Le projet doit utiliser le preset **Next.js** (forcé via `vercel.json`).
+
+### Variables d'environnement obligatoires
+
+Dans **Project Settings → Environment Variables** (Production + Preview) :
+
+| Variable | Exemple |
+|---|---|
+| `DATABASE_URI` | Neon pooled `postgresql://...-pooler.../neondb?sslmode=require` |
+| `PAYLOAD_SECRET` | Chaîne aléatoire longue (`openssl rand -base64 32`) |
+| `NEXT_PUBLIC_SITE_URL` | `https://ton-domaine.vercel.app` |
+
+Optionnel : `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`.
+
+Sans `PAYLOAD_SECRET` / `DATABASE_URI`, le build échoue à l’étape « Collecting page data » (Payload ne peut pas démarrer).
+
 1. Connecter le repo GitHub
-2. Intégration Neon Marketplace (injecte `DATABASE_URI`)
-3. Ajouter `PAYLOAD_SECRET`, Blob, Resend, `NEXT_PUBLIC_SITE_URL`
-4. Deploy — Payload et le front partagent le même build
+2. Intégration Neon Marketplace (ou coller `DATABASE_URI` manuellement)
+3. Ajouter `PAYLOAD_SECRET` + `NEXT_PUBLIC_SITE_URL`
+4. Redeploy
 
 ## Plan
 
