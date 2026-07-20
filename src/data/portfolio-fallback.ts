@@ -20,9 +20,30 @@ type LegacyProject = {
   tags: string[]
   image: string | null
   link: string | null
+  github?: string | null
 }
 
 const legacyProjects: LegacyProject[] = [
+  {
+    id: 'modern-portfolio',
+    title: 'Modern Portfolio',
+    description:
+      'Refonte CMS-driven du portfolio : Next.js 16, Payload 3, Neon Postgres, design glassmorphism et déploiement Vercel. Développé avec Cursor.',
+    tags: ['Next.js', 'Payload', 'TypeScript', 'Neon', 'Tailwind', 'Framer Motion'],
+    image: '/images/profil-picNb.png',
+    link: 'https://modern-portfolio-git-cursor-plan-moder-b9d2d3-bemps17s-projects.vercel.app/',
+    github: 'https://github.com/Bemps17/Modern-portfolio',
+  },
+  {
+    id: 'portfolio-bemps-cms',
+    title: 'Portfolio Bemps CMS',
+    description:
+      'Première itération CMS du portfolio avec Next.js et Payload, base Postgres Neon et interface admin. Prototype développé avec Cursor.',
+    tags: ['Next.js', 'Payload', 'React', 'PostgreSQL', 'Vercel'],
+    image: '/images/hero-person.jpg',
+    link: 'https://portfolio-bemps-cms.vercel.app/',
+    github: null,
+  },
   {
     id: 'ahistory',
     title: 'AHistory',
@@ -197,7 +218,7 @@ function toProject(item: LegacyProject, index: number): Project {
     gallery: [],
     stack: item.tags as Project['stack'],
     liveUrl: item.link,
-    repoUrl: null,
+    repoUrl: item.github ?? null,
     featured: index < 6,
     order: index,
     status: 'published',

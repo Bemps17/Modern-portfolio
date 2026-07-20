@@ -47,10 +47,13 @@ const STACK_MAP: Record<string, string> = {
   'Next.js': 'nextjs',
   TypeScript: 'typescript',
   PostgreSQL: 'postgres',
+  Postgres: 'postgres',
   Tailwind: 'tailwind',
+  'Framer Motion': 'framer-motion',
   Vercel: 'vercel',
   Node: 'nodejs',
   Payload: 'payload',
+  Neon: 'neon',
 }
 
 function mapStack(tags: string[]): string[] {
@@ -63,7 +66,11 @@ function mapStack(tags: string[]): string[] {
   return [...values]
 }
 
-async function uploadCover(payload: Awaited<ReturnType<typeof getPayload>>, path: string | null, alt: string) {
+async function uploadCover(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  path: string | null,
+  alt: string,
+) {
   const imagePath = path || '/images/profil-picNb.png'
   const url = `${LEGACY_SITE}${imagePath}`
   const response = await fetch(url)
@@ -83,6 +90,61 @@ async function uploadCover(payload: Awaited<ReturnType<typeof getPayload>>, path
   })
 }
 
+async function upsertProject(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  project: (typeof portfolioFallback.projects)[number],
+  index: number,
+) {
+  const coverUrl =
+    typeof project.cover === 'object' && project.cover?.url ? project.cover.url : null
+  const imagePath = coverUrl
+    ? new URL(coverUrl).pathname
+    : project.slug === 'modern-portfolio'
+      ? '/images/profil-picNb.png'
+      : project.slug === 'portfolio-bemps-cms'
+        ? '/images/hero-person.jpg'
+        : `/projects/${project.slug}-cover.jpg`
+
+  const existing = await payload.find({
+    collection: 'projects',
+    where: { slug: { equals: project.slug } },
+    limit: 1,
+  })
+
+  const cover = existing.docs[0]?.cover
+    ? existing.docs[0].cover
+    : (await uploadCover(payload, imagePath, project.title)).id
+
+  const excerpt = project.excerpt || project.title
+  const data = {
+    title: project.title,
+    slug: project.slug,
+    excerpt,
+    content: textToLexical(excerpt),
+    cover,
+    stack: mapStack((project.stack as string[] | null | undefined) || []),
+    liveUrl: project.liveUrl || undefined,
+    repoUrl: project.repoUrl || undefined,
+    featured: Boolean(project.featured),
+    order: project.order ?? index,
+    status: 'published' as const,
+  }
+
+  if (existing.docs[0]) {
+    await payload.update({
+      collection: 'projects',
+      id: existing.docs[0].id,
+      data,
+    })
+    return
+  }
+
+  await payload.create({
+    collection: 'projects',
+    data,
+  })
+}
+
 async function seed() {
   if (!process.env.DATABASE_URI || !process.env.PAYLOAD_SECRET) {
     throw new Error('DATABASE_URI and PAYLOAD_SECRET are required')
@@ -92,10 +154,6 @@ async function seed() {
   const { siteSettings, seoDefaults, projects, experiences, skills } = portfolioFallback
 
   const existingProjects = await payload.find({ collection: 'projects', limit: 1 })
-  if (existingProjects.totalDocs > 0) {
-    console.log('Portfolio already seeded — skipping.')
-    return
-  }
 
   console.log('Seeding site settings…')
   await payload.updateGlobal({
@@ -118,57 +176,38 @@ async function seed() {
   })
 
   console.log('Seeding skills…')
-  for (const skill of skills) {
-    await payload.create({
-      collection: 'skills',
-      data: {
-        name: skill.name,
-        category: skill.category,
-      },
-    })
+  if (existingProjects.totalDocs === 0) {
+    for (const skill of skills) {
+      await payload.create({
+        collection: 'skills',
+        data: {
+          name: skill.name,
+          category: skill.category,
+        },
+      })
+    }
   }
 
   console.log('Seeding experiences…')
-  for (const experience of experiences) {
-    await payload.create({
-      collection: 'experiences',
-      data: {
-        title: experience.title,
-        company: experience.company,
-        dateStart: experience.dateStart,
-        dateEnd: experience.dateEnd,
-        current: experience.current,
-        description: experience.description,
-      },
-    })
+  if (existingProjects.totalDocs === 0) {
+    for (const experience of experiences) {
+      await payload.create({
+        collection: 'experiences',
+        data: {
+          title: experience.title,
+          company: experience.company,
+          dateStart: experience.dateStart,
+          dateEnd: experience.dateEnd,
+          current: experience.current,
+          description: experience.description,
+        },
+      })
+    }
   }
 
-  console.log('Seeding projects…')
+  console.log('Syncing projects…')
   for (let index = 0; index < projects.length; index++) {
-    const project = projects[index]
-    const coverUrl =
-      typeof project.cover === 'object' && project.cover?.url ? project.cover.url : null
-    const imagePath = coverUrl ? new URL(coverUrl).pathname : `/projects/${project.slug}-cover.jpg`
-
-    const cover = await uploadCover(payload, imagePath, project.title)
-    const excerpt = project.excerpt || project.title
-
-    await payload.create({
-      collection: 'projects',
-      data: {
-        title: project.title,
-        slug: project.slug,
-        excerpt,
-        content: textToLexical(excerpt),
-        cover: cover.id,
-        stack: mapStack((project.stack as string[] | null | undefined) || []),
-        liveUrl: project.liveUrl || undefined,
-        repoUrl: project.repoUrl || undefined,
-        featured: Boolean(project.featured),
-        order: project.order ?? index,
-        status: 'published',
-      },
-    })
+    await upsertProject(payload, projects[index], index)
   }
 
   const adminEmail = process.env.SEED_ADMIN_EMAIL || 'bertrandwebdesigner@proton.me'
