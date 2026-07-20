@@ -4,10 +4,11 @@ const LEGACY_SITE = 'https://projet-refonte-portfolio-persov1-0.vercel.app'
 
 function legacyMedia(path: string | null, alt: string): Media | null {
   if (!path) return null
+  const url = path.startsWith('http') ? path : `${LEGACY_SITE}${path}`
   return {
     id: 0,
     alt,
-    url: `${LEGACY_SITE}${path}`,
+    url,
     updatedAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
   } as Media
@@ -24,6 +25,26 @@ type LegacyProject = {
 }
 
 const legacyProjects: LegacyProject[] = [
+  {
+    id: 'world-cup-scores-2026',
+    title: 'World Cup Scores 2026',
+    description:
+      'Suivi premium des scores et pronostics — Coupe du Monde FIFA 2026. Interface mobile-first, classements live et parcours pronostics.',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Vercel'],
+    image: 'https://world-cup2026-olive.vercel.app/icon.svg',
+    link: 'https://world-cup2026-olive.vercel.app/',
+    github: null,
+  },
+  {
+    id: 'bscl',
+    title: 'BSCL — Black Squad Competitive League',
+    description:
+      'Ligue compétitive dédiée à Black Squad : PUGs 5v5, classements ELO, équipes et tournois. Auth Discord OAuth, bot Discord.js, Prisma et Supabase.',
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Node', 'Vercel'],
+    image: 'https://bscl-project.vercel.app/favicon.ico',
+    link: 'https://bscl.gg',
+    github: 'https://github.com/Bemps17/BsclProject',
+  },
   {
     id: 'modern-portfolio',
     title: 'Modern Portfolio',

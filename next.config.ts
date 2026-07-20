@@ -22,6 +22,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'projet-refonte-portfolio-persov1-0.vercel.app',
       },
+      {
+        protocol: 'https',
+        hostname: 'world-cup2026-olive.vercel.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bscl-project.vercel.app',
+      },
     ],
   },
   async headers() {

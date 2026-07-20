@@ -72,11 +72,11 @@ async function uploadCover(
   alt: string,
 ) {
   const imagePath = path || '/images/profil-picNb.png'
-  const url = `${LEGACY_SITE}${imagePath}`
+  const url = imagePath.startsWith('http') ? imagePath : `${LEGACY_SITE}${imagePath}`
   const response = await fetch(url)
   if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`)
   const buffer = Buffer.from(await response.arrayBuffer())
-  const filename = imagePath.split('/').pop() || 'cover.jpg'
+  const filename = new URL(url).pathname.split('/').pop()?.split('?')[0] || 'cover.jpg'
 
   return payload.create({
     collection: 'media',
@@ -98,12 +98,18 @@ async function upsertProject(
   const coverUrl =
     typeof project.cover === 'object' && project.cover?.url ? project.cover.url : null
   const imagePath = coverUrl
-    ? new URL(coverUrl).pathname
-    : project.slug === 'modern-portfolio'
-      ? '/images/profil-picNb.png'
-      : project.slug === 'portfolio-bemps-cms'
-        ? '/images/hero-person.jpg'
-        : `/projects/${project.slug}-cover.jpg`
+    ? coverUrl.startsWith('http')
+      ? coverUrl
+      : new URL(coverUrl).pathname
+    : project.slug === 'world-cup-scores-2026'
+      ? 'https://world-cup2026-olive.vercel.app/icon.svg'
+      : project.slug === 'bscl'
+        ? 'https://bscl-project.vercel.app/favicon.ico'
+        : project.slug === 'modern-portfolio'
+          ? '/images/profil-picNb.png'
+          : project.slug === 'portfolio-bemps-cms'
+            ? '/images/hero-person.jpg'
+            : `/projects/${project.slug}-cover.jpg`
 
   const existing = await payload.find({
     collection: 'projects',
