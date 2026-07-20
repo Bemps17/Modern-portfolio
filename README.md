@@ -76,6 +76,23 @@ Sans `PAYLOAD_SECRET` / `DATABASE_URI`, le build et le site public fonctionnent 
 3. Ajouter `PAYLOAD_SECRET` + `NEXT_PUBLIC_SITE_URL`
 4. Redeploy
 
+## Roadmap MVP (état)
+
+| Zone | Statut |
+|---|---|
+| U1–U8 fondations, pages, SEO, tests | ✅ |
+| Mode démo Vercel (sans env) | ✅ |
+| Layout studio + effets fun | ✅ |
+| Neon seedé + script `pnpm seed:portfolio` | ✅ |
+| SEO : JSON-LD, OG/Twitter, sitemap | ✅ v0.5.0 |
+| Monitoring : Vercel Analytics + Speed Insights | ✅ v0.5.0 |
+| Admin preview bouton sur projets | ✅ v0.5.0 |
+| Variables Vercel prod (`/admin` CMS) | 🔶 À configurer manuellement |
+| Resend contact prod | 🔶 Optionnel |
+| Lighthouse ≥ 95 | ⏳ À auditer |
+| Domaine custom | ⏳ |
+| Live Preview admin (drafts Payload) | ⏳ Post-MVP |
+
 ## Plan
 
 Voir `docs/plans/2026-07-20-001-feat-modern-portfolio-cms-plan.md`.

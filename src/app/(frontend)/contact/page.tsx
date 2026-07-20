@@ -5,9 +5,22 @@ import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getSiteSettingsContent } from '@/lib/content'
 
-export const metadata: Metadata = {
-  title: 'Contact',
-  description: 'Envoyez un message.',
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettingsContent()
+
+  return {
+    title: 'Contact',
+    description: settings?.tagline
+      ? `Contactez ${settings.siteName} — ${settings.tagline}`
+      : `Contactez ${settings?.siteName || 'moi'}.`,
+    openGraph: {
+      title: `Contact — ${settings?.siteName || 'Portfolio'}`,
+      description: settings?.tagline || undefined,
+      type: 'website',
+    },
+  }
 }
 
 export default async function ContactPage() {

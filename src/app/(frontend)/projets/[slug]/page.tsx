@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ProjectDetailView } from '@/components/sections/ProjectDetailView'
+import { creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
 import { getProjectBySlug, getProjectSlugs, getPublishedProjects } from '@/lib/content'
 import type { Media, Project } from '@/payload-types'
 
@@ -59,19 +60,14 @@ export default async function ProjetDetailPage({ params }: PageProps) {
   const prevProject = toAdjacent(allProjects[index - 1])
   const nextProject = toAdjacent(allProjects[index + 1])
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    name: project.title,
-    description: project.excerpt,
-    url: project.liveUrl || undefined,
-  }
-
   return (
     <>
-      <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        type="application/ld+json"
+      <JsonLd
+        data={creativeWorkJsonLd({
+          name: project.title,
+          description: project.excerpt,
+          url: project.liveUrl,
+        })}
       />
       <ProjectDetailView nextProject={nextProject} prevProject={prevProject} project={project} />
     </>

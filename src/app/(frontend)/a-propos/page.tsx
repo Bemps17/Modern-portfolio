@@ -6,6 +6,8 @@ import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getExperiences, getSiteSettingsContent, getSkills } from '@/lib/content'
+import { JsonLd, personJsonLd } from '@/lib/json-ld'
+import { getSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
 
@@ -24,20 +26,17 @@ export default async function AboutPage() {
     getSkills(),
   ])
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
+  const jsonLd = personJsonLd({
     name: settings?.siteName,
     email: settings?.email,
     description: settings?.aboutIntro || settings?.tagline,
-  }
+    url: getSiteUrl(),
+    sameAs: (settings?.socialLinks || []).map((link) => link.url).filter(Boolean) as string[],
+  })
 
   return (
     <Container className="space-y-16 py-16">
-      <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        type="application/ld+json"
-      />
+      <JsonLd data={jsonLd} />
       <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
         <div>
           <SectionTitle

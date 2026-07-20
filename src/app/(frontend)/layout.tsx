@@ -1,4 +1,6 @@
 import { Syne, DM_Sans, Space_Grotesk } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 
@@ -8,6 +10,7 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
 import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
+import { getSiteUrl } from '@/lib/site-url'
 
 import './styles.css'
 
@@ -32,6 +35,7 @@ const spaceGrotesk = Space_Grotesk({
 export const revalidate = 3600
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   icons: {
     icon: [
       { url: '/brand/favicon.svg', type: 'image/svg+xml' },
@@ -64,6 +68,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </div>
         <BottomTabBar />
         <Toaster position="bottom-center" theme="dark" />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

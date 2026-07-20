@@ -14,11 +14,13 @@ import { Skills } from './collections/Skills'
 import { Users } from './collections/Users'
 import { SEODefaults } from './globals/SEODefaults'
 import { SiteSettings } from './globals/SiteSettings'
+import { getSiteUrl } from './lib/site-url'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+const siteUrl = getSiteUrl()
 
 export default buildConfig({
   admin: {

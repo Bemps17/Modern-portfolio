@@ -17,6 +17,8 @@ import {
   getSiteSettingsContent,
   getSkills,
 } from '@/lib/content'
+import { JsonLd, personJsonLd, websiteJsonLd } from '@/lib/json-ld'
+import { getSiteUrl } from '@/lib/site-url'
 import type { Experience, Media } from '@/payload-types'
 
 export const revalidate = 3600
@@ -44,13 +46,21 @@ export async function generateMetadata(): Promise<Metadata> {
       title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
       description: seo?.defaultDescription || settings?.tagline || undefined,
       images: og ? [{ url: og }] : undefined,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
+      description: seo?.defaultDescription || settings?.tagline || undefined,
+      images: og ? [og] : undefined,
     },
   }
 }
 
 export default async function HomePage() {
-  const [settings, featured, allProjects, experiences, skills] = await Promise.all([
+  const [settings, seo, featured, allProjects, experiences, skills] = await Promise.all([
     getSiteSettingsContent(),
+    getSeoDefaultsContent(),
     getFeaturedProjects(),
     getPublishedProjects(),
     getExperiences(),
@@ -61,9 +71,29 @@ export default async function HomePage() {
   const tagline = settings?.tagline || 'Créateur digital'
   const aboutIntro = settings?.aboutIntro
   const techItems = skills.map((skill) => skill.name)
+  const siteUrl = getSiteUrl()
+  const sameAs = (settings?.socialLinks || [])
+    .map((link) => link.url)
+    .filter((url): url is string => Boolean(url))
 
   return (
     <BootSequence>
+      <JsonLd
+        data={websiteJsonLd({
+          name: siteName,
+          url: siteUrl,
+          description: seo?.defaultDescription || tagline,
+        })}
+      />
+      <JsonLd
+        data={personJsonLd({
+          name: siteName,
+          email: settings?.email,
+          description: aboutIntro || tagline,
+          url: siteUrl,
+          sameAs,
+        })}
+      />
       <Hero aboutIntro={aboutIntro} siteName={siteName} tagline={tagline} />
       <TechMarquee items={techItems} />
       <div className="px-6 py-16 xl:px-16">

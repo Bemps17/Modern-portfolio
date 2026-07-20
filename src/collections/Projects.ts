@@ -2,6 +2,9 @@ import type { Access, CollectionConfig } from 'payload'
 
 import { slugify } from '../lib/utils'
 import { revalidateProjects } from '../lib/revalidate'
+import { getSiteUrl } from '../lib/site-url'
+
+const siteUrl = getSiteUrl()
 
 const isAuthenticated: Access = ({ req: { user } }) => Boolean(user)
 
@@ -34,6 +37,10 @@ export const Projects: CollectionConfig = {
     defaultColumns: ['title', 'status', 'featured', 'order', 'updatedAt'],
     group: 'Contenu',
     description: 'Projets du portfolio (publics uniquement si published).',
+    preview: (doc) => {
+      if (!doc?.slug) return null
+      return `${siteUrl}/projets/${doc.slug}`
+    },
   },
   access: {
     read: isPublishedOrAuthenticated,
