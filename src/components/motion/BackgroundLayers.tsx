@@ -7,34 +7,50 @@ import { SITE_IMAGES } from '@/lib/site-images'
 
 const BLOBS = [
   {
-    className: 'left-[-10%] top-[8%] h-[42vw] w-[42vw] animate-[blob-float-1_22s_ease-in-out_infinite]',
-    color: 'rgba(255, 107, 26, 0.07)',
+    className: 'left-[-12%] top-[4%] h-[46vw] w-[46vw] animate-[blob-float-1_22s_ease-in-out_infinite]',
+    color: 'rgba(255, 107, 26, 0.10)',
   },
   {
-    className: 'right-[-8%] top-[35%] h-[36vw] w-[36vw] animate-[blob-float-2_26s_ease-in-out_infinite]',
-    color: 'rgba(153, 27, 27, 0.06)',
+    className: 'right-[-10%] top-[28%] h-[40vw] w-[40vw] animate-[blob-float-2_26s_ease-in-out_infinite]',
+    color: 'rgba(153, 27, 27, 0.08)',
   },
   {
-    className: 'left-[25%] bottom-[5%] h-[30vw] w-[30vw] animate-[blob-float-3_20s_ease-in-out_infinite]',
-    color: 'rgba(255, 179, 71, 0.05)',
+    className: 'left-[22%] bottom-[2%] h-[34vw] w-[34vw] animate-[blob-float-3_20s_ease-in-out_infinite]',
+    color: 'rgba(255, 179, 71, 0.07)',
+  },
+  {
+    className: 'right-[10%] bottom-[-6%] h-[38vw] w-[38vw] animate-[blob-float-1_28s_ease-in-out_infinite]',
+    color: 'rgba(255, 107, 26, 0.06)',
+  },
+  {
+    className: 'left-[-6%] top-[52%] h-[32vw] w-[32vw] animate-[blob-float-2_24s_ease-in-out_infinite]',
+    color: 'rgba(153, 27, 27, 0.05)',
   },
 ] as const
 
 const PHOTO_LAYERS = [
   {
     alt: '',
-    className: 'right-[-6%] top-[-6%] h-[min(88vh,920px)] w-[min(58vw,680px)]',
-    opacity: 0.22,
-    scroll: [0, 1400] as const,
-    y: [0, 220] as const,
+    className: 'right-[-8%] top-[-10%] h-[min(92vh,980px)] w-[min(60vw,720px)]',
+    opacity: 0.26,
+    scroll: [0, 1600] as const,
+    y: [0, 240] as const,
     src: SITE_IMAGES.backgrounds.marsHighway,
   },
   {
     alt: '',
-    className: 'bottom-[-10%] left-[-8%] h-[min(72vh,760px)] w-[min(50vw,620px)]',
-    opacity: 0.17,
-    scroll: [0, 1400] as const,
-    y: [0, 320] as const,
+    className: 'left-[-10%] top-[18%] h-[min(78vh,820px)] w-[min(52vw,640px)]',
+    opacity: 0.2,
+    scroll: [0, 1800] as const,
+    y: [0, 360] as const,
+    src: SITE_IMAGES.backgrounds.techParticles,
+  },
+  {
+    alt: '',
+    className: 'bottom-[-14%] right-[6%] h-[min(74vh,780px)] w-[min(54vw,680px)]',
+    opacity: 0.18,
+    scroll: [0, 2000] as const,
+    y: [0, 420] as const,
     src: SITE_IMAGES.backgrounds.hangar8Lounge,
   },
 ] as const
@@ -65,20 +81,20 @@ function ParallaxPhotoLayer({
 
   return (
     <motion.div
-      className={`pointer-events-none absolute overflow-hidden rounded-[2rem] ${className}`}
+      className={`pointer-events-none absolute overflow-hidden rounded-[2.5rem] ${className}`}
       style={enabled ? { y } : undefined}
     >
       <Image
         alt={alt}
         aria-hidden={alt === ''}
-        className="object-cover object-center saturate-[0.85] contrast-[1.05]"
+        className="object-cover object-center saturate-[0.9] contrast-[1.08]"
         fill
         sizes="(max-width: 1024px) 70vw, 45vw"
         src={src}
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/35 via-[var(--background)]/10 to-[var(--background)]/55"
+        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/30 via-[var(--background)]/10 to-[var(--background)]/55"
       />
       <div
         aria-hidden
@@ -92,8 +108,8 @@ function ParallaxPhotoLayer({
 export function BackgroundLayers() {
   const reduceMotion = useReducedMotion()
   const { scrollY } = useScroll()
-  const meshY = useTransform(scrollY, [0, 1200], [0, 180])
-  const gridY = useTransform(scrollY, [0, 1200], [0, 60])
+  const meshY = useTransform(scrollY, [0, 1400], [0, 220])
+  const gridY = useTransform(scrollY, [0, 1400], [0, 80])
   const parallaxEnabled = !reduceMotion
 
   return (
@@ -125,11 +141,20 @@ export function BackgroundLayers() {
 
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/55 via-[var(--background)]/25 to-[var(--background)]/80"
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(120% 80% at 50% 110%, rgba(255, 107, 26, 0.10) 0%, transparent 55%)',
+        }}
+      />
+
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/45 via-[var(--background)]/20 to-[var(--background)]/85"
       />
 
       <motion.div
-        className="absolute inset-0 opacity-[0.028]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage: GRID_SVG,
           backgroundSize: '48px 48px',
@@ -138,8 +163,17 @@ export function BackgroundLayers() {
       />
 
       <div
-        className="absolute inset-0 opacity-[0.035] mix-blend-overlay"
+        className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
         style={{ backgroundImage: NOISE_SVG, backgroundSize: '180px 180px' }}
+      />
+
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(140% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%)',
+        }}
       />
     </div>
   )

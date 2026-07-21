@@ -5,5 +5,6 @@ export const SITE_IMAGES = {
   backgrounds: {
     marsHighway: '/images/backgrounds/mars-highway.jpg',
     hangar8Lounge: '/images/backgrounds/hangar8-lounge.jpg',
+    techParticles: '/images/backgrounds/tech-particles.jpg',
   },
 } as const
