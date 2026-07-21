@@ -52,7 +52,7 @@ const legacyProjects: LegacyProject[] = [
       'Refonte CMS-driven du portfolio : Next.js 16, Payload 3, Neon Postgres, design glassmorphism et déploiement Vercel. Développé avec Cursor.',
     tags: ['Next.js', 'Payload', 'TypeScript', 'Neon', 'Tailwind', 'Framer Motion'],
     image: '/images/profil-picNb.png',
-    link: 'https://modern-portfolio-git-cursor-plan-moder-b9d2d3-bemps17s-projects.vercel.app/',
+    link: 'https://modern-portfolio-two-orcin.vercel.app/',
     github: 'https://github.com/Bemps17/Modern-portfolio',
   },
   {
@@ -108,6 +108,7 @@ const legacyProjects: LegacyProject[] = [
     tags: ['Video API', 'Streaming', 'Education'],
     image: '/projects/guidestream-cover.jpg',
     link: 'https://guidestream.netlify.app/',
+    github: 'https://github.com/Bemps17/Guide-streaming-',
   },
   {
     id: 'juriaide',
@@ -126,6 +127,7 @@ const legacyProjects: LegacyProject[] = [
     tags: ['Branding', 'Figma', 'Print'],
     image: null,
     link: null,
+    github: 'https://github.com/Bemps17/H8testv1',
   },
   {
     id: 'mapointeuse',
@@ -153,6 +155,7 @@ const legacyProjects: LegacyProject[] = [
     tags: ['PWA', 'Timer', 'Analytics'],
     image: '/projects/pooltimer-cover.jpg',
     link: 'https://pooltimer.netlify.app/',
+    github: 'https://github.com/Bemps17/PoolTimer',
   },
   {
     id: 'pooltools',
@@ -188,6 +191,7 @@ const legacyProjects: LegacyProject[] = [
     tags: ['JavaScript', 'LocalStorage', 'Search'],
     image: '/projects/snippetbank-cover.jpg',
     link: 'https://snippetbank.netlify.app/',
+    github: 'https://github.com/Bemps17/SnippetBank-',
   },
   {
     id: 'suivijardin',
@@ -206,6 +210,7 @@ const legacyProjects: LegacyProject[] = [
     tags: ['API Météo', 'Planning', 'Travel'],
     image: '/projects/vacanceslr-cover.jpg',
     link: 'https://vacanceslr.netlify.app/',
+    github: 'https://github.com/Bemps17/la-rochelle-pwa',
   },
   {
     id: 'workfloow',
@@ -215,6 +220,117 @@ const legacyProjects: LegacyProject[] = [
     tags: ['Kanban', 'Collaboration', 'Analytics'],
     image: '/projects/workfloow-cover.jpg',
     link: 'https://workfloow.netlify.app/',
+    github: 'https://github.com/Bemps17/workflow',
+  },
+  {
+    id: 'pomodotask',
+    title: 'PomoDoTask',
+    description:
+      'Gestionnaire de tâches avec technique Pomodoro. Sessions focus, pauses programmées et déploiement Vercel.',
+    tags: ['JavaScript', 'Pomodoro', 'Productivity', 'Vercel'],
+    image: null,
+    link: 'https://pomodotaskv1.vercel.app',
+    github: 'https://github.com/Bemps17/Pomodotaskv1',
+  },
+  {
+    id: 'pool-story',
+    title: 'Pool Story',
+    description:
+      'Application web autour du billard — narration et suivi de parties, interface HTML légère.',
+    tags: ['HTML5', 'Billiard'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/PoolStory',
+  },
+  {
+    id: 'projet-plato',
+    title: 'Projet Plato',
+    description:
+      'Jeu interactif Plato — React, Vite et NextUI. Expérimentation UI gamifiée.',
+    tags: ['React', 'TypeScript', 'Vite'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/ProjetPlato',
+  },
+  {
+    id: 'react-academy',
+    title: 'React Academy',
+    description:
+      "Plateforme d'apprentissage React — parcours guidés et exercices pratiques, déployée sur Vercel.",
+    tags: ['React', 'HTML5', 'Education', 'Vercel'],
+    image: null,
+    link: 'https://reactacademy-beige.vercel.app',
+    github: 'https://github.com/Bemps17/Reactacademy',
+  },
+  {
+    id: 'scoreur',
+    title: 'Scoreur',
+    description:
+      'Application de scoring en JavaScript — suivi de points et tableaux de résultats.',
+    tags: ['JavaScript', 'Scoring'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/scoreur',
+  },
+  {
+    id: 'calcul-mutuelle',
+    title: 'Calcul Mutuelle',
+    description:
+      'Outil de calcul pour remboursements mutuelle — interface simple et formulaires HTML.',
+    tags: ['HTML5', 'Calculator'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/Calculmutuelle',
+  },
+  {
+    id: 'manus-malakoff',
+    title: 'Manus Malakoff',
+    description:
+      'Projet Manus Malakoff — développement web et identité digitale.',
+    tags: ['Web'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/ManusMalakoff-',
+  },
+  {
+    id: 'stream-config',
+    title: 'Stream Config',
+    description:
+      'Site web moderne pour aider à débuter le streaming — guides, configuration matérielle et logicielle.',
+    tags: ['JavaScript', 'Streaming', 'Education'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/StreamConfigv1',
+  },
+  {
+    id: 'portfolio-v1',
+    title: 'Portfolio v1',
+    description:
+      'Première version du portfolio personnel — site vitrine HTML/CSS, base de la refonte actuelle.',
+    tags: ['HTML5', 'CSS3', 'Portfolio'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/Porfolio-final-v1',
+  },
+  {
+    id: 'site-perso-v2',
+    title: 'Site Perso v2',
+    description:
+      'Deuxième itération du site personnel — exploration CSS avancé et mise en page responsive.',
+    tags: ['CSS3', 'Portfolio'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/site-perso-v2',
+  },
+  {
+    id: 'vavances-lr',
+    title: 'Vacances La Rochelle',
+    description:
+      'Planificateur de vacances à La Rochelle — PWA avec météo et suggestions locales.',
+    tags: ['HTML5', 'PWA', 'Travel'],
+    image: null,
+    link: null,
+    github: 'https://github.com/Bemps17/VavancesLR-v0.1',
   },
 ]
 
