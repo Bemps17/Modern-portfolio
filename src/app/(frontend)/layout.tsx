@@ -59,11 +59,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
       <body>
+        <a
+          className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-4 focus-visible:left-4 focus-visible:z-[100] focus-visible:rounded-lg focus-visible:bg-[var(--accent)] focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-black"
+          href="#main"
+        >
+          Aller au contenu
+        </a>
         <FunEffects />
         <CommandPalette projects={paletteProjects} />
         <Sidebar siteName={siteName} socialLinks={socialLinks} />
         <div className="relative z-10 min-h-screen lg:pl-[72px]">
-          <main className="min-h-screen pb-20 lg:pb-0">{children}</main>
+          <main className="min-h-screen pb-20 lg:pb-0" id="main">
+            {children}
+          </main>
           <Footer email={email} siteName={siteName} />
         </div>
         <BottomTabBar />

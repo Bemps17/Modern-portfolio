@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 type CommandItem = {
   id: string
@@ -26,6 +26,14 @@ const NAV_ITEMS: CommandItem[] = [
 export function CommandPalette({ projects }: CommandPaletteProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
+
+  const close = useCallback(() => {
+    setOpen(false)
+    setQuery('')
+  }, [])
 
   const items = useMemo(() => {
     const projectItems = projects.map((project) => ({
@@ -47,14 +55,42 @@ export function CommandPalette({ projects }: CommandPaletteProps) {
     const onKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
-        setOpen((value) => !value)
+        if (open) close()
+        else setOpen(true)
       }
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape') close()
     }
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [open, close])
+
+  useEffect(() => {
+    if (open) {
+      lastFocusedRef.current = document.activeElement as HTMLElement | null
+      inputRef.current?.focus()
+    } else {
+      lastFocusedRef.current?.focus()
+    }
+  }, [open])
+
+  const onDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Tab') return
+    const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+    )
+    if (!focusables || focusables.length === 0) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    const active = document.activeElement
+    if (event.shiftKey && active === first) {
+      event.preventDefault()
+      last.focus()
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault()
+      first.focus()
+    }
+  }
 
   const groups = [...new Set(filtered.map((item) => item.group))]
 
@@ -76,21 +112,26 @@ export function CommandPalette({ projects }: CommandPaletteProps) {
             className="fixed inset-0 z-[80] flex items-start justify-center bg-black/60 px-4 pt-[12vh] backdrop-blur-sm"
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
-            onClick={() => setOpen(false)}
+            onClick={close}
           >
             <motion.div
               animate={{ opacity: 1, y: 0, scale: 1 }}
+              aria-label="Recherche rapide"
+              aria-modal="true"
               className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-[var(--background-elevated)] shadow-2xl"
               exit={{ opacity: 0, y: 8, scale: 0.98 }}
               initial={{ opacity: 0, y: 8, scale: 0.98 }}
               onClick={(event) => event.stopPropagation()}
+              onKeyDown={onDialogKeyDown}
+              ref={dialogRef}
+              role="dialog"
             >
               <div className="border-b border-white/10 px-4 py-3">
                 <input
-                  autoFocus
                   className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted)]"
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Rechercher une page ou un projet…"
+                  ref={inputRef}
                   value={query}
                 />
               </div>
@@ -105,7 +146,7 @@ export function CommandPalette({ projects }: CommandPaletteProps) {
                           className="block rounded-lg px-3 py-2 text-sm transition hover:bg-white/5"
                           href={item.href}
                           key={item.id}
-                          onClick={() => setOpen(false)}
+                          onClick={close}
                         >
                           {item.label}
                         </Link>
