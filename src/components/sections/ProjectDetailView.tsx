@@ -9,7 +9,8 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { estimateReadingTime } from '@/lib/reading-time'
-import type { Media, Project } from '@/payload-types'
+import { isMedia } from '@/lib/media'
+import type { Project } from '@/payload-types'
 
 const STACK_LABELS: Record<string, string> = {
   nextjs: 'Next.js',
@@ -37,7 +38,7 @@ type ProjectDetailViewProps = {
 }
 
 export function ProjectDetailView({ project, prevProject, nextProject }: ProjectDetailViewProps) {
-  const cover = typeof project.cover === 'object' ? (project.cover as Media) : null
+  const cover = isMedia(project.cover) ? project.cover : null
   const stackItems = (project.stack || []) as NonNullable<Project['stack']>
   const readingMinutes = estimateReadingTime(project)
 
@@ -99,7 +100,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
             {project.gallery?.length ? (
               <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {project.gallery.map((item, index) => {
-                  const image = typeof item.image === 'object' ? (item.image as Media) : null
+                  const image = isMedia(item.image) ? item.image : null
                   if (!image?.url) return null
                   return (
                     <div
