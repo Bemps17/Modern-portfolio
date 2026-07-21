@@ -31,24 +31,24 @@ const BLOBS = [
 const PHOTO_LAYERS = [
   {
     alt: '',
-    className: 'right-[-8%] top-[-10%] h-[min(92vh,980px)] w-[min(60vw,720px)]',
-    opacity: 0.32,
+    className: 'right-[-12%] top-[-10%] h-[min(92vh,980px)] w-[min(82vw,720px)] lg:w-[min(60vw,720px)]',
+    opacity: 0.34,
     scroll: [0, 1600] as const,
     y: [0, 240] as const,
     src: SITE_IMAGES.backgrounds.marsHighway,
   },
   {
     alt: '',
-    className: 'left-[-10%] top-[18%] h-[min(78vh,820px)] w-[min(52vw,640px)]',
-    opacity: 0.26,
+    className: 'left-[-14%] top-[18%] h-[min(78vh,820px)] w-[min(74vw,640px)] lg:w-[min(52vw,640px)]',
+    opacity: 0.28,
     scroll: [0, 1800] as const,
     y: [0, 360] as const,
     src: SITE_IMAGES.backgrounds.techParticles,
   },
   {
     alt: '',
-    className: 'bottom-[-14%] right-[6%] h-[min(74vh,780px)] w-[min(54vw,680px)]',
-    opacity: 0.24,
+    className: 'bottom-[-14%] right-[-8%] h-[min(74vh,780px)] w-[min(76vw,680px)] lg:w-[min(54vw,680px)]',
+    opacity: 0.26,
     scroll: [0, 2000] as const,
     y: [0, 420] as const,
     src: SITE_IMAGES.backgrounds.hangar8Lounge,
@@ -89,17 +89,17 @@ function ParallaxPhotoLayer({
         aria-hidden={alt === ''}
         className="object-cover object-center saturate-[0.95] contrast-[1.1]"
         fill
-        sizes="(max-width: 1024px) 70vw, 45vw"
+        sizes="(max-width: 1024px) 90vw, 45vw"
         src={src}
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/25 via-[var(--background)]/8 to-[var(--background)]/45"
+        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/20 via-[var(--background)]/5 to-[var(--background)]/40"
       />
       <div
         aria-hidden
         className="absolute inset-0 mix-blend-multiply"
-        style={{ backgroundColor: `rgba(10, 10, 10, ${1 - opacity})` }}
+        style={{ backgroundColor: `rgba(10, 10, 10, ${Math.max(0, 1 - opacity - 0.18)})` }}
       />
     </motion.div>
   )
@@ -150,7 +150,7 @@ export function BackgroundLayers() {
 
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/35 via-[var(--background)]/15 to-[var(--background)]/80"
+        className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/25 via-[var(--background)]/10 to-[var(--background)]/70"
       />
 
       <motion.div

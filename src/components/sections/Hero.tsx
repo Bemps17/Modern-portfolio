@@ -60,13 +60,17 @@ export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
         </div>
       </div>
 
-      <div className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/10 lg:hidden">
+      <div className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl lg:hidden">
         <Image
           alt={`Portrait de ${siteName}`}
           className="object-cover object-top"
           fill
           sizes="90vw"
           src={SITE_IMAGES.profile}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
         />
       </div>
     </section>

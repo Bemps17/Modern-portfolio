@@ -86,9 +86,11 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Transparent : le fond opaque est fourni par BackgroundLayers (fixed z-0),
+     ce qui permet aux couches parallax de rester visibles derrière le contenu. */
+  background: transparent;
 }
 
 a {
