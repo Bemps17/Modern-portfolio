@@ -1,8 +1,8 @@
 'use client'
 
-import { BackgroundLayers } from '@/components/motion/BackgroundLayers'
 import { CustomCursor } from '@/components/motion/CustomCursor'
 import { MouseGlow } from '@/components/motion/MouseGlow'
+import { BackgroundLayers } from '@/components/motion/BackgroundLayers'
 import { useRichMotionEffects } from '@/lib/use-client-media'
 
 export function FunEffects() {
@@ -10,12 +10,10 @@ export function FunEffects() {
 
   return (
     <>
-      {richEffects ? (
-        <>
-          <BackgroundLayers />
-          <MouseGlow />
-        </>
-      ) : null}
+      {/* Les couches de fond sont toujours rendues (desktop + mobile).
+          Seuls les effets riches (glow souris, curseur custom) restent desktop-only. */}
+      <BackgroundLayers />
+      {richEffects ? <MouseGlow /> : null}
       <CustomCursor />
     </>
   )
