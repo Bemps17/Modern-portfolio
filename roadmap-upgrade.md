@@ -188,4 +188,38 @@ Priorités : **P0** = bloquant / sécurité critique · **P1** = fort impact, ef
 
 ---
 
-*Document d'audit — généré à partir de l'état `main`. Toutes les références de fichiers sont vérifiables dans le dépôt.*
+## 6. Bilan de remédiation — suivi (v0.6.0)
+
+Première vague de correctifs appliquée sur la branche `cursor/audit-remediation-c7c1`.
+Légende : ✅ fait · ⏸️ reporté (infra/clé externe requise) · 🎯 planifié.
+
+### ✅ Livrés
+
+| ID | Correctif | Preuve |
+|---|---|---|
+| C1 | `images.localPatterns` autorise `/brand/**` et `/images/**` | `next.config.ts` — front public de nouveau rendu |
+| S4 | `submitContact` : `try/catch` DB + email, renvoie `{ ok:false }` propre | `contact/actions.ts` |
+| A1 | Skip link « Aller au contenu » + `<main id="main">` | `layout.tsx` |
+| A2 | Focus trap `Tab`/`Shift+Tab` + restauration du focus + `role="dialog"` | `CommandPalette.tsx` |
+| SEO1 | `alternates.canonical` sur accueil, projets, projet, à-propos, contact | pages `generateMetadata` |
+| SEO4 | JSON-LD projet enrichi (`image`, `datePublished`, `author`) + `BreadcrumbList` | `json-ld.tsx`, `projets/[slug]/page.tsx` |
+| Q1/Q2 | Helper typé `isMedia()` / `resolveMediaUrl()` remplaçant les casts `as Media` | `src/lib/media.ts` + pages/composants |
+| Q5 | Log serveur quand Payload bascule en contenu de démo | `src/lib/payload.ts` |
+| U5 | Page 404 front personnalisée | `src/app/(frontend)/not-found.tsx` |
+| — | Bump `SITE_VERSION` → `0.6.0` | `src/lib/site-version.ts` |
+
+### ⏸️ Reportés (nécessitent provisioning / décision)
+
+| ID | Raison du report |
+|---|---|
+| S1 (CSP `unsafe-eval`/nonces) | Impacte `/admin` Payload — nécessite tests dédiés + nonces sur le JSON-LD ; à isoler dans sa propre PR. |
+| S2 (rate-limit persistant) | Nécessite un store partagé (Vercel KV / Upstash) à provisionner. |
+| S3 (anti-spam Turnstile) | Nécessite des clés Cloudflare Turnstile. |
+| SEO2 (OG image fallback `next/og`) | 🎯 réalisable, prévu dans une vague suivante. |
+| Q4 (CI GitHub `pnpm verify`) | 🎯 ajout d'un workflow prévu (non vérifiable dans cet environnement). |
+| A4 (tests a11y `axe`) | 🎯 nécessite navigateurs Playwright + serveur en CI. |
+| A5/D1 (touch targets / contraste) | 🎯 audit visuel restant. |
+
+---
+
+*Document d'audit — généré à partir de l'état `main`, mis à jour avec le bilan de remédiation. Toutes les références de fichiers sont vérifiables dans le dépôt.*

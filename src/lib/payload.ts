@@ -21,7 +21,8 @@ export async function getPayloadClientSafe(): Promise<Payload | null> {
 
   try {
     return await getPayloadClient()
-  } catch {
+  } catch (error) {
+    console.error('[payload] Connexion indisponible — bascule sur le contenu de démo', error)
     return null
   }
 }
