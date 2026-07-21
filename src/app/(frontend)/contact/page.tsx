@@ -4,6 +4,7 @@ import { ContactForm } from '@/components/sections/ContactForm'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getSiteSettingsContent } from '@/lib/content'
+import { getSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
 
@@ -15,9 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
     description: settings?.tagline
       ? `Contactez ${settings.siteName} — ${settings.tagline}`
       : `Contactez ${settings?.siteName || 'moi'}.`,
+    alternates: { canonical: `${getSiteUrl()}/contact` },
     openGraph: {
       title: `Contact — ${settings?.siteName || 'Portfolio'}`,
       description: settings?.tagline || undefined,
+      url: `${getSiteUrl()}/contact`,
       type: 'website',
     },
   }

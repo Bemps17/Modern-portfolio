@@ -14,9 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Projets',
     description: seo?.defaultDescription || `Projets de ${settings?.siteName || 'portfolio'}.`,
+    alternates: { canonical: `${getSiteUrl()}/projets` },
     openGraph: {
       title: `Projets — ${settings?.siteName || 'Portfolio'}`,
       description: seo?.defaultDescription || settings?.tagline || undefined,
+      url: `${getSiteUrl()}/projets`,
       type: 'website',
     },
   }

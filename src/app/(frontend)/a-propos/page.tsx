@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'À propos',
     description: settings?.aboutIntro || settings?.tagline || 'À propos',
+    alternates: { canonical: `${getSiteUrl()}/a-propos` },
   }
 }
 

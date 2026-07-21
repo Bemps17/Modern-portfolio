@@ -43,6 +43,9 @@ export function creativeWorkJsonLd(input: {
   name: string
   description?: string | null
   url?: string | null
+  image?: string | null
+  datePublished?: string | null
+  authorName?: string | null
 }) {
   return {
     '@context': 'https://schema.org',
@@ -50,6 +53,22 @@ export function creativeWorkJsonLd(input: {
     name: input.name,
     description: input.description || undefined,
     url: input.url || undefined,
+    image: input.image || undefined,
+    datePublished: input.datePublished || undefined,
+    author: input.authorName ? { '@type': 'Person', name: input.authorName } : undefined,
+  }
+}
+
+export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
   }
 }
 

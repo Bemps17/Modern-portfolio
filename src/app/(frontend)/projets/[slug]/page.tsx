@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ProjectDetailView } from '@/components/sections/ProjectDetailView'
-import { creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
-import { getProjectBySlug, getProjectSlugs, getPublishedProjects } from '@/lib/content'
-import type { Media, Project } from '@/payload-types'
+import { breadcrumbJsonLd, creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
+import { getProjectBySlug, getProjectSlugs, getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
+import { resolveMediaUrl } from '@/lib/media'
+import { getSiteUrl } from '@/lib/site-url'
+import type { Project } from '@/payload-types'
 
 export const revalidate = 3600
 
@@ -22,43 +24,52 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = await getProjectBySlug(slug)
   if (!project) return { title: 'Projet' }
 
-  const cover = typeof project.cover === 'object' ? (project.cover as Media) : null
+  const coverUrl = resolveMediaUrl(project.cover)
+  const canonical = `${getSiteUrl()}/projets/${project.slug}`
 
   return {
     title: project.title,
     description: project.excerpt,
+    alternates: { canonical },
     openGraph: {
       title: project.title,
       description: project.excerpt,
-      images: cover?.url ? [{ url: cover.url }] : undefined,
+      url: canonical,
+      images: coverUrl ? [{ url: coverUrl }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title: project.title,
       description: project.excerpt,
-      images: cover?.url ? [cover.url] : undefined,
+      images: coverUrl ? [coverUrl] : undefined,
     },
   }
 }
 
 function toAdjacent(project: Project | undefined) {
   if (!project) return null
-  const cover = typeof project.cover === 'object' ? (project.cover as Media) : null
   return {
     slug: project.slug,
     title: project.title,
-    coverUrl: cover?.url ?? null,
+    coverUrl: resolveMediaUrl(project.cover),
   }
 }
 
 export default async function ProjetDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const [project, allProjects] = await Promise.all([getProjectBySlug(slug), getPublishedProjects()])
+  const [project, allProjects, settings] = await Promise.all([
+    getProjectBySlug(slug),
+    getPublishedProjects(),
+    getSiteSettingsContent(),
+  ])
   if (!project) notFound()
 
   const index = allProjects.findIndex((item) => item.slug === slug)
   const prevProject = toAdjacent(allProjects[index - 1])
   const nextProject = toAdjacent(allProjects[index + 1])
+
+  const siteUrl = getSiteUrl()
+  const projectUrl = `${siteUrl}/projets/${project.slug}`
 
   return (
     <>
@@ -66,8 +77,18 @@ export default async function ProjetDetailPage({ params }: PageProps) {
         data={creativeWorkJsonLd({
           name: project.title,
           description: project.excerpt,
-          url: project.liveUrl,
+          url: projectUrl,
+          image: resolveMediaUrl(project.cover),
+          datePublished: project.createdAt,
+          authorName: settings?.siteName,
         })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Accueil', url: `${siteUrl}/` },
+          { name: 'Projets', url: `${siteUrl}/projets` },
+          { name: project.title, url: projectUrl },
+        ])}
       />
       <ProjectDetailView nextProject={nextProject} prevProject={prevProject} project={project} />
     </>

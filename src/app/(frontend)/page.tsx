@@ -18,8 +18,9 @@ import {
   getSkills,
 } from '@/lib/content'
 import { JsonLd, personJsonLd, websiteJsonLd } from '@/lib/json-ld'
+import { resolveMediaUrl } from '@/lib/media'
 import { getSiteUrl } from '@/lib/site-url'
-import type { Experience, Media } from '@/payload-types'
+import type { Experience } from '@/payload-types'
 
 export const revalidate = 3600
 
@@ -36,15 +37,16 @@ function yearsFromExperiences(experiences: Experience[]): number {
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
 
-  const og =
-    seo?.ogImage && typeof seo.ogImage === 'object' ? (seo.ogImage as Media).url || undefined : undefined
+  const og = resolveMediaUrl(seo?.ogImage) || undefined
 
   return {
     title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
     description: seo?.defaultDescription || settings?.tagline || undefined,
+    alternates: { canonical: getSiteUrl() + '/' },
     openGraph: {
       title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
       description: seo?.defaultDescription || settings?.tagline || undefined,
+      url: getSiteUrl() + '/',
       images: og ? [{ url: og }] : undefined,
       type: 'website',
     },
