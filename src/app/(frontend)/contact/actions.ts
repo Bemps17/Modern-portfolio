@@ -29,27 +29,40 @@ export async function submitContact(
     return { ok: true, message: 'Message envoyé.' }
   }
 
-  const payload = await getPayloadClient()
-  await payload.create({
-    collection: 'form-submissions',
-    data: {
-      name: parsed.data.name,
-      email: parsed.data.email,
-      message: parsed.data.message,
-    },
-  })
+  try {
+    const payload = await getPayloadClient()
+    await payload.create({
+      collection: 'form-submissions',
+      data: {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        message: parsed.data.message,
+      },
+    })
+  } catch (error) {
+    console.error('[contact] Échec de l’enregistrement du message', error)
+    return {
+      ok: false,
+      message: 'Une erreur est survenue lors de l’envoi. Réessayez plus tard.',
+    }
+  }
 
   const apiKey = process.env.RESEND_API_KEY
   const to = process.env.CONTACT_TO_EMAIL || process.env.NEXT_PUBLIC_CONTACT_EMAIL
   if (apiKey && to) {
-    const resend = new Resend(apiKey)
-    await resend.emails.send({
-      from: process.env.CONTACT_FROM_EMAIL || 'Portfolio <onboarding@resend.dev>',
-      to: [to],
-      subject: `Nouveau message de ${parsed.data.name}`,
-      replyTo: parsed.data.email,
-      text: parsed.data.message,
-    })
+    try {
+      const resend = new Resend(apiKey)
+      await resend.emails.send({
+        from: process.env.CONTACT_FROM_EMAIL || 'Portfolio <onboarding@resend.dev>',
+        to: [to],
+        subject: `Nouveau message de ${parsed.data.name}`,
+        replyTo: parsed.data.email,
+        text: parsed.data.message,
+      })
+    } catch (error) {
+      // Le message est déjà persisté : on n'échoue pas la soumission si l'email ne part pas.
+      console.error('[contact] Échec de l’envoi de l’email de notification', error)
+    }
   }
 
   return { ok: true, message: 'Message envoyé. Merci !' }
