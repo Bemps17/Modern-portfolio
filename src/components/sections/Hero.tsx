@@ -4,6 +4,7 @@ import { Breathing } from '@/components/motion/Breathing'
 import { RevealText } from '@/components/motion/RevealText'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { Button } from '@/components/ui/Button'
+import { SITE_IMAGES } from '@/lib/site-images'
 
 type HeroProps = {
   siteName: string
@@ -26,7 +27,7 @@ export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
             fill
             priority
             sizes="58vw"
-            src="/images/bertrand-portrait.jpg"
+            src={SITE_IMAGES.profile}
           />
           <div
             aria-hidden
@@ -65,7 +66,7 @@ export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
           className="object-cover object-top"
           fill
           sizes="90vw"
-          src="/images/bertrand-portrait.jpg"
+          src={SITE_IMAGES.profile}
         />
       </div>
     </section>

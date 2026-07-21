@@ -7,6 +7,7 @@ import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getExperiences, getSiteSettingsContent, getSkills } from '@/lib/content'
 import { JsonLd, personJsonLd } from '@/lib/json-ld'
+import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
@@ -58,7 +59,7 @@ export default async function AboutPage() {
             className="object-cover object-top"
             fill
             sizes="280px"
-            src="/images/bertrand-portrait.jpg"
+            src={SITE_IMAGES.profile}
           />
         </div>
       </section>
