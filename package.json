@@ -20,6 +20,7 @@
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "seed:portfolio": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-portfolio.ts",
     "sync:github": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/sync-github-projects.ts",
+    "generate:covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/generate-project-covers.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {

@@ -1,8 +1,12 @@
 import 'dotenv/config'
 
+import fs from 'node:fs'
+import path from 'node:path'
+
 import { getPayload } from 'payload'
 
 import { portfolioFallback } from '../src/data/portfolio-fallback'
+import { mimeFromExt, projectCoverPublicPath, resolveLocalCoverFile } from '../src/lib/project-cover-path'
 import config from '../src/payload.config'
 
 const REMOVED_PROJECT_SLUGS = ['portfolio-bemps-cms']
@@ -68,13 +72,35 @@ function mapStack(tags: string[]): string[] {
   return [...values]
 }
 
-async function uploadCover(
+async function uploadCoverFile(
   payload: Awaited<ReturnType<typeof getPayload>>,
-  path: string | null,
+  absPath: string,
   alt: string,
 ) {
-  const imagePath = path || '/images/profil-picNb.png'
-  const url = imagePath.startsWith('http') ? imagePath : `${LEGACY_SITE}${imagePath}`
+  const buffer = fs.readFileSync(absPath)
+  const filename = path.basename(absPath)
+  return payload.create({
+    collection: 'media',
+    data: { alt },
+    file: {
+      data: buffer,
+      mimetype: mimeFromExt(filename),
+      name: filename,
+      size: buffer.length,
+    },
+  })
+}
+
+async function uploadCoverRemote(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  imagePath: string,
+  alt: string,
+) {
+  const url = imagePath.startsWith('http')
+    ? imagePath
+    : imagePath.startsWith('/projects/') || imagePath.startsWith('/images/')
+      ? `http://127.0.0.1:3000${imagePath}`
+      : `${LEGACY_SITE}${imagePath}`
   const response = await fetch(url)
   if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`)
   const buffer = Buffer.from(await response.arrayBuffer())
@@ -85,11 +111,22 @@ async function uploadCover(
     data: { alt },
     file: {
       data: buffer,
-      mimetype: response.headers.get('content-type') || 'image/jpeg',
+      mimetype: response.headers.get('content-type') || mimeFromExt(filename),
       name: filename,
       size: buffer.length,
     },
   })
+}
+
+async function resolveCoverMedia(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  slug: string,
+  title: string,
+  remotePath: string,
+) {
+  const local = resolveLocalCoverFile(slug)
+  if (local) return uploadCoverFile(payload, local.abs, title)
+  return uploadCoverRemote(payload, remotePath, title)
 }
 
 async function upsertProject(
@@ -99,17 +136,16 @@ async function upsertProject(
 ) {
   const coverUrl =
     typeof project.cover === 'object' && project.cover?.url ? project.cover.url : null
-  const imagePath = coverUrl
-    ? coverUrl.startsWith('http')
-      ? coverUrl
-      : new URL(coverUrl).pathname
-    : project.slug === 'world-cup-scores-2026'
-      ? 'https://world-cup2026-olive.vercel.app/icon.svg'
-      : project.slug === 'bscl'
-        ? 'https://bscl-project.vercel.app/favicon.ico'
-        : project.slug === 'modern-portfolio'
-          ? '/images/profil-picNb.png'
-          : `/projects/${project.slug}-cover.jpg`
+  const imagePath =
+    coverUrl && !coverUrl.includes('profil-picNb')
+      ? coverUrl.startsWith('http')
+        ? coverUrl
+        : new URL(coverUrl, 'http://local').pathname
+      : project.slug === 'world-cup-scores-2026'
+        ? 'https://world-cup2026-olive.vercel.app/icon.svg'
+        : project.slug === 'bscl'
+          ? 'https://bscl-project.vercel.app/favicon.ico'
+          : projectCoverPublicPath(project.slug)
 
   const existing = await payload.find({
     collection: 'projects',
@@ -117,9 +153,8 @@ async function upsertProject(
     limit: 1,
   })
 
-  const cover = existing.docs[0]?.cover
-    ? existing.docs[0].cover
-    : (await uploadCover(payload, imagePath, project.title)).id
+  const coverMedia = await resolveCoverMedia(payload, project.slug, project.title, imagePath)
+  const cover = coverMedia.id
 
   const excerpt = project.excerpt || project.title
   const data = {

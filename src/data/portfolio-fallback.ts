@@ -4,7 +4,11 @@ const LEGACY_SITE = 'https://projet-refonte-portfolio-persov1-0.vercel.app'
 
 function legacyMedia(path: string | null, alt: string): Media | null {
   if (!path) return null
-  const url = path.startsWith('http') ? path : `${LEGACY_SITE}${path}`
+  const url = path.startsWith('http')
+    ? path
+    : path.startsWith('/projects/') || path.startsWith('/images/')
+      ? path
+      : `${LEGACY_SITE}${path}`
   return {
     id: 0,
     alt,
@@ -24,7 +28,7 @@ type LegacyProject = {
   github?: string | null
 }
 
-const legacyProjects: LegacyProject[] = [
+export const legacyProjects: LegacyProject[] = [
   {
     id: 'world-cup-scores-2026',
     title: 'World Cup Scores 2026',
@@ -335,13 +339,14 @@ const legacyProjects: LegacyProject[] = [
 ]
 
 function toProject(item: LegacyProject, index: number): Project {
-  const cover = legacyMedia(item.image, item.title)
+  const coverPath = `/projects/${item.id}-cover.webp`
+  const cover = legacyMedia(coverPath, item.title) as Media
   return {
     id: index + 1,
     title: item.title,
     slug: item.id,
     excerpt: item.description.slice(0, 200),
-    cover: cover ?? (legacyMedia('/images/profil-picNb.png', item.title) as Media),
+    cover,
     gallery: [],
     stack: item.tags as Project['stack'],
     liveUrl: item.link,

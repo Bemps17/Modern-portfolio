@@ -10,11 +10,14 @@
 import 'dotenv/config'
 
 import { execSync } from 'node:child_process'
+import fs from 'node:fs'
 
 import { getPayload } from 'payload'
 
-import config from '../src/payload.config'
+import { buildProjectCoverSvg } from '../src/lib/project-cover-art'
+import { mimeFromExt, resolveLocalCoverFile } from '../src/lib/project-cover-path'
 import { slugify } from '../src/lib/utils'
+import config from '../src/payload.config'
 
 const GITHUB_USER = 'Bemps17'
 
@@ -178,21 +181,37 @@ function fetchGitHubRepos(): GhRepo[] {
   }
 }
 
-async function uploadDefaultCover(
+async function uploadCoverForSlug(
   payload: Awaited<ReturnType<typeof getPayload>>,
-  alt: string,
+  slug: string,
+  title: string,
 ) {
-  const url = 'https://projet-refonte-portfolio-persov1-0.vercel.app/images/profil-picNb.png'
-  const response = await fetch(url)
-  if (!response.ok) throw new Error(`Failed to fetch default cover: ${response.status}`)
-  const buffer = Buffer.from(await response.arrayBuffer())
+  const local = resolveLocalCoverFile(slug)
+  if (local) {
+    const buffer = fs.readFileSync(local.abs)
+    const filename = local.abs.split('/').pop() ?? `${slug}-cover.webp`
+    return payload.create({
+      collection: 'media',
+      data: { alt: title },
+      file: {
+        data: buffer,
+        mimetype: mimeFromExt(filename),
+        name: filename,
+        size: buffer.length,
+      },
+    })
+  }
+
+  const sharp = (await import('sharp')).default
+  const svg = buildProjectCoverSvg(title, slug)
+  const buffer = await sharp(Buffer.from(svg)).resize(1200, 750).webp({ quality: 86 }).toBuffer()
   return payload.create({
     collection: 'media',
-    data: { alt },
+    data: { alt: title },
     file: {
       data: buffer,
-      mimetype: 'image/png',
-      name: 'profil-picNb.png',
+      mimetype: 'image/webp',
+      name: `${slug}-cover.webp`,
       size: buffer.length,
     },
   })
@@ -202,7 +221,6 @@ async function upsertFromRepo(
   payload: Awaited<ReturnType<typeof getPayload>>,
   repo: GhRepo,
   order: number,
-  defaultCoverId: number | string,
 ) {
   const existingSlug = REPO_TO_EXISTING_SLUG[repo.name]
   const slug = existingSlug ?? slugify(humanizeRepoName(repo.name))
@@ -216,7 +234,8 @@ async function upsertFromRepo(
   })
 
   const doc = existing.docs[0]
-  const cover = doc?.cover ?? defaultCoverId
+  const coverMedia = await uploadCoverForSlug(payload, slug, doc?.title ?? title)
+  const cover = coverMedia.id
 
   const data = {
     slug,
@@ -264,7 +283,6 @@ async function main() {
   }
 
   const payload = await getPayload({ config })
-  const defaultCover = await uploadDefaultCover(payload, 'Cover projet')
 
   let order = 100
   for (const repo of repos) {
@@ -272,7 +290,7 @@ async function main() {
       console.log(`  ⊘ skip ${repo.name}`)
       continue
     }
-    await upsertFromRepo(payload, repo, order++, defaultCover.id)
+    await upsertFromRepo(payload, repo, order++)
   }
 
   console.log('Sync GitHub → Payload terminée.')
