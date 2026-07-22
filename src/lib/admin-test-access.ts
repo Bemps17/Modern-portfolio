@@ -1,4 +1,4 @@
-import { isPayloadConfigured } from '@/lib/payload-env'
+import { getDatabaseUri, getPayloadSecret, isPayloadConfigured } from '@/lib/payload-env'
 
 /** Connexion admin automatique — activer via ENABLE_ADMIN_TEST_LOGIN=true sur Vercel. */
 export function isAdminTestLoginEnabled(): boolean {
@@ -24,15 +24,23 @@ function isOneClickAdminLoginAvailable(): boolean {
   )
 }
 
-/** Footer : connexion 1 clic si configuré, sinon login Payload ou diagnostic. */
+/** Footer : connexion 1 clic si configuré, sinon setup ou login. */
 export function getAdminHref(): string {
   if (isOneClickAdminLoginAvailable()) return '/api/admin/test-login'
   if (isPayloadConfigured()) return '/admin/login'
-  return '/payload-health'
+  return '/setup-admin'
 }
 
 export function getAdminLinkTitle(): string {
   if (isOneClickAdminLoginAvailable()) return 'Backoffice — connexion en 1 clic'
   if (isPayloadConfigured()) return 'Backoffice Payload CMS — se connecter'
-  return 'Backoffice — vérifier la configuration Payload sur Vercel'
+  return 'Configurer le backoffice Payload (variables Vercel manquantes)'
+}
+
+export function getPayloadConfigSummary() {
+  return {
+    configured: isPayloadConfigured(),
+    hasSecret: Boolean(getPayloadSecret()),
+    hasDatabase: Boolean(getDatabaseUri()),
+  }
 }

@@ -14,9 +14,12 @@ import { Skills } from './collections/Skills'
 import { Users } from './collections/Users'
 import { SEODefaults } from './globals/SEODefaults'
 import { SiteSettings } from './globals/SiteSettings'
+import { getDatabaseUri, getPayloadSecret, syncDatabaseUriEnv } from './lib/payload-env'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+syncDatabaseUriEnv()
 
 const blobToken = process.env.BLOB_READ_WRITE_TOKEN
 
@@ -30,13 +33,13 @@ export default buildConfig({
   collections: [Users, Media, Projects, Skills, Experiences, FormSubmissions],
   globals: [SiteSettings, SEODefaults],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: getPayloadSecret(),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: getDatabaseUri(),
     },
     push: process.env.NODE_ENV !== 'production',
   }),
