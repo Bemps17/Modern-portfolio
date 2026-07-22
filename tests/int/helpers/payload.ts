@@ -128,7 +128,7 @@ export async function restoreGlobalUpload(
   if (testMediaId == null) return
 
   const current = await payload.findGlobal({ slug, depth: 0 })
-  const raw = (current as Record<string, unknown>)[field]
+  const raw = (current as unknown as Record<string, unknown>)[field]
   const currentId =
     typeof raw === 'number'
       ? raw

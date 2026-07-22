@@ -7,6 +7,7 @@ import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getExperiences, getSiteSettingsContent, getSkills } from '@/lib/content'
 import { JsonLd, personJsonLd } from '@/lib/json-ld'
+import { isMedia, resolveMediaUrl } from '@/lib/media'
 import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
 
@@ -28,12 +29,18 @@ export default async function AboutPage() {
     getSkills(),
   ])
 
+  const portraitSrc = resolveMediaUrl(settings?.avatar) || SITE_IMAGES.profile
+  const portraitAlt =
+    (isMedia(settings?.avatar) ? settings.avatar.alt : null) ||
+    (settings?.siteName ? `Portrait de ${settings.siteName}` : 'Portrait')
+
   const jsonLd = personJsonLd({
     name: settings?.siteName,
     email: settings?.email,
     description: settings?.aboutIntro || settings?.tagline,
     url: getSiteUrl(),
     sameAs: (settings?.socialLinks || []).map((link) => link.url).filter(Boolean) as string[],
+    image: portraitSrc.startsWith('http') ? portraitSrc : `${getSiteUrl()}${portraitSrc}`,
   })
 
   return (
@@ -55,11 +62,11 @@ export default async function AboutPage() {
         </div>
         <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
           <Image
-            alt={settings?.siteName ? `Portrait de ${settings.siteName}` : 'Portrait'}
+            alt={portraitAlt}
             className="object-cover object-top"
             fill
             sizes="280px"
-            src={SITE_IMAGES.profile}
+            src={portraitSrc}
           />
         </div>
       </section>

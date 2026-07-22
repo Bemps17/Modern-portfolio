@@ -18,7 +18,8 @@ import {
   getSkills,
 } from '@/lib/content'
 import { JsonLd, personJsonLd, websiteJsonLd } from '@/lib/json-ld'
-import { resolveMediaUrl } from '@/lib/media'
+import { resolveMediaUrl, isMedia } from '@/lib/media'
+import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
 import type { Experience } from '@/payload-types'
 
@@ -72,6 +73,8 @@ export default async function HomePage() {
   const siteName = settings?.siteName || 'Portfolio'
   const tagline = settings?.tagline || 'Créateur digital'
   const aboutIntro = settings?.aboutIntro
+  const avatarUrl = resolveMediaUrl(settings?.avatar) || SITE_IMAGES.profile
+  const avatarAlt = isMedia(settings?.avatar) ? settings.avatar.alt : null
   const techItems = skills.map((skill) => skill.name)
   const siteUrl = getSiteUrl()
   const sameAs = (settings?.socialLinks || [])
@@ -94,9 +97,16 @@ export default async function HomePage() {
           description: aboutIntro || tagline,
           url: siteUrl,
           sameAs,
+          image: avatarUrl.startsWith('http') ? avatarUrl : `${siteUrl}${avatarUrl}`,
         })}
       />
-      <Hero aboutIntro={aboutIntro} siteName={siteName} tagline={tagline} />
+      <Hero
+        aboutIntro={aboutIntro}
+        avatarAlt={avatarAlt}
+        avatarUrl={avatarUrl}
+        siteName={siteName}
+        tagline={tagline}
+      />
       <TechMarquee items={techItems} />
       <div className="px-6 py-16 xl:px-16">
         <FadeInWhenVisible>

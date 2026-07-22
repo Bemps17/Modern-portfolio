@@ -7,7 +7,8 @@ import { useRef, useState } from 'react'
 
 import { Badge } from '@/components/ui/Badge'
 import { GlassCard } from '@/components/ui/GlassCard'
-import type { Media, Project } from '@/payload-types'
+import type { Project } from '@/payload-types'
+import { resolveMediaUrl } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type ProjectCardProps = {
@@ -15,11 +16,6 @@ type ProjectCardProps = {
   large?: boolean
   enablePreview?: boolean
   showStack?: boolean
-}
-
-function mediaUrl(media: number | Media | null | undefined): string | null {
-  if (!media || typeof media === 'number') return null
-  return media.url ?? null
 }
 
 const STACK_LABELS: Record<string, string> = {
@@ -50,7 +46,7 @@ export function ProjectCard({
   const [glow, setGlow] = useState({ x: 50, y: 50 })
   const [preview, setPreview] = useState<{ x: number; y: number } | null>(null)
 
-  const coverUrl = mediaUrl(project.cover)
+  const coverUrl = resolveMediaUrl(project.cover)
   const coverAlt =
     typeof project.cover === 'object' && project.cover?.alt ? project.cover.alt : project.title
 

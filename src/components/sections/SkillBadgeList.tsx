@@ -1,15 +1,11 @@
 import Image from 'next/image'
 
 import { Badge } from '@/components/ui/Badge'
-import type { Media, Skill } from '@/payload-types'
+import type { Skill } from '@/payload-types'
+import { resolveMediaUrl } from '@/lib/media'
 
 type SkillBadgeListProps = {
   skills: Skill[]
-}
-
-function mediaUrl(media: number | Media | null | undefined): string | null {
-  if (!media || typeof media === 'number') return null
-  return media.url ?? null
 }
 
 export function SkillBadgeList({ skills }: SkillBadgeListProps) {
@@ -31,7 +27,7 @@ export function SkillBadgeList({ skills }: SkillBadgeListProps) {
           </h3>
           <div className="flex flex-wrap gap-3">
             {items.map((skill) => {
-              const iconUrl = mediaUrl(skill.icon)
+              const iconUrl = resolveMediaUrl(skill.icon)
               return (
                 <Badge className="gap-2 py-1.5" key={skill.id}>
                   {iconUrl ? (
