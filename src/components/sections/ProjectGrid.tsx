@@ -5,6 +5,7 @@ import { SlidersHorizontal, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 import { Breathing } from '@/components/motion/Breathing'
+import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren'
 import { ProjectCard } from '@/components/sections/ProjectCard'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -179,12 +180,13 @@ export function ProjectGrid({
           </AnimatePresence>
         </div>
       ) : null}
-      <div
+      <StaggerChildren
         className={cn(
           layoutMode === 'masonry'
             ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-12 xl:auto-rows-[minmax(220px,auto)]'
             : 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3',
         )}
+        stagger={0.1}
       >
         {filtered.map((project, index) => {
           const large = layoutMode === 'masonry' && !!project.featured && index < 2
@@ -201,15 +203,15 @@ export function ProjectGrid({
             breatheFeatured && index === 0 ? <Breathing>{card}</Breathing> : card
 
           return (
-            <div
+            <StaggerItem
               className={layoutMode === 'masonry' ? masonryClass(project, index) : undefined}
               key={project.id}
             >
               {content}
-            </div>
+            </StaggerItem>
           )
         })}
-      </div>
+      </StaggerChildren>
     </div>
   )
 }

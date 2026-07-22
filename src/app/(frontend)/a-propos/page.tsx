@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
 import { StatsStrip } from '@/components/sections/StatsStrip'
-import { AvailabilityBadge, type AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import {
@@ -62,21 +61,16 @@ export default async function AboutPage() {
     image: portraitSrc.startsWith('http') ? portraitSrc : `${getSiteUrl()}${portraitSrc}`,
   })
 
-  const availability = (settings?.availability ?? 'available') as AvailabilityStatus
-
   return (
     <Container className="space-y-16 py-16">
       <JsonLd data={jsonLd} />
       <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
         <div className="space-y-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <AvailabilityBadge label={settings?.availabilityLabel} size="sm" status={availability} />
-            {settings?.location?.trim() ? (
-              <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
-                {settings.location}
-              </span>
-            ) : null}
-          </div>
+          {settings?.location?.trim() ? (
+            <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+              {settings.location}
+            </span>
+          ) : null}
           <SectionTitle
             eyebrow="Profil"
             subtitle={settings?.tagline || undefined}

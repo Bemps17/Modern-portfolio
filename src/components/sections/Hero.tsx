@@ -1,6 +1,10 @@
+'use client'
+
 import Image from 'next/image'
+import { motion, useReducedMotion } from 'framer-motion'
 
 import { Breathing } from '@/components/motion/Breathing'
+import { Magnetic } from '@/components/motion/Magnetic'
 import { RevealText } from '@/components/motion/RevealText'
 import { AvailabilityBadge, type AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
@@ -11,7 +15,6 @@ type HeroProps = {
   siteName: string
   tagline: string
   aboutIntro?: string | null
-  /** URL portrait CMS (Site Settings → avatar), sinon fallback brand. */
   avatarUrl?: string | null
   avatarAlt?: string | null
   availability?: AvailabilityStatus | null
@@ -31,6 +34,7 @@ export function Hero({
 }: HeroProps) {
   const portraitSrc = avatarUrl?.trim() || SITE_IMAGES.profile
   const portraitAlt = avatarAlt?.trim() || `Portrait de ${siteName}`
+  const reduceMotion = useReducedMotion()
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden border-b border-white/10">
@@ -38,6 +42,14 @@ export function Hero({
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,var(--accent-glow),transparent_45%),radial-gradient(ellipse_at_80%_0%,var(--accent-secondary-glow),transparent_40%)]"
       />
+      {!reduceMotion ? (
+        <motion.div
+          animate={{ opacity: [0.25, 0.55, 0.25], scale: [1, 1.08, 1] }}
+          aria-hidden
+          className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-[var(--accent)]/20 blur-3xl"
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ) : null}
 
       <div
         className="absolute inset-y-0 right-0 hidden w-[58%] lg:block"
@@ -61,14 +73,20 @@ export function Hero({
       </div>
 
       <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-6 py-24 lg:w-[42%] lg:px-10 xl:px-16">
-        <div className="mb-6 flex flex-wrap items-center gap-3">
+        <motion.div
+          className="mb-6 flex flex-wrap items-center gap-3"
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* Unique badge disponibilité du site — uniquement ici. */}
           <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
           {location?.trim() ? (
             <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
               {location}
             </span>
           ) : null}
-        </div>
+        </motion.div>
 
         <EditorialTitle as="h1" bleed className="mb-5" text={siteName} />
         <RevealText
@@ -85,15 +103,29 @@ export function Hero({
             text={aboutIntro}
           />
         ) : null}
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="#projets-une">Voir mes projets</Button>
-          <Button href="/contact" variant="glass">
-            Me contacter
-          </Button>
-        </div>
+        <motion.div
+          className="mt-10 flex flex-wrap gap-3"
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Magnetic>
+            <Button href="#projets-une">Voir mes projets</Button>
+          </Magnetic>
+          <Magnetic strength={12}>
+            <Button href="/contact" variant="glass">
+              Me contacter
+            </Button>
+          </Magnetic>
+        </motion.div>
       </div>
 
-      <div className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl lg:hidden">
+      <motion.div
+        className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
+        animate={{ opacity: 1, y: 0, rotate: 0 }}
+        transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      >
         <Image
           alt={portraitAlt}
           className="object-cover object-top"
@@ -105,10 +137,7 @@ export function Hero({
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
         />
-        <div className="absolute left-3 top-3">
-          <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
-        </div>
-      </div>
+      </motion.div>
     </section>
   )
 }
