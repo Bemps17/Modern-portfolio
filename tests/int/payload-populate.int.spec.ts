@@ -10,6 +10,7 @@ import {
   getTestPayload,
   lexicalParagraph,
   releaseSiteSettingsLock,
+  restoreGlobalUpload,
 } from './helpers/payload'
 
 /**
@@ -54,12 +55,7 @@ describe('Payload populate (depth) — dashboard → Local API', () => {
         await payload.delete({ collection: 'skills', id: createdSkillId }).catch(() => undefined)
       }
 
-      await payload
-        .updateGlobal({
-          slug: 'site-settings',
-          data: { avatar: previousAvatar },
-        })
-        .catch(() => undefined)
+      await restoreGlobalUpload(payload, 'site-settings', 'avatar', previousAvatar, mediaId)
 
       await payload.delete({ collection: 'media', id: mediaId }).catch(() => undefined)
     } finally {
@@ -150,10 +146,7 @@ describe('Payload populate (depth) — dashboard → Local API', () => {
       expect(isMedia(seo.ogImage)).toBe(true)
       expect(resolveMediaUrl(seo.ogImage)).toMatch(/\/api\/media\/file\//)
     } finally {
-      await payload.updateGlobal({
-        slug: 'seo-defaults',
-        data: { ogImage: previousOg },
-      })
+      await restoreGlobalUpload(payload, 'seo-defaults', 'ogImage', previousOg, mediaId)
     }
   })
 })

@@ -101,3 +101,42 @@ export function releaseSiteSettingsLock(): void {
     // ignore
   }
 }
+
+/**
+ * Restaure un upload de global sans écraser le contenu CMS réel.
+ * - Si `previousId` existe encore → on le remet
+ * - Si `previousId` est null et que la valeur courante est encore le média de test → on nettoie
+ * - Sinon on ne touche pas (évite d’effacer un avatar prod après une course)
+ */
+export async function restoreGlobalUpload(
+  payload: Payload,
+  slug: 'site-settings' | 'seo-defaults',
+  field: 'avatar' | 'ogImage' | 'cv',
+  previousId: number | null,
+  testMediaId?: number,
+): Promise<void> {
+  if (previousId != null) {
+    try {
+      await payload.findByID({ collection: 'media', id: previousId })
+      await payload.updateGlobal({ slug, data: { [field]: previousId } })
+    } catch {
+      // média précédent disparu — ne pas écraser
+    }
+    return
+  }
+
+  if (testMediaId == null) return
+
+  const current = await payload.findGlobal({ slug, depth: 0 })
+  const raw = (current as Record<string, unknown>)[field]
+  const currentId =
+    typeof raw === 'number'
+      ? raw
+      : raw && typeof raw === 'object' && 'id' in raw
+        ? Number((raw as { id: number }).id)
+        : null
+
+  if (currentId === testMediaId) {
+    await payload.updateGlobal({ slug, data: { [field]: null } }).catch(() => undefined)
+  }
+}

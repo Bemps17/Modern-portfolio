@@ -17,6 +17,7 @@ import {
   createTestMedia,
   getTestPayload,
   releaseSiteSettingsLock,
+  restoreGlobalUpload,
 } from './helpers/payload'
 
 /**
@@ -54,12 +55,7 @@ describe('content.ts — peuplement CMS pour le front', () => {
   afterAll(async () => {
     try {
       if (!payload) return
-      await payload
-        .updateGlobal({
-          slug: 'site-settings',
-          data: { avatar: previousAvatar },
-        })
-        .catch(() => undefined)
+      await restoreGlobalUpload(payload, 'site-settings', 'avatar', previousAvatar, mediaId)
       await payload.delete({ collection: 'media', id: mediaId }).catch(() => undefined)
     } finally {
       releaseSiteSettingsLock()
