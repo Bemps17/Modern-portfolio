@@ -564,6 +564,36 @@ body {
 }
 
 /* -------------------------------------------------------------------------- */
+/* 14b. Bandeau synchro dashboard                                              */
+/* -------------------------------------------------------------------------- */
+
+.cms-sync-banner {
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border-subtle);
+  background: var(--brand-surface);
+  color: var(--brand-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.cms-sync-banner__title {
+  display: block;
+  color: var(--brand-text);
+  font-weight: 600;
+}
+
+.cms-sync-banner__text {
+  margin: 0.35rem 0 0;
+}
+
+.cms-sync-banner__text strong {
+  color: var(--brand-text);
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------- */
 /* 15. Scrollbars (WebKit) — discrètes                                         */
 /* -------------------------------------------------------------------------- */
 
