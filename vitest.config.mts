@@ -21,6 +21,7 @@ export default defineConfig({
             'tests/int/mediaConfig.int.spec.ts',
             'tests/int/media-resolve.int.spec.ts',
             'tests/int/payload-*.int.spec.ts',
+            'tests/int/project-cover.int.spec.ts',
             'tests/int/slugify.int.spec.ts',
             'tests/int/contactSchema.int.spec.ts',
           ],

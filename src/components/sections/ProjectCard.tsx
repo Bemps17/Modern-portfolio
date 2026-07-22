@@ -8,7 +8,7 @@ import { useRef, useState } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { GlassCard } from '@/components/ui/GlassCard'
 import type { Project } from '@/payload-types'
-import { resolveMediaUrl } from '@/lib/media'
+import { resolveProjectCoverUrl } from '@/lib/project-cover'
 import { cn } from '@/lib/utils'
 
 type ProjectCardProps = {
@@ -46,7 +46,7 @@ export function ProjectCard({
   const [glow, setGlow] = useState({ x: 50, y: 50 })
   const [preview, setPreview] = useState<{ x: number; y: number } | null>(null)
 
-  const coverUrl = resolveMediaUrl(project.cover)
+  const coverUrl = resolveProjectCoverUrl(project)
   const coverAlt =
     typeof project.cover === 'object' && project.cover?.alt ? project.cover.alt : project.title
 

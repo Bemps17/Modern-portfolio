@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ProjectDetailView } from '@/components/sections/ProjectDetailView'
 import { breadcrumbJsonLd, creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
 import { getProjectBySlug, getProjectSlugs, getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
-import { resolveMediaUrl } from '@/lib/media'
+import { resolveProjectCoverUrl } from '@/lib/project-cover'
 import { getSiteUrl } from '@/lib/site-url'
 import type { Project } from '@/payload-types'
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = await getProjectBySlug(slug)
   if (!project) return { title: 'Projet' }
 
-  const coverUrl = resolveMediaUrl(project.cover)
+  const coverUrl = resolveProjectCoverUrl(project)
   const canonical = `${getSiteUrl()}/projets/${project.slug}`
 
   return {
@@ -51,7 +51,7 @@ function toAdjacent(project: Project | undefined) {
   return {
     slug: project.slug,
     title: project.title,
-    coverUrl: resolveMediaUrl(project.cover),
+    coverUrl: resolveProjectCoverUrl(project),
   }
 }
 
@@ -78,7 +78,7 @@ export default async function ProjetDetailPage({ params }: PageProps) {
           name: project.title,
           description: project.excerpt,
           url: projectUrl,
-          image: resolveMediaUrl(project.cover),
+          image: resolveProjectCoverUrl(project),
           datePublished: project.createdAt,
           authorName: settings?.siteName,
         })}

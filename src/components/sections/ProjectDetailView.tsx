@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { estimateReadingTime } from '@/lib/reading-time'
 import { isMedia } from '@/lib/media'
+import { resolveProjectCoverUrl } from '@/lib/project-cover'
 import type { Project } from '@/payload-types'
 
 const STACK_LABELS: Record<string, string> = {
@@ -38,7 +39,9 @@ type ProjectDetailViewProps = {
 }
 
 export function ProjectDetailView({ project, prevProject, nextProject }: ProjectDetailViewProps) {
-  const cover = isMedia(project.cover) ? project.cover : null
+  const coverUrl = resolveProjectCoverUrl(project)
+  const coverAlt =
+    (isMedia(project.cover) ? project.cover.alt : null) || project.title
   const stackItems = (project.stack || []) as NonNullable<Project['stack']>
   const readingMinutes = estimateReadingTime(project)
 
@@ -56,15 +59,15 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
 
         <div className="lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           <div className="lg:sticky lg:top-24 lg:self-start">
-            {cover?.url ? (
+            {coverUrl ? (
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 lg:aspect-[3/4]">
                 <Image
-                  alt={cover.alt || project.title}
+                  alt={coverAlt}
                   className="object-cover"
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 45vw"
-                  src={cover.url}
+                  src={coverUrl}
                 />
               </div>
             ) : null}
