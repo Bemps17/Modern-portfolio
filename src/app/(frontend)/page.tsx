@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 
 import { BootSequence } from '@/components/motion/BootSequence'
-import { KineticDivider } from '@/components/motion/KineticDivider'
 import { ApproachSection } from '@/components/sections/ApproachSection'
 import { ContactCTA } from '@/components/sections/ContactCTA'
 import { Hero } from '@/components/sections/Hero'
@@ -122,7 +121,6 @@ export default async function HomePage() {
         tagline={tagline}
       />
       <TechMarquee items={techItems} maxItems={8} />
-      <KineticDivider />
       <div className="px-6 py-20 xl:px-16" id="projets-une">
         <SectionTitle
           editorial
@@ -143,9 +141,7 @@ export default async function HomePage() {
           </Button>
         </div>
       </div>
-      <KineticDivider />
       <ApproachSection steps={approachSteps} />
-      <KineticDivider />
       <ContactCTA email={settings?.email} location={settings?.location} />
     </BootSequence>
   )
