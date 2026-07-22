@@ -33,8 +33,18 @@ Après changement de `admin.components` : `pnpm generate:importmap`.
 
 ## Globals
 
-- `site-settings` — nom, tagline, **logo**, **favicon**, avatar, email, réseaux, intro à propos
+- `site-settings` — nom, tagline, **logo**, **favicon**, avatar, email, réseaux, intro à propos, **disponibilité**, **localisation**, **approche**, **aboutBody**
 - `seo-defaults` — titre/description/OG par défaut
+
+## Accueil (structure v0.8)
+
+1. Hero — brand + badge disponibilité + CTAs  
+2. Marquee skills (max 8)  
+3. Projets à la une (max 5, bento + index)  
+4. Approche (3 étapes CMS)  
+5. Bandeau contact + statut  
+
+Éditer disponibilité / approche : Admin → **Paramètres du site**.
 
 ## Logo & favicon (dashboard)
 

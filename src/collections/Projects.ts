@@ -72,6 +72,14 @@ export const Projects: CollectionConfig = {
       required: true,
     },
     {
+      name: 'impact',
+      type: 'text',
+      maxLength: 120,
+      admin: {
+        description: 'Impact mesurable (ex. « 50+ utilisateurs · -30 % temps de traitement »).',
+      },
+    },
+    {
       name: 'content',
       type: 'richText',
       required: true,

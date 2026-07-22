@@ -31,6 +31,10 @@ type ProjectGridProps = {
   layoutMode?: 'grid' | 'masonry'
   enablePreview?: boolean
   showStackChips?: boolean
+  /** Affiche « 01 — » sur les cartes. */
+  showIndex?: boolean
+  /** Limite le nombre de projets affichés (accueil). */
+  limit?: number
 }
 
 function masonryClass(project: Project, index: number): string {
@@ -46,23 +50,27 @@ export function ProjectGrid({
   layoutMode = 'grid',
   enablePreview = false,
   showStackChips = true,
+  showIndex = false,
+  limit,
 }: ProjectGridProps) {
   const [active, setActive] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
+  const source = typeof limit === 'number' ? projects.slice(0, limit) : projects
+
   const tags = useMemo(() => {
     const set = new Set<string>()
-    for (const project of projects) {
+    for (const project of source) {
       for (const item of project.stack ?? []) set.add(item)
     }
     return [...set].sort()
-  }, [projects])
+  }, [source])
 
   const filtered = active
-    ? projects.filter((project) => project.stack?.includes(active as NonNullable<Project['stack']>[number]))
-    : projects
+    ? source.filter((project) => project.stack?.includes(active as NonNullable<Project['stack']>[number]))
+    : source
 
-  if (!projects.length) {
+  if (!source.length) {
     return <p className="text-[var(--muted)]">Aucun projet publié pour le moment.</p>
   }
 
@@ -183,6 +191,7 @@ export function ProjectGrid({
           const card = (
             <ProjectCard
               enablePreview={enablePreview}
+              index={showIndex ? index + 1 : undefined}
               large={large}
               project={project}
               showStack={showStackChips}

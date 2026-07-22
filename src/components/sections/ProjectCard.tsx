@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
+import { ExternalLink, Github } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRef, useState } from 'react'
@@ -16,6 +17,9 @@ type ProjectCardProps = {
   large?: boolean
   enablePreview?: boolean
   showStack?: boolean
+  /** Index 1-based pour le style « 01 — Titre ». */
+  index?: number
+  maxStack?: number
 }
 
 const STACK_LABELS: Record<string, string> = {
@@ -36,6 +40,8 @@ export function ProjectCard({
   large = false,
   enablePreview = false,
   showStack = true,
+  index,
+  maxStack = 4,
 }: ProjectCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useMotionValue(0)
@@ -49,6 +55,8 @@ export function ProjectCard({
   const coverUrl = resolveProjectCoverUrl(project)
   const coverAlt =
     typeof project.cover === 'object' && project.cover?.alt ? project.cover.alt : project.title
+  const stack = (project.stack ?? []).slice(0, maxStack)
+  const impact = typeof project.impact === 'string' ? project.impact : null
 
   const onMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (reduceMotion || !ref.current) return
@@ -90,7 +98,7 @@ export function ProjectCard({
     >
       <GlassCard
         as="article"
-        className="group relative overflow-hidden transition duration-300 hover:border-[color:var(--accent)]/40"
+        className="group relative flex h-full flex-col overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-[color:var(--accent)]/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
       >
         {!reduceMotion ? (
           <motion.div
@@ -101,6 +109,7 @@ export function ProjectCard({
             }}
           />
         ) : null}
+
         <Link className="relative block" data-cursor="view" href={`/projets/${project.slug}`}>
           <div
             className={cn(
@@ -118,18 +127,61 @@ export function ProjectCard({
               />
             ) : null}
           </div>
-          <div className="space-y-3 p-5">
-            <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">{project.title}</h3>
+          <div className="space-y-2 p-5 pb-2">
+            <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">
+              {typeof index === 'number' ? (
+                <span className="mr-2 font-[family-name:var(--font-space-grotesk)] text-sm text-[var(--accent-soft)]">
+                  {String(index).padStart(2, '0')} —
+                </span>
+              ) : null}
+              {project.title}
+            </h3>
             <p className="line-clamp-2 text-sm text-[var(--muted)]">{project.excerpt}</p>
-            {showStack && project.stack?.length ? (
-              <div className="flex flex-wrap gap-2">
-                {project.stack.map((item) => (
-                  <Badge key={item}>{STACK_LABELS[item] ?? item}</Badge>
-                ))}
-              </div>
+            {impact ? (
+              <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--accent-soft)]">
+                {impact}
+              </p>
             ) : null}
           </div>
         </Link>
+
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 px-5 pb-5">
+          {showStack && stack.length ? (
+            <div className="flex flex-wrap gap-2">
+              {stack.map((item) => (
+                <Badge key={item}>{STACK_LABELS[item] ?? item}</Badge>
+              ))}
+            </div>
+          ) : (
+            <span />
+          )}
+          <div className="flex gap-1.5">
+            {project.liveUrl ? (
+              <a
+                aria-label={`Demo live — ${project.title}`}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[var(--muted)] transition hover:border-[color:var(--accent)]/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]"
+                data-cursor="link"
+                href={project.liveUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <ExternalLink aria-hidden className="h-3.5 w-3.5" />
+              </a>
+            ) : null}
+            {project.repoUrl ? (
+              <a
+                aria-label={`Code source — ${project.title}`}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[var(--muted)] transition hover:border-[color:var(--accent)]/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]"
+                data-cursor="link"
+                href={project.repoUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Github aria-hidden className="h-3.5 w-3.5" />
+              </a>
+            ) : null}
+          </div>
+        </div>
       </GlassCard>
       {enablePreview && preview && coverUrl ? (
         <div

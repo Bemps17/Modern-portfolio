@@ -41,6 +41,11 @@ describe('Payload schema — collections & globals', () => {
         'email',
         'socialLinks',
         'aboutIntro',
+        'aboutBody',
+        'location',
+        'availability',
+        'availabilityLabel',
+        'approachSteps',
       ]),
     )
     const avatar = SiteSettings.fields.find((field) => 'name' in field && field.name === 'avatar')
@@ -58,7 +63,9 @@ describe('Payload schema — collections & globals', () => {
 
   it('Projects exige cover + status published/draft', () => {
     const names = fieldNames(Projects.fields as { name?: string }[])
-    expect(names).toEqual(expect.arrayContaining(['title', 'slug', 'excerpt', 'content', 'cover', 'status']))
+    expect(names).toEqual(
+      expect.arrayContaining(['title', 'slug', 'excerpt', 'impact', 'content', 'cover', 'status']),
+    )
     const cover = Projects.fields.find((field) => 'name' in field && field.name === 'cover')
     expect(cover).toMatchObject({ type: 'upload', relationTo: 'media', required: true })
   })

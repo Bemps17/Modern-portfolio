@@ -4,12 +4,15 @@ import { Badge } from '@/components/ui/Badge'
 
 type TechMarqueeProps = {
   items: string[]
+  /** Recruteurs : 6–8 skills max sur l’accueil. */
+  maxItems?: number
 }
 
-export function TechMarquee({ items }: TechMarqueeProps) {
-  if (!items.length) return null
+export function TechMarquee({ items, maxItems = 8 }: TechMarqueeProps) {
+  const limited = items.slice(0, maxItems)
+  if (!limited.length) return null
 
-  const loop = [...items, ...items]
+  const loop = [...limited, ...limited]
 
   return (
     <div className="relative overflow-hidden border-y border-white/5 py-4">

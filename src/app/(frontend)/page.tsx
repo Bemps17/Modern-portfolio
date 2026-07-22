@@ -2,17 +2,16 @@ import type { Metadata } from 'next'
 
 import { BootSequence } from '@/components/motion/BootSequence'
 import { SectionDivider } from '@/components/motion/RevealText'
+import { ApproachSection } from '@/components/sections/ApproachSection'
+import { ContactCTA } from '@/components/sections/ContactCTA'
 import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
-import { StatsStrip } from '@/components/sections/StatsStrip'
 import { TechMarquee } from '@/components/sections/TechMarquee'
 import { SectionTitle } from '@/components/ui/SectionTitle'
-import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { Button } from '@/components/ui/Button'
+import type { AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
 import {
-  getExperiences,
   getFeaturedProjects,
-  getPublishedProjects,
   getSeoDefaultsContent,
   getSiteSettingsContent,
   getSkills,
@@ -21,19 +20,23 @@ import { JsonLd, personJsonLd, websiteJsonLd } from '@/lib/json-ld'
 import { resolveMediaUrl, isMedia } from '@/lib/media'
 import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
-import type { Experience } from '@/payload-types'
 
 export const revalidate = 3600
 
-function yearsFromExperiences(experiences: Experience[]): number {
-  const years = experiences
-    .map((experience) => experience.dateStart)
-    .filter(Boolean)
-    .map((date) => new Date(date).getFullYear())
-
-  if (!years.length) return 10
-  return new Date().getFullYear() - Math.min(...years)
-}
+const DEFAULT_APPROACH = [
+  {
+    title: 'Cadrer',
+    description: 'Clarifier le problème, les contraintes et le résultat attendu avant d’écrire une ligne.',
+  },
+  {
+    title: 'Construire',
+    description: 'Livrer une UI nette, un code typé et une stack maintenable — du prototype au ship.',
+  },
+  {
+    title: 'Mesurer',
+    description: 'Valider l’impact, itérer vite, documenter ce qui compte pour la suite.',
+  },
+] as const
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
@@ -47,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
       description: seo?.defaultDescription || settings?.tagline || undefined,
-      url: getSiteUrl() + '/',
+      url: getSiteUrl(),
       images: og ? [{ url: og }] : undefined,
       type: 'website',
     },
@@ -61,12 +64,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [settings, seo, featured, allProjects, experiences, skills] = await Promise.all([
+  const [settings, seo, featured, skills] = await Promise.all([
     getSiteSettingsContent(),
     getSeoDefaultsContent(),
     getFeaturedProjects(),
-    getPublishedProjects(),
-    getExperiences(),
     getSkills(),
   ])
 
@@ -80,6 +81,16 @@ export default async function HomePage() {
   const sameAs = (settings?.socialLinks || [])
     .map((link) => link.url)
     .filter((url): url is string => Boolean(url))
+
+  const availability = (settings?.availability ?? 'available') as AvailabilityStatus
+  const approachSteps =
+    settings?.approachSteps?.filter((step) => step.title && step.description).map((step) => ({
+      id: step.id,
+      title: step.title,
+      description: step.description,
+    })) ?? [...DEFAULT_APPROACH]
+
+  const spotlight = featured.slice(0, 5)
 
   return (
     <BootSequence>
@@ -102,36 +113,30 @@ export default async function HomePage() {
       />
       <Hero
         aboutIntro={aboutIntro}
+        availability={availability}
+        availabilityLabel={settings?.availabilityLabel}
         avatarAlt={avatarAlt}
         avatarUrl={avatarUrl}
+        location={settings?.location}
         siteName={siteName}
         tagline={tagline}
       />
-      <TechMarquee items={techItems} />
-      <div className="px-6 py-16 xl:px-16">
-        <FadeInWhenVisible>
-          <SectionTitle
-            editorial
-            eyebrow="En chiffres"
-            subtitle="Un aperçu rapide de mon parcours et de ma production."
-            title="Ce que je fais"
-          />
-          <StatsStrip
-            projectCount={allProjects.length}
-            skillCount={skills.length}
-            yearsExperience={yearsFromExperiences(experiences)}
-          />
-        </FadeInWhenVisible>
-      </div>
+      <TechMarquee items={techItems} maxItems={8} />
       <SectionDivider />
-      <div className="px-6 py-20 xl:px-16">
+      <div className="px-6 py-20 xl:px-16" id="projets-une">
         <SectionTitle
           editorial
           eyebrow="Portfolio"
-          subtitle="Une sélection de réalisations récentes."
+          subtitle="3 à 5 réalisations choisies — problème, stack, résultat."
           title="Projets à la une"
         />
-        <ProjectGrid breatheFeatured layoutMode="masonry" projects={featured} />
+        <ProjectGrid
+          breatheFeatured
+          layoutMode="masonry"
+          limit={5}
+          projects={spotlight}
+          showIndex
+        />
         <div className="mt-10">
           <Button href="/projets" variant="glass">
             Tous les projets
@@ -139,12 +144,14 @@ export default async function HomePage() {
         </div>
       </div>
       <SectionDivider />
-      <div className="px-6 pb-20 xl:px-16">
-        <FadeInWhenVisible>
-          <SectionTitle title="Travaillons ensemble" subtitle="Un projet en tête ? Écrivons-nous." />
-          <Button href="/contact">Me contacter</Button>
-        </FadeInWhenVisible>
-      </div>
+      <ApproachSection steps={approachSteps} />
+      <SectionDivider />
+      <ContactCTA
+        availability={availability}
+        availabilityLabel={settings?.availabilityLabel}
+        email={settings?.email}
+        location={settings?.location}
+      />
     </BootSequence>
   )
 }

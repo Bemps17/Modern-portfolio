@@ -221,6 +221,10 @@ export interface Project {
    */
   slug: string;
   excerpt: string;
+  /**
+   * Impact mesurable (ex. « 50+ utilisateurs · -30 % temps de traitement »).
+   */
+  impact?: string | null;
   content: {
     root: {
       type: string;
@@ -479,6 +483,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   excerpt?: T;
+  impact?: T;
   content?: T;
   cover?: T;
   gallery?:
@@ -608,9 +613,35 @@ export interface SiteSetting {
    */
   cv?: (number | null) | Media;
   /**
-   * Résumé affiché sur la page d’accueil et À propos.
+   * Résumé court (Hero + intro À propos).
    */
   aboutIntro?: string | null;
+  /**
+   * Texte long de la page À propos (CMS-first, pas de copy en dur).
+   */
+  aboutBody?: string | null;
+  /**
+   * Ex. « La Rochelle · ouvert au remote ».
+   */
+  location?: string | null;
+  /**
+   * Badge de statut dans le Hero et le bandeau contact.
+   */
+  availability?: ('available' | 'limited' | 'unavailable') | null;
+  /**
+   * Libellé custom du badge (sinon libellé selon le statut).
+   */
+  availabilityLabel?: string | null;
+  /**
+   * Section « Approche » sur l’accueil (3 étapes recommandées).
+   */
+  approachSteps?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -647,6 +678,17 @@ export interface SiteSettingsSelect<T extends boolean = true> {
       };
   cv?: T;
   aboutIntro?: T;
+  aboutBody?: T;
+  location?: T;
+  availability?: T;
+  availabilityLabel?: T;
+  approachSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -52,6 +52,10 @@ export function Footer({
           <span aria-hidden className="text-white/15">
             ·
           </span>
+          <span>Next.js · Vercel</span>
+          <span aria-hidden className="text-white/15">
+            ·
+          </span>
           <span className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-wider text-[var(--muted)]/45 tabular-nums">
             v{SITE_VERSION}
           </span>

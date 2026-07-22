@@ -95,8 +95,62 @@ export const SiteSettings: GlobalConfig = {
       name: 'aboutIntro',
       type: 'textarea',
       admin: {
-        description: 'Résumé affiché sur la page d’accueil et À propos.',
+        description: 'Résumé court (Hero + intro À propos).',
       },
+    },
+    {
+      name: 'aboutBody',
+      type: 'textarea',
+      admin: {
+        description: 'Texte long de la page À propos (CMS-first, pas de copy en dur).',
+      },
+    },
+    {
+      name: 'location',
+      type: 'text',
+      admin: {
+        description: 'Ex. « La Rochelle · ouvert au remote ».',
+      },
+    },
+    {
+      name: 'availability',
+      type: 'select',
+      defaultValue: 'available',
+      options: [
+        { label: 'Disponible', value: 'available' },
+        { label: 'Disponibilité limitée', value: 'limited' },
+        { label: 'Indisponible', value: 'unavailable' },
+      ],
+      admin: {
+        description: 'Badge de statut dans le Hero et le bandeau contact.',
+      },
+    },
+    {
+      name: 'availabilityLabel',
+      type: 'text',
+      admin: {
+        description: 'Libellé custom du badge (sinon libellé selon le statut).',
+      },
+    },
+    {
+      name: 'approachSteps',
+      type: 'array',
+      labels: { singular: 'Étape', plural: 'Approche' },
+      admin: {
+        description: 'Section « Approche » sur l’accueil (3 étapes recommandées).',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          required: true,
+        },
+      ],
     },
   ],
   hooks: {

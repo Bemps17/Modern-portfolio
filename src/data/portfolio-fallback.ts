@@ -346,6 +346,7 @@ function toProject(item: LegacyProject, index: number): Project {
     title: item.title,
     slug: item.id,
     excerpt: item.description.slice(0, 200),
+    impact: null,
     cover,
     gallery: [],
     stack: item.tags as Project['stack'],
@@ -365,6 +366,30 @@ export const portfolioFallback = {
     tagline: 'Je transforme les défis complexes en solutions élégantes.',
     aboutIntro:
       'Web Designer Junior & Profil Polyvalent — une expertise unique forgée par 10+ ans d’expérience : Commercial B2B • Création Web • Logistique.',
+    aboutBody:
+      'Mon parcours est atypique, et c’est ma plus grande force. Après plus de 10 ans dans le commerce et la logistique, j’ai pivoté vers le numérique. Cette expérience m’a appris la rigueur, la gestion de projet et l’importance de la relation client.',
+    location: 'La Rochelle · ouvert au remote',
+    availability: 'available' as const,
+    availabilityLabel: 'Disponible pour CDI / Freelance',
+    approachSteps: [
+      {
+        id: '1',
+        title: 'Cadrer',
+        description:
+          'Clarifier le problème, les contraintes et le résultat attendu avant d’écrire une ligne.',
+      },
+      {
+        id: '2',
+        title: 'Construire',
+        description:
+          'Livrer une UI nette, un code typé et une stack maintenable — du prototype au ship.',
+      },
+      {
+        id: '3',
+        title: 'Mesurer',
+        description: 'Valider l’impact, itérer vite, documenter ce qui compte pour la suite.',
+      },
+    ],
     /** Portrait CMS — null en démo (Hero utilise SITE_IMAGES.profile). */
     avatar: null,
     logo: null,

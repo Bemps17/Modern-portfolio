@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { Breathing } from '@/components/motion/Breathing'
 import { RevealText } from '@/components/motion/RevealText'
+import { AvailabilityBadge, type AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { Button } from '@/components/ui/Button'
 import { SITE_IMAGES } from '@/lib/site-images'
@@ -13,14 +14,31 @@ type HeroProps = {
   /** URL portrait CMS (Site Settings → avatar), sinon fallback brand. */
   avatarUrl?: string | null
   avatarAlt?: string | null
+  availability?: AvailabilityStatus | null
+  availabilityLabel?: string | null
+  location?: string | null
 }
 
-export function Hero({ siteName, tagline, aboutIntro, avatarUrl, avatarAlt }: HeroProps) {
+export function Hero({
+  siteName,
+  tagline,
+  aboutIntro,
+  avatarUrl,
+  avatarAlt,
+  availability,
+  availabilityLabel,
+  location,
+}: HeroProps) {
   const portraitSrc = avatarUrl?.trim() || SITE_IMAGES.profile
   const portraitAlt = avatarAlt?.trim() || `Portrait de ${siteName}`
 
   return (
     <section className="relative min-h-[100dvh] overflow-hidden border-b border-white/10">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,var(--accent-glow),transparent_45%),radial-gradient(ellipse_at_80%_0%,var(--accent-secondary-glow),transparent_40%)]"
+      />
+
       <div
         className="absolute inset-y-0 right-0 hidden w-[58%] lg:block"
         style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 100%, 0% 100%)' }}
@@ -43,6 +61,15 @@ export function Hero({ siteName, tagline, aboutIntro, avatarUrl, avatarAlt }: He
       </div>
 
       <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-6 py-24 lg:w-[42%] lg:px-10 xl:px-16">
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
+          {location?.trim() ? (
+            <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+              {location}
+            </span>
+          ) : null}
+        </div>
+
         <EditorialTitle as="h1" bleed className="mb-5" text={siteName} />
         <RevealText
           as="p"
@@ -59,7 +86,7 @@ export function Hero({ siteName, tagline, aboutIntro, avatarUrl, avatarAlt }: He
           />
         ) : null}
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="/projets">Voir mes projets</Button>
+          <Button href="#projets-une">Voir mes projets</Button>
           <Button href="/contact" variant="glass">
             Me contacter
           </Button>
@@ -78,6 +105,9 @@ export function Hero({ siteName, tagline, aboutIntro, avatarUrl, avatarAlt }: He
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
         />
+        <div className="absolute left-3 top-3">
+          <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
+        </div>
       </div>
     </section>
   )
