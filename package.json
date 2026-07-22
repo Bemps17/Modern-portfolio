@@ -22,7 +22,7 @@
     "sync:github": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/sync-github-projects.ts",
     "generate:covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/generate-project-covers.ts",
     "resync:covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/resync-project-covers.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts --no-file-parallelism",
     "test:payload": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts --project node-payload --no-file-parallelism",
     "test:precommit": "pnpm test:payload",
     "prepare": "node scripts/install-git-hooks.mjs"
