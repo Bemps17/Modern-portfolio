@@ -23,6 +23,7 @@ type SocialLink = {
 type SidebarProps = {
   siteName: string
   socialLinks?: SocialLink[] | null
+  logoUrl?: string | null
 }
 
 function SocialIcon({ platform }: { platform?: string | null }) {
@@ -31,13 +32,13 @@ function SocialIcon({ platform }: { platform?: string | null }) {
   return <Mail className="h-4 w-4" />
 }
 
-export function Sidebar({ siteName, socialLinks }: SidebarProps) {
+export function Sidebar({ siteName, socialLinks, logoUrl }: SidebarProps) {
   const pathname = usePathname()
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 hidden w-[72px] flex-col border-r border-white/10 bg-[var(--background)]/90 backdrop-blur-xl lg:flex">
       <div className="flex justify-center px-3 pt-5">
-        <BrandLogo className="flex flex-col items-center" compact siteName={siteName} />
+        <BrandLogo className="flex flex-col items-center" compact logoUrl={logoUrl} siteName={siteName} />
       </div>
 
       <nav aria-label="Navigation principale" className="mt-10 flex flex-1 flex-col items-center gap-3">

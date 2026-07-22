@@ -9,7 +9,7 @@ export const SiteSettings: GlobalConfig = {
   label: 'Paramètres du site',
   admin: {
     group: 'Configuration',
-    description: 'Identité, réseaux sociaux et coordonnées.',
+    description: 'Identité (logo, favicon, avatar), réseaux sociaux et coordonnées.',
   },
   access: {
     read: () => true,
@@ -31,6 +31,25 @@ export const SiteSettings: GlobalConfig = {
       name: 'avatar',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        description: 'Portrait affiché dans le Hero et la page À propos.',
+      },
+    },
+    {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Logo du site (sidebar / header). PNG ou SVG carré recommandé.',
+      },
+    },
+    {
+      name: 'favicon',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Favicon navigateur (PNG 32×32 ou SVG).',
+      },
     },
     {
       name: 'email',

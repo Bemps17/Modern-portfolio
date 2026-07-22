@@ -13,8 +13,17 @@
 
 ## Globals
 
-- `site-settings` — nom, tagline, email, réseaux, intro à propos
+- `site-settings` — nom, tagline, **logo**, **favicon**, avatar, email, réseaux, intro à propos
 - `seo-defaults` — titre/description/OG par défaut
+
+## Logo & favicon (dashboard)
+
+1. Admin → **Paramètres du site** (`Globals` → Site Settings)
+2. Uploader **Logo** (PNG/SVG carré) → sidebar / header
+3. Uploader **Favicon** (PNG 32×32 ou SVG) → onglet navigateur
+4. Enregistrer — revalidation auto de `/`, `/a-propos`, etc.
+
+Sans upload CMS, fallback : `/brand/favicon.png`.
 
 ## Publier un projet
 

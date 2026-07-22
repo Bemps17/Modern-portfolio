@@ -11,12 +11,15 @@ type BrandLogoProps = {
   siteName: string
   className?: string
   compact?: boolean
+  /** URL logo CMS (Site Settings → logo), sinon fallback brand. */
+  logoUrl?: string | null
 }
 
-export function BrandLogo({ siteName, className, compact = false }: BrandLogoProps) {
+export function BrandLogo({ siteName, className, compact = false, logoUrl }: BrandLogoProps) {
   const [clicks, setClicks] = useState(0)
   const [party, setParty] = useState(false)
   const reduceMotion = useReducedMotion()
+  const src = logoUrl?.trim() || SITE_IMAGES.brandLogo
 
   const onClick = () => {
     const next = clicks + 1
@@ -53,7 +56,7 @@ export function BrandLogo({ siteName, className, compact = false }: BrandLogoPro
           alt=""
           className="rounded-lg ring-1 ring-[color:var(--accent)]/30"
           height={compact ? 36 : 32}
-          src={SITE_IMAGES.brandLogo}
+          src={src}
           width={compact ? 36 : 32}
         />
         {!compact ? (

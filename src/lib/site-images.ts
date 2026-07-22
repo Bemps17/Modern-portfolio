@@ -1,10 +1,9 @@
-/** Chemins des assets statiques locaux (`public/`). */
+/** Chemins des assets statiques locaux (`public/`) — fallbacks hors CMS. */
 export const SITE_IMAGES = {
   profile: '/images/profile-bertrand.png',
   brandLogo: '/brand/favicon.png',
+  favicon: '/brand/favicon.png',
   backgrounds: {
     marsHighway: '/images/backgrounds/mars-highway.jpg',
-    hangar8Lounge: '/images/backgrounds/hangar8-lounge.jpg',
-    techParticles: '/images/backgrounds/tech-particles.jpg',
   },
 } as const

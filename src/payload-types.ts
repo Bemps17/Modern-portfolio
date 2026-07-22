@@ -573,7 +573,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Identité, réseaux sociaux et coordonnées.
+ * Identité (logo, favicon, avatar), réseaux sociaux et coordonnées.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -582,7 +582,18 @@ export interface SiteSetting {
   id: number;
   siteName: string;
   tagline: string;
+  /**
+   * Portrait affiché dans le Hero et la page À propos.
+   */
   avatar?: (number | null) | Media;
+  /**
+   * Logo du site (sidebar / header). PNG ou SVG carré recommandé.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Favicon navigateur (PNG 32×32 ou SVG).
+   */
+  favicon?: (number | null) | Media;
   email: string;
   socialLinks?:
     | {
@@ -623,6 +634,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   tagline?: T;
   avatar?: T;
+  logo?: T;
+  favicon?: T;
   email?: T;
   socialLinks?:
     | T

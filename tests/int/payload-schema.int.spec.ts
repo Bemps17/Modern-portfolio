@@ -32,10 +32,23 @@ describe('Payload schema — collections & globals', () => {
   it('Site Settings expose avatar (upload → media) pour le dashboard', () => {
     const names = fieldNames(SiteSettings.fields as { name?: string }[])
     expect(names).toEqual(
-      expect.arrayContaining(['siteName', 'tagline', 'avatar', 'email', 'socialLinks', 'aboutIntro']),
+      expect.arrayContaining([
+        'siteName',
+        'tagline',
+        'avatar',
+        'logo',
+        'favicon',
+        'email',
+        'socialLinks',
+        'aboutIntro',
+      ]),
     )
     const avatar = SiteSettings.fields.find((field) => 'name' in field && field.name === 'avatar')
     expect(avatar).toMatchObject({ type: 'upload', relationTo: 'media' })
+    const logo = SiteSettings.fields.find((field) => 'name' in field && field.name === 'logo')
+    expect(logo).toMatchObject({ type: 'upload', relationTo: 'media' })
+    const favicon = SiteSettings.fields.find((field) => 'name' in field && field.name === 'favicon')
+    expect(favicon).toMatchObject({ type: 'upload', relationTo: 'media' })
   })
 
   it('SEO defaults expose ogImage (upload → media)', () => {

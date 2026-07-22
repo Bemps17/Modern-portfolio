@@ -367,6 +367,8 @@ export const portfolioFallback = {
       'Web Designer Junior & Profil Polyvalent — une expertise unique forgée par 10+ ans d’expérience : Commercial B2B • Création Web • Logistique.',
     /** Portrait CMS — null en démo (Hero utilise SITE_IMAGES.profile). */
     avatar: null,
+    logo: null,
+    favicon: null,
     email: 'bertrandwebdesigner@proton.me',
     socialLinks: [
       { platform: 'github' as const, url: 'https://github.com/Bemps17', label: 'GitHub' },

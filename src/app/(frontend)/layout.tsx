@@ -11,7 +11,9 @@ import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
 import { getAdminHref, getAdminLinkTitle, isAdminLinkVisible } from '@/lib/admin-test-access'
 import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
+import { resolveMediaUrl } from '@/lib/media'
 import { isPayloadConfigured } from '@/lib/payload-env'
+import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
 
 import './styles.css'
@@ -36,19 +38,22 @@ const spaceGrotesk = Space_Grotesk({
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getSiteUrl()),
-  icons: {
-    icon: [
-      { url: '/brand/favicon.svg', type: 'image/svg+xml' },
-      { url: '/brand/favicon.png', type: 'image/png' },
-    ],
-    apple: '/apple-icon.png',
-  },
-}
-
 export const viewport: Viewport = {
   themeColor: '#0a0a0a',
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettingsContent()
+  const favicon =
+    resolveMediaUrl('favicon' in settings ? settings.favicon : null) || SITE_IMAGES.favicon
+
+  return {
+    metadataBase: new URL(getSiteUrl()),
+    icons: {
+      icon: [{ url: favicon }],
+      apple: favicon,
+    },
+  }
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -56,6 +61,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const siteName = settings?.siteName || 'Portfolio'
   const email = settings?.email || null
   const socialLinks = settings?.socialLinks || []
+  const logoUrl =
+    resolveMediaUrl('logo' in settings ? settings.logo : null) || SITE_IMAGES.brandLogo
   const paletteProjects = projects.map((project) => ({ title: project.title, slug: project.slug }))
   const showAdminLink = isAdminLinkVisible()
   const adminHref = getAdminHref()
@@ -73,7 +80,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </a>
         <FunEffects />
         <CommandPalette projects={paletteProjects} />
-        <Sidebar siteName={siteName} socialLinks={socialLinks} />
+        <Sidebar logoUrl={logoUrl} siteName={siteName} socialLinks={socialLinks} />
         <div className="relative z-10 min-h-screen lg:pl-[72px]">
           <main className="min-h-screen pb-20 lg:pb-0" id="main">
             {children}

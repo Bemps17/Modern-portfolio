@@ -13,14 +13,16 @@ const links = [
 
 type HeaderProps = {
   siteName: string
+  logoUrl?: string | null
 }
 
-export function Header({ siteName }: HeaderProps) {
+export function Header({ siteName, logoUrl }: HeaderProps) {
   return (
     <header className="sticky top-0 z-40 hidden border-b border-white/10 bg-[var(--background)]/80 backdrop-blur-xl lg:block">
       <Container className="flex h-16 items-center justify-between">
         <BrandLogo
           className="font-[family-name:var(--font-syne)] text-lg font-bold tracking-tight"
+          logoUrl={logoUrl}
           siteName={siteName}
         />
         <nav aria-label="Navigation principale" className="flex items-center gap-8">
