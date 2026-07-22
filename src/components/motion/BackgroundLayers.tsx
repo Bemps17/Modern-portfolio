@@ -18,21 +18,23 @@ const BLOBS = [
 const GRID_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M48 0H0V48' fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='1'/%3E%3C/svg%3E")`
 
 /**
- * Parallax fond Mars — v3
- * - Voile allégé pour que le mouvement se voie vraiment
- * - Amplitude liée au progrès de page (0→1), pas à un plafond px arbitraire
- * - Image oversized + translate opposé au contenu (profondeur)
- * - Pas de spring (évite lag / rubber-band)
+ * Parallax fond Mars — v4 (fluide dès le 1er frame)
+ *
+ * Cause du “pop” v3 :
+ * 1. Gate `reduceMotion === false` → au hydrate, y passait de `0` à `-6%` d’un coup
+ * 2. Scale animé au scroll + translate → sensation de “scale/décale” brusque
+ *
+ * Correctifs :
+ * - y démarre à 0 px (pas d’offset initial)
+ * - MotionValue branché dès que reduced-motion n’est pas explicitement true
+ * - pas de scale scroll : oversize CSS uniquement, seul translateY bouge
  */
 export function BackgroundLayers() {
   const reduceMotion = useReducedMotion()
-  const { scrollYProgress } = useScroll()
-  // Contenu monte → le fond descend plus lentement = profondeur lisible.
-  const y = useTransform(scrollYProgress, [0, 1], ['-6%', '22%'])
-  const scale = useTransform(scrollYProgress, [0, 1], [1.18, 1.32])
+  const { scrollY } = useScroll()
 
-  // null au SSR / avant hydratation → pas de parallax (évite mismatch).
-  const parallaxOn = reduceMotion === false
+  // Translate pur, clampé — fluide, sans spring (pas de rubber-band).
+  const y = useTransform(scrollY, [0, 2400], [0, 300], { clamp: true })
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -41,11 +43,11 @@ export function BackgroundLayers() {
       <motion.div
         className="absolute inset-x-0 will-change-transform"
         style={{
-          // Oversized : absorbe translate ±22 % + scale 1.32
-          top: '-28%',
-          height: '156%',
-          y: parallaxOn ? y : 0,
-          scale: parallaxOn ? scale : 1.18,
+          // Marge verticale > amplitude max (300px) pour ne jamais découvrir le vide
+          top: '-18%',
+          height: '136%',
+          // null (SSR) et false → même MotionValue à y=0 : aucun saut à l’hydratation
+          y: reduceMotion === true ? 0 : y,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -58,7 +60,6 @@ export function BackgroundLayers() {
         />
       </motion.div>
 
-      {/* Voile allégé — lisibilité OK, parallax encore perceptible */}
       <div className="absolute inset-0 bg-[var(--background)]/48" />
       <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/40 via-transparent to-[var(--background)]/82" />
 
