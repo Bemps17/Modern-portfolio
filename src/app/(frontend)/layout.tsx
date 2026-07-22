@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
+import { getAdminHref, isAdminLinkVisible } from '@/lib/admin-test-access'
 import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
 import { getSiteUrl } from '@/lib/site-url'
 
@@ -55,6 +56,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const email = settings?.email || null
   const socialLinks = settings?.socialLinks || []
   const paletteProjects = projects.map((project) => ({ title: project.title, slug: project.slug }))
+  const showAdminLink = isAdminLinkVisible()
+  const adminHref = getAdminHref()
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
@@ -72,7 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <main className="min-h-screen pb-20 lg:pb-0" id="main">
             {children}
           </main>
-          <Footer email={email} siteName={siteName} />
+          <Footer adminHref={adminHref} email={email} showAdminLink={showAdminLink} siteName={siteName} />
         </div>
         <BottomTabBar />
         <Toaster position="bottom-center" theme="dark" />
