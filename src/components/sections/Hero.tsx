@@ -10,9 +10,15 @@ type HeroProps = {
   siteName: string
   tagline: string
   aboutIntro?: string | null
+  /** URL portrait CMS (Site Settings → avatar), sinon fallback brand. */
+  avatarUrl?: string | null
+  avatarAlt?: string | null
 }
 
-export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
+export function Hero({ siteName, tagline, aboutIntro, avatarUrl, avatarAlt }: HeroProps) {
+  const portraitSrc = avatarUrl?.trim() || SITE_IMAGES.profile
+  const portraitAlt = avatarAlt?.trim() || `Portrait de ${siteName}`
+
   return (
     <section className="relative min-h-[100dvh] overflow-hidden border-b border-white/10">
       <div
@@ -21,13 +27,13 @@ export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
       >
         <Breathing className="relative h-full w-full">
           <Image
-            alt={`Portrait de ${siteName}`}
+            alt={portraitAlt}
             className="object-cover object-top"
             data-cursor="view"
             fill
             priority
             sizes="58vw"
-            src={SITE_IMAGES.profile}
+            src={portraitSrc}
           />
           <div
             aria-hidden
@@ -62,11 +68,11 @@ export function Hero({ siteName, tagline, aboutIntro }: HeroProps) {
 
       <div className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl lg:hidden">
         <Image
-          alt={`Portrait de ${siteName}`}
+          alt={portraitAlt}
           className="object-cover object-top"
           fill
           sizes="90vw"
-          src={SITE_IMAGES.profile}
+          src={portraitSrc}
         />
         <span
           aria-hidden

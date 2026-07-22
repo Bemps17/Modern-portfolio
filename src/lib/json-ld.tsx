@@ -17,6 +17,7 @@ export function personJsonLd(input: {
   description?: string | null
   url?: string
   sameAs?: string[]
+  image?: string | null
 }) {
   return {
     '@context': 'https://schema.org',
@@ -26,6 +27,7 @@ export function personJsonLd(input: {
     description: input.description || undefined,
     url: input.url,
     sameAs: input.sameAs?.length ? input.sameAs : undefined,
+    image: input.image || undefined,
   }
 }
 
