@@ -1,13 +1,11 @@
-import { isPayloadConfigured } from './payload-env'
-
 /** Connexion admin automatique pour tests — activer via ENABLE_ADMIN_TEST_LOGIN=true (jamais en prod sans flag explicite). */
 export function isAdminTestLoginEnabled(): boolean {
   return process.env.ENABLE_ADMIN_TEST_LOGIN === 'true'
 }
 
-/** Afficher le lien footer lorsque le CMS est configuré. */
+/** Lien footer toujours visible — /admin répond si Payload est configuré. */
 export function isAdminLinkVisible(): boolean {
-  return isPayloadConfigured()
+  return true
 }
 
 /** URL du backoffice : auto-login test ou page login classique. */

@@ -14,7 +14,7 @@ export function Footer({
   siteName,
   email,
   adminHref = '/admin',
-  showAdminLink = false,
+  showAdminLink = true,
 }: FooterProps) {
   return (
     <footer className="mt-24 border-t border-white/10 pb-24 lg:pb-10">
