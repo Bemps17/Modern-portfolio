@@ -1,7 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
-import { en } from '@payloadcms/translations/languages/en'
 import { fr } from '@payloadcms/translations/languages/fr'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -51,10 +50,10 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  /** Interface admin en français par défaut. */
+  /** Interface admin en français uniquement (pas de bascule navigateur EN). */
   i18n: {
     fallbackLanguage: 'fr',
-    supportedLanguages: { fr, en },
+    supportedLanguages: { fr },
   },
   collections: [Users, Media, Projects, Skills, Experiences, FormSubmissions],
   globals: [SiteSettings, SEODefaults],
