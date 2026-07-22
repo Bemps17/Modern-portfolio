@@ -28,14 +28,6 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
             className="pointer-events-none absolute -bottom-20 left-10 h-40 w-40 rounded-full bg-[var(--accent-secondary)]/20 blur-3xl"
             delay={2.2}
           />
-          {!reduceMotion ? (
-            <motion.div
-              animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--accent),transparent)] bg-[length:200%_100%]"
-              transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }}
-            />
-          ) : null}
 
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl space-y-4">

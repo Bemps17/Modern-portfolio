@@ -3,8 +3,6 @@
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 
-import { cn } from '@/lib/utils'
-
 type RevealTextProps = {
   text: string
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span'
@@ -40,26 +38,5 @@ export function RevealText({ text, as: Tag = 'span', className, delay = 0 }: Rev
         </motion.span>
       ))}
     </Tag>
-  )
-}
-
-type SectionDividerProps = {
-  className?: string
-}
-
-export function SectionDivider({ className }: SectionDividerProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-12% 0px' })
-  const reduceMotion = useReducedMotion()
-
-  return (
-    <div className={cn('py-10', className)} ref={ref}>
-      <motion.div
-        animate={inView || reduceMotion ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0.4 }}
-        className="h-px origin-left bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
-        initial={{ scaleX: 0, opacity: 0.4 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      />
-    </div>
   )
 }

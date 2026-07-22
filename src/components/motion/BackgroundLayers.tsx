@@ -1,7 +1,6 @@
 'use client'
 
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { useEffect, useState } from 'react'
 
 import { SITE_IMAGES } from '@/lib/site-images'
 
@@ -19,26 +18,21 @@ const BLOBS = [
 const GRID_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M48 0H0V48' fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='1'/%3E%3C/svg%3E")`
 
 /**
- * Parallax fond Mars — v2
- * - Pas de spring (source de lag / rubber-band)
- * - Couche largement oversized (pas de bandes vides)
- * - Transform direct scroll → y + scale léger
- * - Actif dès que reduced-motion est off (pas seulement desktop)
+ * Parallax fond Mars — v3
+ * - Voile allégé pour que le mouvement se voie vraiment
+ * - Amplitude liée au progrès de page (0→1), pas à un plafond px arbitraire
+ * - Image oversized + translate opposé au contenu (profondeur)
+ * - Pas de spring (évite lag / rubber-band)
  */
 export function BackgroundLayers() {
   const reduceMotion = useReducedMotion()
-  const [mounted, setMounted] = useState(false)
+  const { scrollYProgress } = useScroll()
+  // Contenu monte → le fond descend plus lentement = profondeur lisible.
+  const y = useTransform(scrollYProgress, [0, 1], ['-6%', '22%'])
+  const scale = useTransform(scrollYProgress, [0, 1], [1.18, 1.32])
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const { scrollY } = useScroll()
-  // Image monte plus lentement que le contenu → sensation de profondeur.
-  const y = useTransform(scrollY, [0, 2800], [0, 160])
-  const scale = useTransform(scrollY, [0, 2800], [1.12, 1.2])
-
-  const parallaxOn = mounted && !reduceMotion
+  // null au SSR / avant hydratation → pas de parallax (évite mismatch).
+  const parallaxOn = reduceMotion === false
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -47,26 +41,26 @@ export function BackgroundLayers() {
       <motion.div
         className="absolute inset-x-0 will-change-transform"
         style={{
-          // Oversized : ±20–25 % pour absorber le translate max (~160px)
-          top: '-22%',
-          height: '144%',
+          // Oversized : absorbe translate ±22 % + scale 1.32
+          top: '-28%',
+          height: '156%',
           y: parallaxOn ? y : 0,
-          scale: parallaxOn ? scale : 1.12,
+          scale: parallaxOn ? scale : 1.18,
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt=""
-          className="h-full w-full object-cover object-[68%_center] saturate-[0.88] contrast-[1.04]"
+          className="h-full w-full object-cover object-[62%_center] saturate-[0.92] contrast-[1.06]"
           decoding="async"
           fetchPriority="low"
           src={SITE_IMAGES.backgrounds.marsHighway}
         />
       </motion.div>
 
-      {/* Voiles — lisibilité sans étouffer le parallax */}
-      <div className="absolute inset-0 bg-[var(--background)]/68" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/50 via-transparent to-[var(--background)]/90" />
+      {/* Voile allégé — lisibilité OK, parallax encore perceptible */}
+      <div className="absolute inset-0 bg-[var(--background)]/48" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/40 via-transparent to-[var(--background)]/82" />
 
       <div className="absolute inset-0">
         {BLOBS.map((blob) => (
@@ -87,7 +81,7 @@ export function BackgroundLayers() {
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(130% 90% at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.55) 100%)',
+            'radial-gradient(130% 90% at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.5) 100%)',
         }}
       />
     </div>
