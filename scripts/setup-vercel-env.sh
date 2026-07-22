@@ -12,14 +12,41 @@ if [[ -z "${DATABASE_URI:-}" || -z "${PAYLOAD_SECRET:-}" || -z "${NEXT_PUBLIC_SI
   echo "  export DATABASE_URI='postgresql://...-pooler.../neondb?sslmode=require'"
   echo "  export PAYLOAD_SECRET=\$(openssl rand -base64 32)"
   echo "  export NEXT_PUBLIC_SITE_URL='https://modern-portfolio-two-orcin.vercel.app'"
+  echo ""
+  echo "Optionnel (connexion admin 1 clic depuis le footer) :"
+  echo "  export ENABLE_ADMIN_TEST_LOGIN=true"
+  echo "  export SEED_ADMIN_EMAIL='votre@email.com'"
+  echo "  export SEED_ADMIN_PASSWORD='mot-de-passe-admin'"
   exit 1
 fi
 
+add_env() {
+  local name="$1"
+  local value="$2"
+  local target="$3"
+  printf '%s' "$value" | npx vercel env add "$name" "$target" --force --scope "$TEAM" --project "$PROJECT"
+}
+
 for TARGET in production preview; do
   echo "→ $TARGET"
-  printf '%s' "$DATABASE_URI" | npx vercel env add DATABASE_URI "$TARGET" --force --scope "$TEAM" --project "$PROJECT"
-  printf '%s' "$PAYLOAD_SECRET" | npx vercel env add PAYLOAD_SECRET "$TARGET" --force --scope "$TEAM" --project "$PROJECT"
-  printf '%s' "$NEXT_PUBLIC_SITE_URL" | npx vercel env add NEXT_PUBLIC_SITE_URL "$TARGET" --force --scope "$TEAM" --project "$PROJECT"
+  add_env DATABASE_URI "$DATABASE_URI" "$TARGET"
+  add_env PAYLOAD_SECRET "$PAYLOAD_SECRET" "$TARGET"
+  add_env NEXT_PUBLIC_SITE_URL "$NEXT_PUBLIC_SITE_URL" "$TARGET"
+
+  if [[ -n "${ENABLE_ADMIN_TEST_LOGIN:-}" ]]; then
+    add_env ENABLE_ADMIN_TEST_LOGIN "$ENABLE_ADMIN_TEST_LOGIN" "$TARGET"
+  fi
+  if [[ -n "${SEED_ADMIN_EMAIL:-}" ]]; then
+    add_env SEED_ADMIN_EMAIL "$SEED_ADMIN_EMAIL" "$TARGET"
+  fi
+  if [[ -n "${SEED_ADMIN_PASSWORD:-}" ]]; then
+    add_env SEED_ADMIN_PASSWORD "$SEED_ADMIN_PASSWORD" "$TARGET"
+  fi
 done
 
-echo "OK — lance un redeploy sur Vercel pour appliquer."
+echo ""
+echo "OK — redeploy Production sur Vercel, puis vérifier :"
+echo "  ${NEXT_PUBLIC_SITE_URL}/payload-health"
+echo "  (ok: true + hasSecret: true + hasDatabase: true)"
+echo ""
+echo "Connexion admin : icône maison dans le footer → connexion 1 clic si ENABLE_ADMIN_TEST_LOGIN=true"

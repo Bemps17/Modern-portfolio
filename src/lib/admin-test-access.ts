@@ -1,16 +1,13 @@
-/** Connexion admin automatique pour tests — activer via ENABLE_ADMIN_TEST_LOGIN=true (jamais en prod sans flag explicite). */
+import { isPayloadConfigured } from '@/lib/payload-env'
+
+/** Connexion admin automatique — activer via ENABLE_ADMIN_TEST_LOGIN=true sur Vercel. */
 export function isAdminTestLoginEnabled(): boolean {
   return process.env.ENABLE_ADMIN_TEST_LOGIN === 'true'
 }
 
-/** Lien footer toujours visible — /admin répond si Payload est configuré. */
+/** Lien footer toujours visible. */
 export function isAdminLinkVisible(): boolean {
   return true
-}
-
-/** Lien footer : toujours /admin (page login Payload). La connexion test reste sur /api/admin/test-login. */
-export function getAdminHref(): string {
-  return '/admin'
 }
 
 export function getAdminTestCredentials(): { email: string; password: string } | null {
@@ -19,4 +16,23 @@ export function getAdminTestCredentials(): { email: string; password: string } |
     process.env.ADMIN_TEST_PASSWORD?.trim() || process.env.SEED_ADMIN_PASSWORD?.trim()
   if (!email || !password) return null
   return { email, password }
+}
+
+function isOneClickAdminLoginAvailable(): boolean {
+  return (
+    isPayloadConfigured() && isAdminTestLoginEnabled() && getAdminTestCredentials() !== null
+  )
+}
+
+/** Footer : connexion 1 clic si configuré, sinon login Payload ou diagnostic. */
+export function getAdminHref(): string {
+  if (isOneClickAdminLoginAvailable()) return '/api/admin/test-login'
+  if (isPayloadConfigured()) return '/admin/login'
+  return '/payload-health'
+}
+
+export function getAdminLinkTitle(): string {
+  if (isOneClickAdminLoginAvailable()) return 'Backoffice — connexion en 1 clic'
+  if (isPayloadConfigured()) return 'Backoffice Payload CMS — se connecter'
+  return 'Backoffice — vérifier la configuration Payload sur Vercel'
 }

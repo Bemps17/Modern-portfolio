@@ -8,6 +8,7 @@ type FooterProps = {
   siteName: string
   email?: string | null
   adminHref?: string | null
+  adminLinkTitle?: string
   showAdminLink?: boolean
   adminConfigured?: boolean
 }
@@ -15,7 +16,8 @@ type FooterProps = {
 export function Footer({
   siteName,
   email,
-  adminHref = '/admin',
+  adminHref = '/admin/login',
+  adminLinkTitle = 'Backoffice Payload CMS',
   showAdminLink = true,
   adminConfigured = false,
 }: FooterProps) {
@@ -39,11 +41,7 @@ export function Footer({
               )}
               href={adminHref}
               prefetch={false}
-              title={
-                adminConfigured
-                  ? 'Backoffice Payload CMS'
-                  : 'Backoffice — configurer PAYLOAD_SECRET et DATABASE_URI sur Vercel'
-              }
+              title={adminLinkTitle}
             >
               <Home aria-hidden className="h-4 w-4" />
             </Link>

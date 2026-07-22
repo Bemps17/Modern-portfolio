@@ -9,7 +9,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
-import { getAdminHref, isAdminLinkVisible } from '@/lib/admin-test-access'
+import { getAdminHref, getAdminLinkTitle, isAdminLinkVisible } from '@/lib/admin-test-access'
 import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
 import { isPayloadConfigured } from '@/lib/payload-env'
 import { getSiteUrl } from '@/lib/site-url'
@@ -59,6 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const paletteProjects = projects.map((project) => ({ title: project.title, slug: project.slug }))
   const showAdminLink = isAdminLinkVisible()
   const adminHref = getAdminHref()
+  const adminLinkTitle = getAdminLinkTitle()
   const adminConfigured = isPayloadConfigured()
 
   return (
@@ -80,6 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Footer
             adminConfigured={adminConfigured}
             adminHref={adminHref}
+            adminLinkTitle={adminLinkTitle}
             email={email}
             showAdminLink={showAdminLink}
             siteName={siteName}
