@@ -74,3 +74,23 @@ Icônes : **lucide-react** uniquement.
 
 Cible **WCAG AA** sur texte body (`--foreground`, `--muted`) sur `--background`.  
 Audit formel : 🎯 `tests/a11y.spec.ts` (à venir).
+
+---
+
+## Admin Payload (white-label)
+
+Source de vérité : `src/app/(payload)/custom.scss` (hors frontend Tailwind).
+
+| Token | Valeur | Usage |
+|---|---|---|
+| `--brand-bg` | `#0c0e12` | Fond admin |
+| `--brand-surface` | `#12151a` | Sidebar, cartes, inputs |
+| `--brand-text` | `#f4f5f6` | Texte principal |
+| `--brand-text-muted` | `#9aa0ab` | Labels, secondaires |
+| `--brand-accent` | `#ff850a` | CTA primary, focus, active nav |
+| `--brand-success` | `#3d9a6a` | Statuts OK (pas l’accent) |
+| `--brand-error` | `#e05a52` | Erreurs |
+
+- `admin.theme: 'dark'` — pas de mode clair
+- Pas de Tailwind dans l’admin (évite le preflight)
+- Détails pratiques : `docs/how-to/cms.md` § Thème admin

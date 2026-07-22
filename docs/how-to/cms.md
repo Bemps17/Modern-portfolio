@@ -1,5 +1,25 @@
 # How-to — CMS Payload
 
+## Thème admin (marque)
+
+Look & feel white-label dark — tokens + overrides dans :
+
+| Élément | Fichier |
+|---|---|
+| Tokens / overrides CSS | `src/app/(payload)/custom.scss` |
+| Config (`theme`, `meta`, `graphics`, `i18n`) | `src/payload.config.ts` → `admin` |
+| Logo login | `src/components/admin/Logo.tsx` |
+| Icône sidebar | `src/components/admin/Icon.tsx` |
+
+**Ajuster rapidement :**
+
+1. Couleurs / rayons / typo → variables `--brand-*` et `--color-base-*` en tête de `custom.scss`
+2. Accent → `--brand-accent` (`#ff850a` par défaut)
+3. Logo / favicon admin → `Logo.tsx` / `Icon.tsx` + `admin.meta.icons`
+4. Langue → `i18n.fallbackLanguage` (`fr`)
+
+Après changement de `admin.components` : `pnpm generate:importmap`.
+
 ## Collections
 
 | Slug | Rôle |

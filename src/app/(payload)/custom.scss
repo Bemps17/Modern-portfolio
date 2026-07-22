@@ -1,0 +1,591 @@
+/**
+ * Admin Payload — design system marque (dark, technique, premium)
+ * ================================================================
+ * Point d’entrée unique pour le look & feel de `/admin`.
+ * Chargé par `src/app/(payload)/layout.tsx` (hors `@layer payload-default`
+ * → nos variables gagnent sans `!important`).
+ *
+ * Ajuster les tokens dans `:root` / `html[data-theme='dark']` ci-dessous.
+ * Pas de Tailwind ici : évite le preflight global dans l’admin.
+ *
+ * Réf. Payload : https://payloadcms.com/docs/admin/customizing-css
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* -------------------------------------------------------------------------- */
+/* 1. Tokens marque                                                            */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  /* Accent — actions / focus uniquement */
+  --brand-accent: #ff850a;
+  --brand-accent-hover: #ff961f;
+  --brand-accent-active: #e67200;
+  --brand-accent-muted: rgb(255 133 10 / 0.14);
+  --brand-accent-ring: rgb(255 133 10 / 0.45);
+  --brand-accent-on: #0a0a0a;
+
+  /* Surfaces anthracite (sémantique claire → foncée pour --color-base-*) */
+  --brand-bg: #0c0e12;
+  --brand-surface: #12151a;
+  --brand-surface-2: #171a20;
+  --brand-surface-3: #1d2128;
+  --brand-border: #2c313c;
+  --brand-border-subtle: #242830;
+  --brand-text: #f4f5f6;
+  --brand-text-muted: #9aa0ab;
+
+  /* Statuts (discrets) */
+  --brand-success: #3d9a6a;
+  --brand-success-muted: rgb(61 154 106 / 0.16);
+  --brand-error: #e05a52;
+  --brand-error-muted: rgb(224 90 82 / 0.16);
+  --brand-warning: #d4a017;
+
+  /* Typo / rayons / ombres */
+  --font-body:
+    'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --style-radius-s: 4px;
+  --style-radius-m: 8px;
+  --style-radius-l: 12px;
+  --brand-shadow-sm: 0 1px 0 rgb(255 255 255 / 0.03), 0 8px 24px rgb(0 0 0 / 0.35);
+  --brand-shadow-md: 0 1px 0 rgb(255 255 255 / 0.04), 0 16px 40px rgb(0 0 0 / 0.45);
+
+  /* Densité légèrement plus compacte */
+  --base-px: 18;
+  --base-body-size: 13;
+  --nav-width: 260px;
+  --app-header-height: calc(var(--base) * 2.6);
+
+  /*
+   * Échelle base Payload (0 = clair … 1000 = sombre).
+   * En dark, elevation-N = base-(1000-N) approximatif — voir inversion native.
+   */
+  --color-base-0: #ffffff;
+  --color-base-50: #f4f5f6;
+  --color-base-100: #e8eaed;
+  --color-base-150: #d5d8dd;
+  --color-base-200: #c2c6cd;
+  --color-base-250: #aeb3bc;
+  --color-base-300: #9aa0ab;
+  --color-base-350: #868d99;
+  --color-base-400: #727986;
+  --color-base-450: #5e6674;
+  --color-base-500: #4a5261;
+  --color-base-550: #3f4654;
+  --color-base-600: #353b47;
+  --color-base-650: #2c313c;
+  --color-base-700: #242830;
+  --color-base-750: #1d2128;
+  --color-base-800: #171a20;
+  --color-base-850: #12151a;
+  --color-base-900: #0c0e12;
+  --color-base-950: #08090c;
+  --color-base-1000: #050608;
+
+  /* Succès — vert discret (toasts / badges), pas l’accent marque */
+  --color-success-50: #edf8f2;
+  --color-success-100: #d4f0e1;
+  --color-success-150: #b3e4cb;
+  --color-success-200: #8dd4b0;
+  --color-success-250: #6bc496;
+  --color-success-300: #52b482;
+  --color-success-350: #45a775;
+  --color-success-400: #3d9a6a;
+  --color-success-450: #368c60;
+  --color-success-500: #2f7e56;
+  --color-success-550: #28704c;
+  --color-success-600: #226242;
+  --color-success-650: #1c5438;
+  --color-success-700: #17472f;
+  --color-success-750: #123a27;
+  --color-success-800: #0e2e1f;
+  --color-success-850: #0a2318;
+  --color-success-900: #071811;
+  --color-success-950: #040e0a;
+
+  /* Erreur — rouge lisible, non agressif */
+  --color-error-50: #fdf4f3;
+  --color-error-100: #fbe6e4;
+  --color-error-150: #f6cdc9;
+  --color-error-200: #f0aea8;
+  --color-error-250: #e98e86;
+  --color-error-300: #e3726a;
+  --color-error-350: #e05a52;
+  --color-error-400: #d44b43;
+  --color-error-450: #c24039;
+  --color-error-500: #af3731;
+  --color-error-550: #9c302b;
+  --color-error-600: #892a26;
+  --color-error-650: #752420;
+  --color-error-700: #621f1c;
+  --color-error-750: #501a17;
+  --color-error-800: #3f1513;
+  --color-error-850: #30110f;
+  --color-error-900: #220c0b;
+  --color-error-950: #150807;
+}
+
+html[data-theme='dark'] {
+  --theme-bg: var(--brand-bg);
+  --theme-input-bg: var(--brand-surface);
+  --theme-text: var(--brand-text);
+  --theme-border-color: var(--brand-border-subtle);
+  --theme-overlay: rgb(0 0 0 / 0.72);
+
+  /* Renforce l’échelle dark (au cas où l’inversion native diverge) */
+  --theme-elevation-0: var(--brand-bg);
+  --theme-elevation-50: var(--brand-surface);
+  --theme-elevation-100: var(--brand-surface-2);
+  --theme-elevation-150: var(--brand-surface-3);
+  --theme-elevation-200: #242830;
+  --theme-elevation-250: #2c313c;
+  --theme-elevation-300: #353b47;
+  --theme-elevation-350: #3f4654;
+  --theme-elevation-400: #5e6674;
+  --theme-elevation-450: #727986;
+  --theme-elevation-500: #868d99;
+  --theme-elevation-550: #9aa0ab;
+  --theme-elevation-600: #aeb3bc;
+  --theme-elevation-650: #c2c6cd;
+  --theme-elevation-700: #d5d8dd;
+  --theme-elevation-750: #e8eaed;
+  --theme-elevation-800: #f0f2f4;
+  --theme-elevation-850: #f7f8fa;
+  --theme-elevation-900: #fbfbfc;
+  --theme-elevation-950: #ffffff;
+  --theme-elevation-1000: #ffffff;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. Base document                                                            */
+/* -------------------------------------------------------------------------- */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  letter-spacing: -0.011em;
+}
+
+::selection {
+  background: var(--brand-accent-muted);
+  color: var(--brand-text);
+}
+
+::-moz-selection {
+  background: var(--brand-accent-muted);
+  color: var(--brand-text);
+}
+
+/* Focus visible — anneau orange, jamais partout */
+:where(a, button, input, textarea, select, [role='button'], [tabindex]:not([tabindex='-1'])):focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. Branding graphiques (Logo / Icon)                                        */
+/* -------------------------------------------------------------------------- */
+
+.brand-admin-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-admin-logo__mark {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border);
+  object-fit: cover;
+  background: var(--brand-surface-2);
+}
+
+.brand-admin-logo__wordmark {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--brand-text);
+}
+
+.brand-admin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.brand-admin-icon__mark {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--style-radius-s);
+  border: 1px solid var(--brand-border);
+  object-fit: cover;
+  background: var(--brand-surface-2);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Login                                                                    */
+/* -------------------------------------------------------------------------- */
+
+.template-minimal,
+.login {
+  background: var(--brand-bg);
+}
+
+.login {
+  .form-header h1,
+  .form-header__heading {
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+
+  .btn.btn--style-primary {
+    width: 100%;
+  }
+}
+
+/* Carte login / wrap — surface discrète */
+.template-minimal .wrap,
+.login__wrap {
+  border: 1px solid var(--brand-border-subtle);
+  border-radius: var(--style-radius-l);
+  background: var(--brand-surface);
+  box-shadow: var(--brand-shadow-md);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. Sidebar / nav                                                            */
+/* -------------------------------------------------------------------------- */
+
+.nav,
+.template-default__nav {
+  background: var(--brand-surface);
+  border-inline-end: 1px solid var(--brand-border-subtle);
+}
+
+.nav__header,
+.nav__brand {
+  border-block-end: 1px solid var(--brand-border-subtle);
+}
+
+.nav__link,
+.nav a {
+  border-radius: var(--style-radius-m);
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.nav__link:hover,
+.nav a:hover {
+  background: var(--brand-surface-3);
+}
+
+.nav__link.active,
+.nav__link[aria-current='page'],
+.nav a.active,
+.nav a[aria-current='page'] {
+  background: var(--brand-accent-muted);
+  color: var(--brand-text);
+  box-shadow: inset 2px 0 0 0 var(--brand-accent);
+}
+
+.nav__label,
+.nav__group-label {
+  color: var(--brand-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Topbar / header                                                          */
+/* -------------------------------------------------------------------------- */
+
+.app-header,
+.collection-list__header,
+.doc-header,
+.document-header {
+  background: color-mix(in srgb, var(--brand-bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-block-end: 1px solid var(--brand-border-subtle);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. Dashboard                                                                */
+/* -------------------------------------------------------------------------- */
+
+.dashboard,
+.template-default__wrap {
+  background: var(--brand-bg);
+}
+
+.card,
+.dashboard .card {
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-border-subtle);
+  border-radius: var(--style-radius-m);
+  box-shadow: none;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.card:hover,
+.dashboard .card:hover {
+  border-color: var(--brand-border);
+  background: var(--brand-surface-2);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. Tables / listes                                                          */
+/* -------------------------------------------------------------------------- */
+
+.table,
+.table table,
+.collection-list table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th,
+.collection-list th {
+  color: var(--brand-text-muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-block-end: 1px solid var(--brand-border-subtle);
+  background: var(--brand-surface);
+}
+
+.table td,
+.collection-list td {
+  border-block-end: 1px solid var(--brand-border-subtle);
+}
+
+.table tr:hover td,
+.collection-list tbody tr:hover td {
+  background: var(--brand-surface-2);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. Formulaires / inputs                                                     */
+/* -------------------------------------------------------------------------- */
+
+.field-type input:not([type='checkbox']):not([type='radio']),
+.field-type textarea,
+.field-type select,
+.react-select__control,
+.search-filter__input,
+.date-time-picker__input-wrapper {
+  background: var(--brand-surface) !important;
+  border-color: var(--brand-border) !important;
+  border-radius: var(--style-radius-m) !important;
+  color: var(--brand-text);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.field-type input:not([type='checkbox']):not([type='radio']):hover,
+.field-type textarea:hover,
+.field-type select:hover,
+.react-select__control:hover {
+  border-color: var(--theme-elevation-350) !important;
+}
+
+.field-type input:not([type='checkbox']):not([type='radio']):focus,
+.field-type textarea:focus,
+.field-type select:focus,
+.react-select__control--is-focused,
+.react-select__control--is-focused:hover {
+  border-color: var(--brand-accent) !important;
+  box-shadow: 0 0 0 3px var(--brand-accent-ring) !important;
+  outline: none !important;
+}
+
+.field-label,
+.field-type > label,
+.label-wrapper label {
+  color: var(--brand-text-muted);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 10. Boutons                                                                 */
+/* -------------------------------------------------------------------------- */
+
+.btn {
+  border-radius: var(--style-radius-m);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* Primary = accent orange (actions) */
+.btn.btn--style-primary {
+  --color: var(--brand-accent-on);
+  --bg-color: var(--brand-accent);
+  --hover-bg: var(--brand-accent-hover);
+  --hover-color: var(--brand-accent-on);
+  box-shadow: none;
+}
+
+.btn.btn--style-primary:hover,
+.btn.btn--style-primary:focus-visible {
+  box-shadow: 0 0 0 3px var(--brand-accent-ring);
+}
+
+.btn.btn--style-primary.btn--disabled {
+  --bg-color: color-mix(in srgb, var(--brand-accent) 35%, var(--brand-surface-3));
+  --color: color-mix(in srgb, var(--brand-accent-on) 55%, transparent);
+  --hover-bg: var(--bg-color);
+}
+
+/* Secondary = contour sombre */
+.btn.btn--style-secondary {
+  --color: var(--brand-text);
+  --bg-color: transparent;
+  --btn-border: 1px solid var(--brand-border);
+  --hover-color: var(--brand-text);
+  --hover-btn-border: 1px solid var(--theme-elevation-400);
+  --hover-bg: var(--brand-surface-2);
+}
+
+/* Subtle / ghost */
+.btn.btn--style-subtle {
+  --bg-color: var(--brand-surface-2);
+  --color: var(--brand-text);
+  --hover-bg: var(--brand-surface-3);
+  --btn-border: 1px solid var(--brand-border-subtle);
+  --hover-btn-border: 1px solid var(--brand-border);
+}
+
+.btn.btn--style-pill {
+  --bg-color: var(--brand-surface-3);
+  --color: var(--brand-text);
+  --hover-bg: var(--brand-border);
+  --hover-color: var(--brand-text);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 11. Badges / pills / status                                                 */
+/* -------------------------------------------------------------------------- */
+
+.pill,
+.status,
+.chip,
+.badge {
+  border-radius: 999px;
+  border: 1px solid var(--brand-border-subtle);
+  background: var(--brand-surface-2);
+  color: var(--brand-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.pill--style-success,
+.status--success,
+.badge--success {
+  background: var(--brand-success-muted);
+  border-color: color-mix(in srgb, var(--brand-success) 35%, transparent);
+  color: color-mix(in srgb, var(--brand-success) 85%, white);
+}
+
+.pill--style-error,
+.status--error,
+.badge--error {
+  background: var(--brand-error-muted);
+  border-color: color-mix(in srgb, var(--brand-error) 35%, transparent);
+  color: color-mix(in srgb, var(--brand-error) 85%, white);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 12. Drawers / modales                                                       */
+/* -------------------------------------------------------------------------- */
+
+.drawer__content,
+.modal__content,
+.dialog,
+.popup__content {
+  background: var(--brand-surface) !important;
+  border: 1px solid var(--brand-border-subtle);
+  border-radius: var(--style-radius-l);
+  box-shadow: var(--brand-shadow-md);
+}
+
+.drawer__header,
+.modal__header {
+  border-block-end: 1px solid var(--brand-border-subtle);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 13. Empty states                                                            */
+/* -------------------------------------------------------------------------- */
+
+.no-results,
+.empty-state,
+.collection-list__no-results {
+  color: var(--brand-text-muted);
+  border: 1px dashed var(--brand-border);
+  border-radius: var(--style-radius-l);
+  background: var(--brand-surface);
+  padding: 2rem 1.25rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 14. Toasts / feedback                                                       */
+/* -------------------------------------------------------------------------- */
+
+.Toastify__toast,
+.payload-toast-item {
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border-subtle);
+  background: var(--brand-surface-2);
+  box-shadow: var(--brand-shadow-sm);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 15. Scrollbars (WebKit) — discrètes                                         */
+/* -------------------------------------------------------------------------- */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--brand-border);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-elevation-350);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
