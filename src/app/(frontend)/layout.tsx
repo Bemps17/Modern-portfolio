@@ -11,6 +11,7 @@ import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
 import { getAdminHref, isAdminLinkVisible } from '@/lib/admin-test-access'
 import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
+import { isPayloadConfigured } from '@/lib/payload-env'
 import { getSiteUrl } from '@/lib/site-url'
 
 import './styles.css'
@@ -58,6 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const paletteProjects = projects.map((project) => ({ title: project.title, slug: project.slug }))
   const showAdminLink = isAdminLinkVisible()
   const adminHref = getAdminHref()
+  const adminConfigured = isPayloadConfigured()
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
@@ -75,7 +77,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <main className="min-h-screen pb-20 lg:pb-0" id="main">
             {children}
           </main>
-          <Footer adminHref={adminHref} email={email} showAdminLink={showAdminLink} siteName={siteName} />
+          <Footer
+            adminConfigured={adminConfigured}
+            adminHref={adminHref}
+            email={email}
+            showAdminLink={showAdminLink}
+            siteName={siteName}
+          />
         </div>
         <BottomTabBar />
         <Toaster position="bottom-center" theme="dark" />

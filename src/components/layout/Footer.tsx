@@ -1,13 +1,15 @@
 import Link from 'next/link'
-import { Lock } from 'lucide-react'
+import { Home } from 'lucide-react'
 
 import { SITE_VERSION } from '@/lib/site-version'
+import { cn } from '@/lib/utils'
 
 type FooterProps = {
   siteName: string
   email?: string | null
   adminHref?: string | null
   showAdminLink?: boolean
+  adminConfigured?: boolean
 }
 
 export function Footer({
@@ -15,6 +17,7 @@ export function Footer({
   email,
   adminHref = '/admin',
   showAdminLink = true,
+  adminConfigured = false,
 }: FooterProps) {
   return (
     <footer className="mt-24 border-t border-white/10 pb-24 lg:pb-10">
@@ -28,12 +31,21 @@ export function Footer({
           ) : null}
           {showAdminLink && adminHref ? (
             <Link
-              className="inline-flex items-center gap-1.5 text-sm text-[var(--muted)] transition hover:text-[var(--accent-soft)]"
+              aria-label="Accès admin — backoffice Payload CMS"
+              className={cn(
+                'inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-white/[0.06] text-[var(--muted)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-sm transition',
+                'hover:border-[color:var(--accent)]/35 hover:bg-white/[0.1] hover:text-[var(--accent-soft)]',
+                !adminConfigured && 'opacity-80',
+              )}
               href={adminHref}
               prefetch={false}
+              title={
+                adminConfigured
+                  ? 'Backoffice Payload CMS'
+                  : 'Backoffice — configurer PAYLOAD_SECRET et DATABASE_URI sur Vercel'
+              }
             >
-              <Lock aria-hidden className="h-3.5 w-3.5" />
-              Accès admin
+              <Home aria-hidden className="h-4 w-4" />
             </Link>
           ) : null}
         </div>

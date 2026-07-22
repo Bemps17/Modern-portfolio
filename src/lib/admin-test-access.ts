@@ -8,11 +8,8 @@ export function isAdminLinkVisible(): boolean {
   return true
 }
 
-/** URL du backoffice : auto-login test ou page login classique. */
+/** Lien footer : toujours /admin (page login Payload). La connexion test reste sur /api/admin/test-login. */
 export function getAdminHref(): string {
-  if (isAdminTestLoginEnabled()) {
-    return '/api/admin/test-login'
-  }
   return '/admin'
 }
 

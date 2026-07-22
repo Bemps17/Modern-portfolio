@@ -1,17 +1,18 @@
+import { generatePayloadCookie } from 'payload'
 import { NextResponse } from 'next/server'
 
 import {
   getAdminTestCredentials,
   isAdminTestLoginEnabled,
 } from '@/lib/admin-test-access'
+import { getPayloadClient } from '@/lib/payload'
 import { isPayloadConfigured } from '@/lib/payload-env'
-import { getSiteUrl } from '@/lib/site-url'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
-  const siteUrl = getSiteUrl()
-  const loginUrl = new URL('/admin/login', siteUrl)
+export async function GET(request: Request) {
+  const origin = new URL(request.url).origin
+  const loginUrl = new URL('/admin/login', origin)
 
   if (!isPayloadConfigured() || !isAdminTestLoginEnabled()) {
     return NextResponse.redirect(loginUrl)
@@ -22,23 +23,29 @@ export async function GET() {
     return NextResponse.redirect(loginUrl)
   }
 
-  const loginResponse = await fetch(new URL('/api/users/login', siteUrl), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials),
-  })
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.login({
+      collection: 'users',
+      data: credentials,
+    })
 
-  if (!loginResponse.ok) {
+    if (!result.token) {
+      return NextResponse.redirect(loginUrl)
+    }
+
+    const usersCollection = payload.collections.users
+    const cookie = generatePayloadCookie({
+      collectionAuthConfig: usersCollection.config.auth,
+      cookiePrefix: payload.config.cookiePrefix,
+      token: result.token,
+    })
+
+    const response = NextResponse.redirect(new URL('/admin', origin))
+    response.headers.set('Set-Cookie', cookie)
+    return response
+  } catch (error) {
+    console.error('[admin/test-login]', error)
     return NextResponse.redirect(loginUrl)
   }
-
-  const adminUrl = new URL('/admin', siteUrl)
-  const response = NextResponse.redirect(adminUrl)
-  const setCookie = loginResponse.headers.get('set-cookie')
-
-  if (setCookie) {
-    response.headers.set('Set-Cookie', setCookie)
-  }
-
-  return response
 }
