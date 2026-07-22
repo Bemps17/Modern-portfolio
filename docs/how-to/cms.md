@@ -16,7 +16,7 @@ Look & feel white-label dark — tokens + overrides dans :
 1. Couleurs / rayons / typo → variables `--brand-*` et `--color-base-*` en tête de `custom.scss`
 2. Accent → `--brand-accent` (`#ff850a` par défaut)
 3. Logo / favicon admin → `Logo.tsx` / `Icon.tsx` + `admin.meta.icons`
-4. Langue → `i18n.fallbackLanguage` (`fr`)
+4. Langue → `i18n.fallbackLanguage` / `supportedLanguages` (`fr` uniquement)
 
 Après changement de `admin.components` : `pnpm generate:importmap`.
 
