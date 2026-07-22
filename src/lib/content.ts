@@ -11,7 +11,9 @@ export function isDemoContentMode(): boolean {
 export async function getSiteSettingsContent() {
   const payload = await getPayloadClientSafe()
   if (payload) {
-    return payload.findGlobal({ slug: 'site-settings' }).catch(() => portfolioFallback.siteSettings)
+    return payload
+      .findGlobal({ slug: 'site-settings', depth: 1 })
+      .catch(() => portfolioFallback.siteSettings)
   }
   return portfolioFallback.siteSettings
 }
@@ -19,7 +21,9 @@ export async function getSiteSettingsContent() {
 export async function getSeoDefaultsContent() {
   const payload = await getPayloadClientSafe()
   if (payload) {
-    return payload.findGlobal({ slug: 'seo-defaults' }).catch(() => portfolioFallback.seoDefaults)
+    return payload
+      .findGlobal({ slug: 'seo-defaults', depth: 1 })
+      .catch(() => portfolioFallback.seoDefaults)
   }
   return portfolioFallback.seoDefaults
 }

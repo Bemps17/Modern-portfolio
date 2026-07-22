@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Gate obligatoire avant chaque commit : batterie Payload (+ helpers média).
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "▶ pre-commit → pnpm test:precommit (batterie Payload obligatoire)"
+pnpm test:precommit
+echo "✔ pre-commit OK"

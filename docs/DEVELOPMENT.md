@@ -69,15 +69,25 @@ Détails tokens/composants : **`docs/DESIGN.md`**
 
 ```bash
 pnpm verify          # lint + typecheck + test:int + check:tokens + build
+pnpm test:payload    # Batterie Payload (schéma, CRUD, peuplement depth, content.ts)
+pnpm test:precommit  # Gate git pre-commit (= test:payload)
 pnpm test:e2e        # Playwright (optionnel local)
 ```
 
 | Règle | Statut |
 |---|---|
 | Vitest sur schémas/composants critiques | ✅ |
+| Batterie Payload (globals, collections, depth/populate, content) | ✅ |
+| Hook git `pre-commit` → `pnpm test:precommit` (`.githooks/`) | ✅ |
 | E2E frontend à jour (contenu réel, pas template Payload) | 🎯 |
 | Script `pnpm verify` unifié | ✅ |
 | `pnpm check:tokens` (tokens orphelins) | ✅ |
+
+### Pre-commit (obligatoire)
+
+Après `pnpm install`, `prepare` active `core.hooksPath=.githooks`. Chaque `git commit` lance la batterie Payload (`pnpm test:precommit`). Bypass exceptionnel uniquement : `git commit --no-verify` (à justifier en revue).
+
+Les specs Payload nécessitent Postgres + `DATABASE_URI` + `PAYLOAD_SECRET` (voir `.env.local`).
 
 ### Server Actions (pattern contact)
 

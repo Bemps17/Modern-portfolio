@@ -17,6 +17,7 @@ Portfolio CMS — **Next.js 16 + Payload 3 + Neon + Vercel**. Contenu éditorial
 ```bash
 pnpm dev                    # Dev local
 pnpm verify                 # Gate PR (lint + typecheck + tests + build + tokens)
+pnpm test:payload           # Batterie Payload (obligatoire pre-commit)
 pnpm test:e2e               # Playwright (DB optionnelle)
 pnpm generate:types         # Après modif collections/globals
 pnpm seed:portfolio         # Seed Neon (DATABASE_URI + PAYLOAD_SECRET)
@@ -57,6 +58,7 @@ pnpm verify
 - [ ] Scope limité à la tâche
 - [ ] `SITE_VERSION` bumpé si livraison notable
 - [ ] Pas de secret dans le diff
+- [ ] Pre-commit Payload vert (`pnpm test:precommit` — hook `.githooks/pre-commit`)
 
 ## Docs
 

@@ -21,7 +21,10 @@
     "seed:portfolio": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-portfolio.ts",
     "sync:github": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/sync-github-projects.ts",
     "generate:covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/generate-project-covers.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "test:payload": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts --project node-payload --no-file-parallelism",
+    "test:precommit": "pnpm test:payload",
+    "prepare": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
