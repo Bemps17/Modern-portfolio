@@ -8,6 +8,11 @@ type StaggerChildrenProps = {
   /** Délai entre enfants (s). */
   stagger?: number
   delay?: number
+  /**
+   * `mount` — anime dès le rendu (listes longues / pages projets).
+   * `view` — anime au scroll (sections courtes).
+   */
+  mode?: 'mount' | 'view'
 }
 
 const container = (stagger: number, delay: number) => ({
@@ -20,25 +25,27 @@ const container = (stagger: number, delay: number) => ({
   },
 })
 
+/** Pas de `filter: blur` — trop coûteux sur de longues grilles. */
 export const staggerItem = {
-  hidden: { opacity: 0, y: 36, filter: 'blur(10px)', scale: 0.96 },
+  hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    scale: 1,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const },
   },
 }
 
 /**
- * Conteneur de stagger au scroll — enfants wrappés dans `motion.div variants={staggerItem}`.
+ * Conteneur de stagger — enfants wrappés dans `StaggerItem`.
+ * Important : en `view`, une grille très haute peut ne jamais atteindre
+ * `amount` → cartes restées invisibles. Préférer `mount` pour /projets.
  */
 export function StaggerChildren({
   children,
   className,
-  stagger = 0.12,
-  delay = 0.05,
+  stagger = 0.06,
+  delay = 0.02,
+  mode = 'mount',
 }: StaggerChildrenProps) {
   const reduceMotion = useReducedMotion()
 
@@ -46,12 +53,25 @@ export function StaggerChildren({
     return <div className={className}>{children}</div>
   }
 
+  if (mode === 'mount') {
+    return (
+      <motion.div
+        animate="show"
+        className={className}
+        initial="hidden"
+        variants={container(stagger, delay)}
+      >
+        {children}
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
       className={className}
       initial="hidden"
       variants={container(stagger, delay)}
-      viewport={{ once: true, amount: 0.15, margin: '0px 0px -60px 0px' }}
+      viewport={{ once: true, amount: 0.05, margin: '0px 0px -40px 0px' }}
       whileInView="show"
     >
       {children}

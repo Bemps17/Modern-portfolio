@@ -36,6 +36,8 @@ type ProjectGridProps = {
   showIndex?: boolean
   /** Limite le nombre de projets affichés (accueil). */
   limit?: number
+  /** Tilt 3D — off recommandé sur /projets (beaucoup de cartes). */
+  enableTilt?: boolean
 }
 
 function masonryClass(project: Project, index: number): string {
@@ -53,11 +55,14 @@ export function ProjectGrid({
   showStackChips = true,
   showIndex = false,
   limit,
+  enableTilt = true,
 }: ProjectGridProps) {
   const [active, setActive] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   const source = typeof limit === 'number' ? projects.slice(0, limit) : projects
+  /** Listes longues : stagger plus serré, toujours en mode mount (visible). */
+  const stagger = source.length > 8 ? 0.03 : 0.06
 
   const tags = useMemo(() => {
     const set = new Set<string>()
@@ -68,7 +73,9 @@ export function ProjectGrid({
   }, [source])
 
   const filtered = active
-    ? source.filter((project) => project.stack?.includes(active as NonNullable<Project['stack']>[number]))
+    ? source.filter((project) =>
+        project.stack?.includes(active as NonNullable<Project['stack']>[number]),
+      )
     : source
 
   if (!source.length) {
@@ -186,21 +193,22 @@ export function ProjectGrid({
             ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-12 xl:auto-rows-[minmax(220px,auto)]'
             : 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3',
         )}
-        stagger={0.1}
+        mode="mount"
+        stagger={stagger}
       >
         {filtered.map((project, index) => {
           const large = layoutMode === 'masonry' && !!project.featured && index < 2
           const card = (
             <ProjectCard
               enablePreview={enablePreview}
+              enableTilt={enableTilt}
               index={showIndex ? index + 1 : undefined}
               large={large}
               project={project}
               showStack={showStackChips}
             />
           )
-          const content =
-            breatheFeatured && index === 0 ? <Breathing>{card}</Breathing> : card
+          const content = breatheFeatured && index === 0 ? <Breathing>{card}</Breathing> : card
 
           return (
             <StaggerItem

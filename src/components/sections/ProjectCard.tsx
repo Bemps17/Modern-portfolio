@@ -20,6 +20,8 @@ type ProjectCardProps = {
   /** Index 1-based pour le style « 01 — Titre ». */
   index?: number
   maxStack?: number
+  /** Tilt 3D au survol — désactiver sur listes longues (perf). */
+  enableTilt?: boolean
 }
 
 const STACK_LABELS: Record<string, string> = {
@@ -42,6 +44,7 @@ export function ProjectCard({
   showStack = true,
   index,
   maxStack = 4,
+  enableTilt = true,
 }: ProjectCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useMotionValue(0)
@@ -51,6 +54,7 @@ export function ProjectCard({
   const reduceMotion = useReducedMotion()
   const [glow, setGlow] = useState({ x: 50, y: 50 })
   const [preview, setPreview] = useState<{ x: number; y: number } | null>(null)
+  const tiltActive = enableTilt && !reduceMotion
 
   const coverUrl = resolveProjectCoverUrl(project)
   const coverAlt =
@@ -59,7 +63,7 @@ export function ProjectCard({
   const impact = typeof project.impact === 'string' ? project.impact : null
 
   const onMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (reduceMotion || !ref.current) return
+    if (!tiltActive || !ref.current) return
 
     const rect = ref.current.getBoundingClientRect()
     const x = event.clientX - rect.left
@@ -86,21 +90,21 @@ export function ProjectCard({
       onMouseMove={onMove}
       ref={ref}
       style={
-        reduceMotion
-          ? undefined
-          : {
+        tiltActive
+          ? {
               perspective: 1000,
               rotateX: springRotateX,
               rotateY: springRotateY,
               transformStyle: 'preserve-3d',
             }
+          : undefined
       }
     >
       <GlassCard
         as="article"
         className="group relative flex h-full flex-col overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-[color:var(--accent)]/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
       >
-        {!reduceMotion ? (
+        {!reduceMotion && tiltActive ? (
           <motion.div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"

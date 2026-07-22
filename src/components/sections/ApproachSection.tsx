@@ -88,7 +88,7 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
         subtitle="Du cadrage au ship — précision, rythme, impact."
         title="Comment je construis"
       />
-      <StaggerChildren className="mt-10 grid gap-4 md:grid-cols-3" stagger={0.14}>
+      <StaggerChildren className="mt-10 grid gap-4 md:grid-cols-3" mode="view" stagger={0.14}>
         {steps.map((step, index) => (
           <StaggerItem key={step.id ?? `${step.title}-${index}`}>
             <ApproachCard index={index} step={step} />
