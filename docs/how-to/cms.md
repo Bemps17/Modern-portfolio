@@ -48,8 +48,14 @@ Sans upload CMS, fallback : `/brand/favicon.png`.
 ## Publier un projet
 
 1. Admin → Projects → statut **Publié** (`published`)
-2. `afterChange` revalide : `/`, `/projets`, `/projets/[slug]`, `/a-propos`
-3. Preview admin : bouton sur le document → `/projets/[slug]`
+2. `afterChange` / `afterDelete` revalident le front (`revalidatePublicSite`)
+3. Toast admin natif à l’enregistrement / suppression
+4. Preview admin : bouton sur le document → `/projets/[slug]`
+
+## Actualiser le cache du site
+
+- **Auto** : chaque create / update / delete (projets, skills, expériences, médias, globals) invalide le cache Next des pages publiques.
+- **Manuel** : bouton **Actualiser le site** dans la barre du haut de l’admin → `POST /api/admin/revalidate` (auth cookie) + toast de confirmation.
 
 ## Seed Neon
 

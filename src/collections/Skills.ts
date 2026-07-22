@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { revalidateContentPages } from '../lib/revalidate'
+import { revalidateContentPages, revalidateContentPagesDelete } from '../lib/revalidate'
 
 const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user)
 
@@ -42,5 +42,6 @@ export const Skills: CollectionConfig = {
   ],
   hooks: {
     afterChange: [revalidateContentPages],
+    afterDelete: [revalidateContentPagesDelete],
   },
 }

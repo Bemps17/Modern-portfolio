@@ -45,6 +45,14 @@ export default buildConfig({
         Logo: '/components/admin/Logo',
         Icon: '/components/admin/Icon',
       },
+      /** Bouton header : force la revalidation du front + toast. */
+      actions: ['/components/admin/RevalidateSiteButton'],
+      beforeDashboard: ['/components/admin/CmsSyncBanner'],
+    },
+    /** Toasts de confirmation un peu plus visibles. */
+    toast: {
+      duration: 4500,
+      position: 'bottom-right',
     },
     importMap: {
       baseDir: path.resolve(dirname),

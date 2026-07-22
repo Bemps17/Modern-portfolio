@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { revalidateMediaChange, revalidateMediaDelete } from '../lib/revalidate'
+
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
@@ -38,5 +40,9 @@ export const Media: CollectionConfig = {
       },
     ],
     adminThumbnail: 'thumbnail',
+  },
+  hooks: {
+    afterChange: [revalidateMediaChange],
+    afterDelete: [revalidateMediaDelete],
   },
 }

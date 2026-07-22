@@ -1,7 +1,7 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { slugify } from '../lib/utils'
-import { revalidateProjects } from '../lib/revalidate'
+import { revalidateProjects, revalidateProjectsDelete } from '../lib/revalidate'
 import { getSiteUrl } from '../lib/site-url'
 
 const siteUrl = getSiteUrl()
@@ -163,5 +163,6 @@ export const Projects: CollectionConfig = {
       },
     ],
     afterChange: [revalidateProjects],
+    afterDelete: [revalidateProjectsDelete],
   },
 }
