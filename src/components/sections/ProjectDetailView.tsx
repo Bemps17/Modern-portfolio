@@ -49,7 +49,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
   return (
     <>
       <ScrollProgress />
-      <ReadableSurface bleed={false} className="mx-3 py-10 sm:mx-5 sm:py-12 xl:mx-16" strong>
+      <ReadableSurface bleed={false} className="page-gutter py-10 sm:py-12" strong>
         <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
           <Link className="transition hover:text-[var(--foreground)]" data-cursor="link" href="/projets">
             ← Projets

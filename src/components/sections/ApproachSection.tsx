@@ -82,7 +82,7 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
   if (!steps.length) return null
 
   return (
-    <ReadableSurface as="section" bleed={false} className="mx-3 py-12 sm:mx-6 sm:py-16 xl:mx-16 xl:py-20">
+    <ReadableSurface as="section" bleed={false} className="page-gutter py-12 sm:py-16 xl:py-20">
       <SectionTitle
         editorial
         eyebrow="Méthode"

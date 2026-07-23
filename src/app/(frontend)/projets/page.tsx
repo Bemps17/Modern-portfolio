@@ -29,7 +29,7 @@ export default async function ProjetsPage() {
   const siteUrl = getSiteUrl()
 
   return (
-    <div className="readable-surface-strong glass-panel glass-shine mx-3 py-12 sm:mx-5 sm:py-16 xl:mx-16">
+    <div className="readable-surface-strong glass-panel glass-shine page-gutter py-12 sm:py-16">
       <JsonLd
         data={itemListJsonLd({
           name: 'Projets',

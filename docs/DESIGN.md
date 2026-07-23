@@ -52,7 +52,8 @@ Classe utilitaire (`styles.css`) + composant `ReadableSurface` :
 |---|---|
 | `.readable-surface` / `.readable-surface-strong` | Fond glass + blur + ombre |
 | `.glass-panel` | Padding + radius responsive |
-| `.glass-bleed-mobile` | Pleine largeur mobile (compense Container `px-3`) |
+| `.page-gutter` / `.page-gutter-x` | Marges/paddings horizontaux unifiés (sections hors Container) |
+| `.glass-bleed-mobile` | Pleine largeur mobile (compense Container `px-3` uniquement) |
 | `.glass-shine` | Reflet haut + dégradé léger (::before/::after) |
 
 **Règle :** tout texte de lecture (paragraphes, formulaires) sur `--foreground` ou `--foreground-secondary`, jamais en gris faible sur le parallax nu.

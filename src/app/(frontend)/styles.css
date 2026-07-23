@@ -85,7 +85,40 @@
   }
 }
 
-/* Mobile : panneaux quasi pleine largeur (compense le padding du Container) */
+/*
+ * Gutter horizontal unifié des sections pleine largeur (hors Container).
+ * Évite les décalages mobile entre Hero / Projets / Approche / CTA / Footer.
+ * Échelle : 0.75rem → 1.25rem (sm) → 4rem (xl)
+ */
+.page-gutter {
+  margin-inline: 0.75rem;
+}
+
+.page-gutter-x {
+  padding-inline: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .page-gutter {
+    margin-inline: 1.25rem;
+  }
+
+  .page-gutter-x {
+    padding-inline: 1.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-gutter {
+    margin-inline: 4rem;
+  }
+
+  .page-gutter-x {
+    padding-inline: 4rem;
+  }
+}
+
+/* Mobile : panneaux quasi pleine largeur (compense le padding du Container px-3) */
 .glass-bleed-mobile {
   width: calc(100% + 1.5rem);
   max-width: calc(100% + 1.5rem);

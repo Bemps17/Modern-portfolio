@@ -14,9 +14,9 @@ type ContactCTAProps = {
 
 export function ContactCTA({ location, email }: ContactCTAProps) {
   return (
-    <section className="px-3 pb-16 sm:px-6 sm:pb-20 xl:px-16">
+    <section className="pb-16 sm:pb-20">
       <FadeInWhenVisible>
-        <ReadableSurface as="div" bleed={false} className="overflow-hidden" strong>
+        <ReadableSurface as="div" bleed={false} className="page-gutter overflow-hidden" strong>
           <FloatingOrb className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[var(--accent)]/25 blur-3xl" />
           <FloatingOrb
             className="pointer-events-none absolute -bottom-20 left-10 h-40 w-40 rounded-full bg-[var(--accent-secondary)]/20 blur-3xl"

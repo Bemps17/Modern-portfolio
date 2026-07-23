@@ -32,7 +32,7 @@ export default async function ContactPage() {
 
   return (
     <Container className="py-12 sm:py-16">
-      <ReadableSurface className="max-w-2xl" strong>
+      <ReadableSurface bleed={false} className="mx-auto max-w-2xl" strong>
         <SectionTitle
           eyebrow="Contact"
           subtitle={settings?.email ? `Ou écrivez directement à ${settings.email}` : undefined}

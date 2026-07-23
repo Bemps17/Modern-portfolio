@@ -122,7 +122,7 @@ export default async function HomePage() {
         tagline={tagline}
       />
       <TechMarquee items={techItems} maxItems={8} />
-      <div className="readable-surface-strong glass-panel glass-shine mx-3 py-10 sm:mx-5 sm:py-12 xl:mx-16" id="projets-une">
+      <div className="readable-surface-strong glass-panel glass-shine page-gutter py-10 sm:py-12" id="projets-une">
         <SectionTitle
           editorial
           eyebrow="Portfolio"
