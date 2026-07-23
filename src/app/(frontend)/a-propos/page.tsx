@@ -3,6 +3,7 @@ import Image from 'next/image'
 
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
+import { SoftSkillsStrip } from '@/components/sections/SoftSkillsStrip'
 import { StatsStrip } from '@/components/sections/StatsStrip'
 import { Container } from '@/components/ui/Container'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -16,6 +17,7 @@ import { JsonLd, personJsonLd } from '@/lib/json-ld'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
 import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
+import { getSoftSkills, getTechnicalSkills } from '@/lib/skills'
 import type { Experience } from '@/payload-types'
 
 export const revalidate = 3600
@@ -52,6 +54,9 @@ export default async function AboutPage() {
     (isMedia(settings?.avatar) ? settings.avatar.alt : null) ||
     (settings?.siteName ? `Portrait de ${settings.siteName}` : 'Portrait')
 
+  const softSkills = getSoftSkills(skills)
+  const technicalSkills = getTechnicalSkills(skills)
+
   const jsonLd = personJsonLd({
     name: settings?.siteName,
     email: settings?.email,
@@ -64,6 +69,11 @@ export default async function AboutPage() {
   return (
     <Container className="space-y-16 py-16">
       <JsonLd data={jsonLd} />
+      {softSkills.length ? (
+        <section>
+          <SoftSkillsStrip skills={softSkills} />
+        </section>
+      ) : null}
       <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
         <div className="space-y-5">
           {settings?.location?.trim() ? (
@@ -114,7 +124,7 @@ export default async function AboutPage() {
           subtitle="Les outils avec lesquels je livre le plus souvent."
           title="Compétences"
         />
-        <SkillBadgeList skills={skills} />
+        <SkillBadgeList skills={technicalSkills} />
       </section>
     </Container>
   )

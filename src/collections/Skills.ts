@@ -37,6 +37,7 @@ export const Skills: CollectionConfig = {
         { label: 'Backend', value: 'backend' },
         { label: 'Outils', value: 'outils' },
         { label: 'Design', value: 'design' },
+        { label: 'Soft skills', value: 'soft' },
       ],
     },
   ],

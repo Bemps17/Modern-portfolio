@@ -500,6 +500,13 @@ export const portfolioFallback = {
     { id: 24, name: 'Vercel', category: 'outils' },
     { id: 25, name: 'ChatGPT', category: 'outils' },
     { id: 26, name: 'Claude', category: 'outils' },
+    { id: 27, name: 'Autonomie', category: 'soft' },
+    { id: 28, name: 'Communication', category: 'soft' },
+    { id: 29, name: 'Esprit d’équipe', category: 'soft' },
+    { id: 30, name: 'Résolution de problèmes', category: 'soft' },
+    { id: 31, name: 'Adaptabilité', category: 'soft' },
+    { id: 32, name: 'Curiosité', category: 'soft' },
+    { id: 33, name: 'Pédagogie', category: 'soft' },
   ].map(
     (skill) =>
       ({

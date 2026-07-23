@@ -277,7 +277,7 @@ export interface Skill {
   id: number;
   name: string;
   icon?: (number | null) | Media;
-  category: 'frontend' | 'backend' | 'outils' | 'design';
+  category: 'frontend' | 'backend' | 'outils' | 'design' | 'soft';
   updatedAt: string;
   createdAt: string;
 }

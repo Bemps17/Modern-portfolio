@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/Badge'
 import type { Skill } from '@/payload-types'
 import { resolveMediaUrl } from '@/lib/media'
+import { SKILL_CATEGORY_LABELS } from '@/lib/skills'
 
 type SkillBadgeListProps = {
   skills: Skill[]
@@ -23,7 +24,7 @@ export function SkillBadgeList({ skills }: SkillBadgeListProps) {
       {Object.entries(byCategory).map(([category, items]) => (
         <div key={category}>
           <h3 className="mb-3 font-[family-name:var(--font-space-grotesk)] text-sm tracking-[0.18em] text-[var(--muted)] uppercase">
-            {category}
+            {SKILL_CATEGORY_LABELS[category] ?? category}
           </h3>
           <div className="flex flex-wrap gap-3">
             {items.map((skill) => {
