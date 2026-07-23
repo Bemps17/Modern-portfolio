@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Rocket } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
@@ -360,12 +360,42 @@ function StepRail({
   )
 }
 
+const COUNTDOWN_TICK_MS = 900
+const LIFTOFF_MS = 2200
+
 export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   const router = useRouter()
   const reduceMotion = useReducedMotion()
   const [activeStage, setActiveStage] = useState(0)
   const [isLaunching, setIsLaunching] = useState(false)
   const [countdown, setCountdown] = useState<number | null>(null)
+
+  // Compte à rebours 3 → 2 → 1, puis décollage (machine à états, safe Strict Mode)
+  useEffect(() => {
+    if (countdown === null) return
+
+    const timer = window.setTimeout(() => {
+      if (countdown > 1) {
+        setCountdown(countdown - 1)
+        return
+      }
+      setCountdown(null)
+      setIsLaunching(true)
+    }, COUNTDOWN_TICK_MS)
+
+    return () => window.clearTimeout(timer)
+  }, [countdown])
+
+  // Redirection après le vol
+  useEffect(() => {
+    if (!isLaunching) return
+
+    const timer = window.setTimeout(() => {
+      router.push('/contact')
+    }, LIFTOFF_MS)
+
+    return () => window.clearTimeout(timer)
+  }, [isLaunching, router])
 
   const selectStage = useCallback((index: number) => {
     setActiveStage(index)
@@ -388,17 +418,6 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
     }
 
     setCountdown(3)
-    const tick = window.setInterval(() => {
-      setCountdown((current) => {
-        if (current === null || current <= 1) {
-          window.clearInterval(tick)
-          setIsLaunching(true)
-          window.setTimeout(() => router.push('/contact'), 2200)
-          return null
-        }
-        return current - 1
-      })
-    }, 850)
   }, [countdown, isLaunching, reduceMotion, router])
 
   const activeStep = PROJECT_CUTAWAY_STEPS[activeStage]
