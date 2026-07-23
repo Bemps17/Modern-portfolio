@@ -4,6 +4,7 @@ import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-moti
 import { useRef, useState } from 'react'
 
 import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren'
+import { Container } from '@/components/ui/Container'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -82,20 +83,22 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
   if (!steps.length) return null
 
   return (
-    <ReadableSurface as="section" bleed={false} className="mx-3 py-12 sm:mx-6 sm:py-16 xl:mx-16 xl:py-20">
-      <SectionTitle
-        editorial
-        eyebrow="Méthode"
-        subtitle="Du cadrage au ship — précision, rythme, impact."
-        title="Comment je construis"
-      />
-      <StaggerChildren className="mt-10 grid gap-4 md:grid-cols-3" mode="view" stagger={0.14}>
-        {steps.map((step, index) => (
-          <StaggerItem key={step.id ?? `${step.title}-${index}`}>
-            <ApproachCard index={index} step={step} />
-          </StaggerItem>
-        ))}
-      </StaggerChildren>
-    </ReadableSurface>
+    <Container as="section" className="py-12 sm:py-16 lg:py-20">
+      <ReadableSurface strong>
+        <SectionTitle
+          editorial
+          eyebrow="Méthode"
+          subtitle="Du cadrage au ship — précision, rythme, impact."
+          title="Comment je construis"
+        />
+        <StaggerChildren className="mt-10 grid gap-4 md:grid-cols-3" mode="view" stagger={0.14}>
+          {steps.map((step, index) => (
+            <StaggerItem key={step.id ?? `${step.title}-${index}`}>
+              <ApproachCard index={index} step={step} />
+            </StaggerItem>
+          ))}
+        </StaggerChildren>
+      </ReadableSurface>
+    </Container>
   )
 }

@@ -7,8 +7,10 @@ import { Breathing } from '@/components/motion/Breathing'
 import { Magnetic } from '@/components/motion/Magnetic'
 import { RevealText } from '@/components/motion/RevealText'
 import { AvailabilityBadge, type AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
+import { Container } from '@/components/ui/Container'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { Button } from '@/components/ui/Button'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SITE_IMAGES } from '@/lib/site-images'
 
 type HeroProps = {
@@ -72,9 +74,9 @@ export function Hero({
         </Breathing>
       </div>
 
-      <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-3 py-20 sm:px-6 lg:w-[42%] lg:px-10 xl:px-16">
-        <div className="readable-surface-strong glass-panel glass-shine glass-bleed-mobile relative overflow-hidden">
-          <div className="relative z-[2]">
+      <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center py-20 lg:w-[42%]">
+        <Container>
+          <ReadableSurface strong>
             <motion.div
               className="mb-6 flex flex-wrap items-center gap-3"
           initial={reduceMotion ? false : { opacity: 0, y: 12 }}
@@ -120,28 +122,31 @@ export function Hero({
             </Button>
           </Magnetic>
             </motion.div>
-          </div>
-        </div>
+          </ReadableSurface>
+        </Container>
       </div>
 
-      <motion.div
-        className="readable-surface glass-panel glass-shine relative mx-3 mb-8 aspect-[3/4] overflow-hidden sm:mx-6 lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
-        animate={{ opacity: 1, y: 0, rotate: 0 }}
-        transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <Image
-          alt={portraitAlt}
-          className="object-cover object-top"
-          fill
-          sizes="90vw"
-          src={portraitSrc}
-        />
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
-        />
-      </motion.div>
+      <Container className="mb-8 lg:hidden">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <ReadableSurface className="relative aspect-[3/4] overflow-hidden">
+            <Image
+              alt={portraitAlt}
+              className="object-cover object-top"
+              fill
+              sizes="90vw"
+              src={portraitSrc}
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+            />
+          </ReadableSurface>
+        </motion.div>
+      </Container>
     </section>
   )
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
+import { Container } from '@/components/ui/Container'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getPublishedProjects, getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
 import { itemListJsonLd, JsonLd } from '@/lib/json-ld'
@@ -29,29 +31,31 @@ export default async function ProjetsPage() {
   const siteUrl = getSiteUrl()
 
   return (
-    <div className="readable-surface-strong glass-panel glass-shine mx-3 py-12 sm:mx-5 sm:py-16 xl:mx-16">
-      <JsonLd
-        data={itemListJsonLd({
-          name: 'Projets',
-          items: projects.map((project) => ({
-            name: project.title,
-            url: `${siteUrl}/projets/${project.slug}`,
-          })),
-        })}
-      />
-      <SectionTitle
-        editorial
-        eyebrow="Work"
-        subtitle="Filtrez par stack si besoin — chaque carte mène au détail."
-        title="Projets"
-      />
-      <ProjectGrid
-        enableFilters
-        enableTilt={false}
-        layoutMode="grid"
-        projects={projects}
-        showStackChips
-      />
-    </div>
+    <Container className="py-12 sm:py-16">
+      <ReadableSurface strong>
+        <JsonLd
+          data={itemListJsonLd({
+            name: 'Projets',
+            items: projects.map((project) => ({
+              name: project.title,
+              url: `${siteUrl}/projets/${project.slug}`,
+            })),
+          })}
+        />
+        <SectionTitle
+          editorial
+          eyebrow="Work"
+          subtitle="Filtrez par stack si besoin — chaque carte mène au détail."
+          title="Projets"
+        />
+        <ProjectGrid
+          enableFilters
+          enableTilt={false}
+          layoutMode="grid"
+          projects={projects}
+          showStackChips
+        />
+      </ReadableSurface>
+    </Container>
   )
 }

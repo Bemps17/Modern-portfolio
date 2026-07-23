@@ -6,6 +6,8 @@ import { ContactCTA } from '@/components/sections/ContactCTA'
 import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
 import { TechMarquee } from '@/components/sections/TechMarquee'
+import { Container } from '@/components/ui/Container'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Button } from '@/components/ui/Button'
 import type { AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
@@ -122,26 +124,28 @@ export default async function HomePage() {
         tagline={tagline}
       />
       <TechMarquee items={techItems} maxItems={8} />
-      <div className="readable-surface-strong glass-panel glass-shine mx-3 py-10 sm:mx-5 sm:py-12 xl:mx-16" id="projets-une">
-        <SectionTitle
-          editorial
-          eyebrow="Portfolio"
-          subtitle="3 à 5 réalisations choisies — problème, stack, résultat."
-          title="Projets à la une"
-        />
-        <ProjectGrid
-          breatheFeatured
-          layoutMode="masonry"
-          limit={5}
-          projects={spotlight}
-          showIndex
-        />
-        <div className="mt-10">
-          <Button href="/projets" variant="glass">
-            Tous les projets
-          </Button>
-        </div>
-      </div>
+      <Container className="py-10 sm:py-12" id="projets-une">
+        <ReadableSurface strong>
+          <SectionTitle
+            editorial
+            eyebrow="Portfolio"
+            subtitle="3 à 5 réalisations choisies — problème, stack, résultat."
+            title="Projets à la une"
+          />
+          <ProjectGrid
+            breatheFeatured
+            layoutMode="masonry"
+            limit={5}
+            projects={spotlight}
+            showIndex
+          />
+          <div className="mt-10">
+            <Button href="/projets" variant="glass">
+              Tous les projets
+            </Button>
+          </div>
+        </ReadableSurface>
+      </Container>
       <ApproachSection steps={approachSteps} />
       <ContactCTA email={settings?.email} location={settings?.location} />
     </BootSequence>
