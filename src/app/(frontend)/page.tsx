@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 
 import { BootSequence } from '@/components/motion/BootSequence'
-import { ApproachSection } from '@/components/sections/ApproachSection'
 import { ContactCTA } from '@/components/sections/ContactCTA'
 import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
+import { StarshipCutaway } from '@/components/sections/StarshipCutaway'
 import { TechMarquee } from '@/components/sections/TechMarquee'
 import { Container } from '@/components/ui/Container'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
@@ -24,21 +24,6 @@ import { getSiteUrl } from '@/lib/site-url'
 import { getTechnicalSkills } from '@/lib/skills'
 
 export const revalidate = 3600
-
-const DEFAULT_APPROACH = [
-  {
-    title: 'Cadrer',
-    description: 'Clarifier le problème, les contraintes et le résultat attendu avant d’écrire une ligne.',
-  },
-  {
-    title: 'Construire',
-    description: 'Livrer une UI nette, un code typé et une stack maintenable — du prototype au ship.',
-  },
-  {
-    title: 'Mesurer',
-    description: 'Valider l’impact, itérer vite, documenter ce qui compte pour la suite.',
-  },
-] as const
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
@@ -85,12 +70,6 @@ export default async function HomePage() {
     .filter((url): url is string => Boolean(url))
 
   const availability = (settings?.availability ?? 'available') as AvailabilityStatus
-  const approachSteps =
-    settings?.approachSteps?.filter((step) => step.title && step.description).map((step) => ({
-      id: step.id,
-      title: step.title,
-      description: step.description,
-    })) ?? [...DEFAULT_APPROACH]
 
   const spotlight = featured.slice(0, 5)
 
@@ -124,6 +103,7 @@ export default async function HomePage() {
         tagline={tagline}
       />
       <TechMarquee items={techItems} maxItems={8} />
+      <StarshipCutaway subtitle={tagline} />
       <Container className="py-10 sm:py-12" id="projets-une">
         <ReadableSurface strong>
           <SectionTitle
@@ -146,7 +126,6 @@ export default async function HomePage() {
           </div>
         </ReadableSurface>
       </Container>
-      <ApproachSection steps={approachSteps} />
       <ContactCTA email={settings?.email} location={settings?.location} />
     </BootSequence>
   )
