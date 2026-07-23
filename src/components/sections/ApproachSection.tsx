@@ -5,6 +5,7 @@ import { useRef, useState } from 'react'
 
 import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren'
 import { GlassCard } from '@/components/ui/GlassCard'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 
 export type ApproachStep = {
@@ -81,7 +82,7 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
   if (!steps.length) return null
 
   return (
-    <section className="readable-surface rounded-3xl px-6 py-20 xl:px-16">
+    <ReadableSurface as="section" bleed={false} className="mx-3 py-12 sm:mx-6 sm:py-16 xl:mx-16 xl:py-20">
       <SectionTitle
         editorial
         eyebrow="Méthode"
@@ -95,6 +96,6 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
           </StaggerItem>
         ))}
       </StaggerChildren>
-    </section>
+    </ReadableSurface>
   )
 }

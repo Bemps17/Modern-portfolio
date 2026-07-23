@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Home } from 'lucide-react'
 
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SITE_VERSION } from '@/lib/site-version'
 import { cn } from '@/lib/utils'
 
@@ -22,9 +23,9 @@ export function Footer({
   adminConfigured = false,
 }: FooterProps) {
   return (
-    <footer className="mt-24 border-t border-[color:var(--border)] pb-24 lg:pb-10">
-      <div className="readable-surface-strong mx-4 rounded-3xl sm:mx-6 xl:mx-16">
-        <div className="flex flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between">
+    <footer className="mt-16 border-t border-[color:var(--border-subtle)] px-3 pb-24 sm:px-5 lg:pb-10 xl:px-16">
+      <ReadableSurface as="footer" bleed={false} strong>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-[family-name:var(--font-syne)] text-sm font-semibold text-[var(--foreground)]">
             {siteName}
           </p>
@@ -67,7 +68,7 @@ export function Footer({
             </span>
           </div>
         </div>
-      </div>
+      </ReadableSurface>
     </footer>
   )
 }

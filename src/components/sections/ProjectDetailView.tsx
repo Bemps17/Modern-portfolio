@@ -8,6 +8,7 @@ import { ScrollProgress } from '@/components/motion/ScrollProgress'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { estimateReadingTime } from '@/lib/reading-time'
 import { isMedia } from '@/lib/media'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
@@ -48,7 +49,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
   return (
     <>
       <ScrollProgress />
-      <div className="readable-surface-strong rounded-3xl px-6 py-12 lg:px-10 xl:px-16">
+      <ReadableSurface bleed={false} className="mx-3 py-10 sm:mx-5 sm:py-12 xl:mx-16" strong>
         <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
           <Link className="transition hover:text-[var(--foreground)]" data-cursor="link" href="/projets">
             ← Projets
@@ -165,7 +166,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
             </Link>
           ) : null}
         </nav>
-      </div>
+      </ReadableSurface>
     </>
   )
 }

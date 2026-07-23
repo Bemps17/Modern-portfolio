@@ -1,11 +1,10 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
-
 import { FloatingOrb } from '@/components/motion/FloatingOrb'
 import { Magnetic } from '@/components/motion/Magnetic'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { Button } from '@/components/ui/Button'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 
 type ContactCTAProps = {
@@ -14,15 +13,10 @@ type ContactCTAProps = {
 }
 
 export function ContactCTA({ location, email }: ContactCTAProps) {
-  const reduceMotion = useReducedMotion()
-
   return (
-    <section className="px-6 pb-20 xl:px-16">
+    <section className="px-3 pb-16 sm:px-6 sm:pb-20 xl:px-16">
       <FadeInWhenVisible>
-        <motion.div
-          className="relative overflow-hidden rounded-3xl readable-surface-strong p-8 sm:p-10"
-          whileHover={reduceMotion ? undefined : { borderColor: 'rgba(255,107,26,0.35)' }}
-        >
+        <ReadableSurface as="div" bleed={false} className="overflow-hidden" strong>
           <FloatingOrb className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[var(--accent)]/25 blur-3xl" />
           <FloatingOrb
             className="pointer-events-none absolute -bottom-20 left-10 h-40 w-40 rounded-full bg-[var(--accent-secondary)]/20 blur-3xl"
@@ -58,7 +52,7 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
               </Magnetic>
             </div>
           </div>
-        </motion.div>
+        </ReadableSurface>
       </FadeInWhenVisible>
     </section>
   )

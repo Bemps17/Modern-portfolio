@@ -72,10 +72,11 @@ export function Hero({
         </Breathing>
       </div>
 
-      <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-6 py-24 lg:w-[42%] lg:px-10 xl:px-16">
-        <div className="readable-surface-strong rounded-3xl p-6 sm:p-8">
-        <motion.div
-          className="mb-6 flex flex-wrap items-center gap-3"
+      <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-3 py-20 sm:px-6 lg:w-[42%] lg:px-10 xl:px-16">
+        <div className="readable-surface-strong glass-panel glass-shine glass-bleed-mobile relative overflow-hidden">
+          <div className="relative z-[2]">
+            <motion.div
+              className="mb-6 flex flex-wrap items-center gap-3"
           initial={reduceMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -118,12 +119,13 @@ export function Hero({
               Me contacter
             </Button>
           </Magnetic>
-        </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
       <motion.div
-        className="relative mx-6 mb-10 aspect-[3/4] overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl lg:hidden"
+        className="readable-surface glass-panel glass-shine relative mx-3 mb-8 aspect-[3/4] overflow-hidden sm:mx-6 lg:hidden"
         initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
         animate={{ opacity: 1, y: 0, rotate: 0 }}
         transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

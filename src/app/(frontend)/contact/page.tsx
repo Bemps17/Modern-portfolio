@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/sections/ContactForm'
 import { Container } from '@/components/ui/Container'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getSiteSettingsContent } from '@/lib/content'
 import { getSiteUrl } from '@/lib/site-url'
@@ -30,17 +31,15 @@ export default async function ContactPage() {
   const settings = await getSiteSettingsContent()
 
   return (
-    <Container className="py-16">
-      <div className="readable-surface-strong max-w-2xl rounded-3xl p-6 sm:p-8">
+    <Container className="py-12 sm:py-16">
+      <ReadableSurface className="max-w-2xl" strong>
         <SectionTitle
           eyebrow="Contact"
           subtitle={settings?.email ? `Ou écrivez directement à ${settings.email}` : undefined}
           title="Parlons de votre projet"
         />
-        <div className="max-w-xl">
-          <ContactForm />
-        </div>
-      </div>
+        <ContactForm />
+      </ReadableSurface>
     </Container>
   )
 }

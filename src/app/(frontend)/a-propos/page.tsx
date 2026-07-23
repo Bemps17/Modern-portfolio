@@ -6,6 +6,7 @@ import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
 import { SoftSkillsStrip } from '@/components/sections/SoftSkillsStrip'
 import { StatsStrip } from '@/components/sections/StatsStrip'
 import { Container } from '@/components/ui/Container'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import {
   getExperiences,
@@ -67,15 +68,11 @@ export default async function AboutPage() {
   })
 
   return (
-    <Container className="space-y-16 py-16">
+    <Container className="space-y-10 py-12 sm:space-y-16 sm:py-16">
       <JsonLd data={jsonLd} />
-      {softSkills.length ? (
-        <section>
-          <SoftSkillsStrip skills={softSkills} />
-        </section>
-      ) : null}
-      <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="readable-surface-strong space-y-5 rounded-3xl p-6 sm:p-8">
+      {softSkills.length ? <SoftSkillsStrip skills={softSkills} /> : null}
+      <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10">
+        <ReadableSurface className="space-y-5" strong>
           {settings?.location?.trim() ? (
             <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
               {settings.location}
@@ -90,10 +87,12 @@ export default async function AboutPage() {
             <p className="max-w-2xl text-lg text-[var(--foreground-secondary)]">{settings.aboutIntro}</p>
           ) : null}
           {settings?.aboutBody ? (
-            <p className="max-w-2xl whitespace-pre-line text-base text-[var(--foreground-secondary)]">{settings.aboutBody}</p>
+            <p className="max-w-2xl whitespace-pre-line text-base text-[var(--foreground-secondary)]">
+              {settings.aboutBody}
+            </p>
           ) : null}
-        </div>
-        <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
+        </ReadableSurface>
+        <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
           <Image
             alt={portraitAlt}
             className="object-cover object-top"
@@ -103,7 +102,7 @@ export default async function AboutPage() {
           />
         </div>
       </section>
-      <section className="readable-surface rounded-3xl p-6 sm:p-8">
+      <ReadableSurface as="section">
         <SectionTitle
           eyebrow="En chiffres"
           subtitle="Un aperçu rapide du parcours et de la production."
@@ -114,18 +113,18 @@ export default async function AboutPage() {
           skillCount={skills.length}
           yearsExperience={yearsFromExperiences(experiences)}
         />
-      </section>
-      <section className="readable-surface rounded-3xl p-6 sm:p-8">
+      </ReadableSurface>
+      <ReadableSurface as="section">
         <SectionTitle title="Parcours" />
         <ExperienceTimeline experiences={experiences} />
-      </section>
-      <section className="readable-surface rounded-3xl p-6 sm:p-8">
+      </ReadableSurface>
+      <ReadableSurface as="section">
         <SectionTitle
           subtitle="Les outils avec lesquels je livre le plus souvent."
           title="Compétences"
         />
         <SkillBadgeList skills={technicalSkills} />
-      </section>
+      </ReadableSurface>
     </Container>
   )
 }

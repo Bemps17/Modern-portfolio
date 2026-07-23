@@ -32,9 +32,11 @@ Usage : `font-[family-name:var(--font-syne)]`
 | `--foreground-secondary` | `#ddd8d2` | Corps, sous-titres, labels formulaire |
 | `--muted` | `#c4bfb8` | Eyebrows, légendes, meta |
 | `--muted-subtle` | `#9a958f` | Séparateurs décoratifs uniquement |
-| `--surface-glass` | `rgb(12 12 16 / 0.78)` | Panneaux `.readable-surface` |
-| `--surface-glass-strong` | `rgb(10 10 14 / 0.9)` | Hero, footer, blocs longs |
-| `--border` | `rgb(255 255 255 / 0.12)` | Bordures subtiles |
+| `--surface-glass` | `rgb(14 14 18 / 0.62)` | Panneaux `.readable-surface` — glassmorphism |
+| `--surface-glass-strong` | `rgb(10 10 14 / 0.78)` | Hero, footer, blocs longs |
+| `--glass-highlight` | `rgb(255 255 255 / 0.09)` | Reflet haut de panneau |
+| `--border` | `rgb(255 255 255 / 0.14)` | Bordures glass |
+| `--border-subtle` | `rgb(255 255 255 / 0.08)` | Séparateurs légers |
 | `--glass` | `rgb(255 255 255 / 0.08)` | Cartes glass |
 | `--accent` | `#ff6b1a` | CTA, liens actifs |
 | `--accent-secondary` | `#991b1b` | Dégradés |
@@ -48,8 +50,10 @@ Classe utilitaire (`styles.css`) + composant `ReadableSurface` :
 
 | Classe | Usage |
 |---|---|
-| `.readable-surface` | Sections, cartes légères — `backdrop-filter` + fond semi-opaque |
-| `.readable-surface-strong` | Hero texte, footer, pages longues — contraste renforcé |
+| `.readable-surface` / `.readable-surface-strong` | Fond glass + blur + ombre |
+| `.glass-panel` | Padding + radius responsive |
+| `.glass-bleed-mobile` | Pleine largeur mobile (compense Container `px-3`) |
+| `.glass-shine` | Reflet haut + dégradé léger (::before/::after) |
 
 **Règle :** tout texte de lecture (paragraphes, formulaires) sur `--foreground` ou `--foreground-secondary`, jamais en gris faible sur le parallax nu.
 

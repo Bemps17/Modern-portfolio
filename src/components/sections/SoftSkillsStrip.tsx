@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/Badge'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import type { Skill } from '@/payload-types'
 
 type SoftSkillsStripProps = {
@@ -9,7 +10,7 @@ export function SoftSkillsStrip({ skills }: SoftSkillsStripProps) {
   if (!skills.length) return null
 
   return (
-    <div className="rounded-2xl readable-surface-strong p-6 sm:p-8">
+    <ReadableSurface strong>
       <p className="mb-4 font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--muted)] uppercase">
         Soft skills
       </p>
@@ -23,6 +24,6 @@ export function SoftSkillsStrip({ skills }: SoftSkillsStripProps) {
           </Badge>
         ))}
       </div>
-    </div>
+    </ReadableSurface>
   )
 }
