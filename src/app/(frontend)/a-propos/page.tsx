@@ -70,7 +70,9 @@ export default async function AboutPage() {
   return (
     <Container className="space-y-10 py-12 sm:space-y-16 sm:py-16">
       <JsonLd data={jsonLd} />
-      {softSkills.length ? <SoftSkillsStrip skills={softSkills} /> : null}
+      {softSkills.length ? (
+        <SoftSkillsStrip className="pb-2 sm:pb-4" skills={softSkills} />
+      ) : null}
       <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10">
         <ReadableSurface className="space-y-5" strong>
           {settings?.location?.trim() ? (
