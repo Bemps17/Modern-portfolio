@@ -5,7 +5,6 @@ import { toast } from 'sonner'
 
 import { submitContact, type ContactActionState } from '@/app/(frontend)/contact/actions'
 import { Button } from '@/components/ui/Button'
-import { GlassCard } from '@/components/ui/GlassCard'
 
 const initialState: ContactActionState = { ok: false, message: '' }
 
@@ -19,8 +18,7 @@ export function ContactForm() {
   }, [state])
 
   return (
-    <GlassCard className="p-6 sm:p-8">
-      <form action={formAction} className="space-y-5" noValidate>
+    <form action={formAction} className="space-y-5" noValidate>
         <div className="space-y-2">
           <label className="text-sm font-medium text-[var(--foreground-secondary)]" htmlFor="name">
             Nom
@@ -66,6 +64,5 @@ export function ContactForm() {
           {pending ? 'Envoi…' : 'Envoyer'}
         </Button>
       </form>
-    </GlassCard>
   )
 }
