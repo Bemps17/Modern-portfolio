@@ -72,10 +72,7 @@ export default async function AboutPage() {
       <JsonLd data={jsonLd} />
       <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10">
         <ReadableSurface className="space-y-8" strong>
-          <SoftSkillsStrip
-            lead={settings?.aboutIntro || settings?.tagline}
-            skills={softSkills}
-          />
+          <SoftSkillsStrip skills={softSkills} />
           <div className="space-y-5 border-t border-[color:var(--border-subtle)] pt-8">
             {settings?.location?.trim() ? (
               <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
