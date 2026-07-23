@@ -284,6 +284,20 @@ function StageDetailCard({ step, className }: { step: CutawayStep; className?: s
   )
 }
 
+function MobileSlideContent({ step }: { step: CutawayStep }) {
+  return (
+    <div className="w-full space-y-3">
+      <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--accent-soft)] uppercase">
+        {step.blueprintTag}
+      </p>
+      <p className="font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight text-[var(--foreground)]">
+        {step.title}
+      </p>
+      <p className="text-base leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
+    </div>
+  )
+}
+
 function MobileCarousel({
   activeStage,
   onSelect,
@@ -298,11 +312,11 @@ function MobileCarousel({
   const step = PROJECT_CUTAWAY_STEPS[activeStage]
 
   return (
-    <div className="space-y-4 lg:hidden">
-      <div className="flex items-center justify-between gap-3">
+    <div className="w-full space-y-5">
+      <div className="flex items-center justify-between gap-2">
         <button
           aria-label="Étape précédente"
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
           disabled={activeStage === 0}
           onClick={onPrev}
           type="button"
@@ -327,7 +341,7 @@ function MobileCarousel({
 
         <button
           aria-label="Étape suivante"
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
           disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
           onClick={onNext}
           type="button"
@@ -339,20 +353,19 @@ function MobileCarousel({
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ opacity: 1, x: 0 }}
+          className="min-h-[9rem] w-full"
           exit={{ opacity: 0, x: -20 }}
           initial={{ opacity: 0, x: 20 }}
           key={step.id}
           transition={{ duration: 0.25, ease: 'easeOut' }}
         >
-          <StageDetailCard step={step} />
+          <MobileSlideContent step={step} />
         </motion.div>
       </AnimatePresence>
 
-      <div className="flex items-center justify-between pt-1">
-        <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
-          {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
-        </p>
-      </div>
+      <p className="text-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)]">
+        {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
+      </p>
     </div>
   )
 }
@@ -444,16 +457,26 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         title="Découpez le projet"
       />
 
-      <div className="mt-8 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[#0a1830] sm:mt-10 sm:rounded-3xl">
+      {/* Mobile : diaporama pleine largeur, sans panneau blueprint */}
+      <div className="relative left-1/2 mt-8 w-screen max-w-none -translate-x-1/2 px-4 sm:px-6 lg:hidden">
+        <MobileCarousel
+          activeStage={activeStage}
+          onNext={goNext}
+          onPrev={goPrev}
+          onSelect={selectStage}
+        />
+      </div>
+
+      {/* Desktop : fusée Starship + panneau blueprint */}
+      <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[#0a1830] lg:block sm:mt-10">
         <div
-          className="relative px-4 py-6 sm:px-8 sm:py-10"
+          className="relative px-8 py-10"
           style={{
             backgroundImage: 'radial-gradient(circle, rgb(255 255 255 / 0.13) 1px, transparent 1px)',
             backgroundSize: '18px 18px',
           }}
         >
-          {/* Desktop : fusée Starship + rail */}
-          <div className="hidden items-start gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
+          <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
             <div className="flex flex-col items-center">
               <div className="relative w-full max-w-[340px]">
                 <AnimatePresence>
@@ -504,25 +527,6 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                   {isLaunching ? 'Lancement…' : 'Lancer'}
                 </Button>
               </div>
-            </div>
-          </div>
-
-          {/* Mobile : diaporama propre */}
-          <div className="space-y-5 lg:hidden">
-            <MobileCarousel
-              activeStage={activeStage}
-              onNext={goNext}
-              onPrev={goPrev}
-              onSelect={selectStage}
-            />
-            <div className="flex items-center justify-between gap-3 pt-2">
-              <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
-                Diaporama méthode — {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
-              </p>
-              <Button className="gap-2" disabled={isLaunching} onClick={handleLaunch} type="button">
-                <Rocket aria-hidden className="size-4" />
-                {isLaunching ? 'Lancement…' : 'Lancer'}
-              </Button>
             </div>
           </div>
         </div>
