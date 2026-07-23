@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
@@ -10,6 +10,8 @@ import type { Skill } from '@/payload-types'
 type SoftSkillsStripProps = {
   skills: Skill[]
   className?: string
+  /** Phrase d'intro (CMS) — posture client-first. */
+  lead?: string | null
 }
 
 function skillSeed(id: Skill['id']): number {
@@ -43,8 +45,19 @@ function getChipMotion(id: Skill['id'], index: number) {
 const chipClassName =
   'border-[color:var(--accent)]/30 bg-[var(--accent)]/14 text-[var(--foreground)] shadow-[0_8px_24px_rgb(0_0_0_/_0.22)]'
 
-export function SoftSkillsStrip({ skills, className }: SoftSkillsStripProps) {
+export function SoftSkillsStrip({ skills, className, lead }: SoftSkillsStripProps) {
   const reduceMotion = useReducedMotion()
+  const [revealed, setRevealed] = useState(reduceMotion === true)
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setRevealed(true)
+      return
+    }
+    setRevealed(true)
+    const timer = window.setTimeout(() => setRevealed(true), 1200)
+    return () => window.clearTimeout(timer)
+  }, [reduceMotion])
 
   const items = useMemo(
     () =>
@@ -60,12 +73,18 @@ export function SoftSkillsStrip({ skills, className }: SoftSkillsStripProps) {
 
   return (
     <section aria-label="Soft skills" className={cn('relative', className)}>
-      <p className="mb-5 text-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase">
+      <p className="mb-2 text-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase">
         Soft skills
       </p>
+      {lead?.trim() ? (
+        <p className="mx-auto mb-5 max-w-2xl text-center text-base text-balance text-[var(--foreground-secondary)] sm:text-lg">
+          {lead}
+        </p>
+      ) : null}
       <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
         {items.map((skill, index) => {
           const motionConfig = getChipMotion(skill.id, index)
+          const isVisible = revealed || reduceMotion
 
           if (reduceMotion) {
             return (
@@ -78,8 +97,8 @@ export function SoftSkillsStrip({ skills, className }: SoftSkillsStripProps) {
           return (
             <motion.div
               animate={{
-                opacity: 1,
-                scale: 1,
+                opacity: isVisible ? 1 : 0,
+                scale: isVisible ? 1 : 0.2,
                 y: motionConfig.y,
                 rotate: motionConfig.rotate,
               }}

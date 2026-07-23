@@ -18,7 +18,7 @@ import { JsonLd, personJsonLd } from '@/lib/json-ld'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
 import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
-import { getSoftSkills, getTechnicalSkills } from '@/lib/skills'
+import { getTechnicalSkills, resolveSoftSkills } from '@/lib/skills'
 import type { Experience } from '@/payload-types'
 
 export const revalidate = 3600
@@ -55,7 +55,7 @@ export default async function AboutPage() {
     (isMedia(settings?.avatar) ? settings.avatar.alt : null) ||
     (settings?.siteName ? `Portrait de ${settings.siteName}` : 'Portrait')
 
-  const softSkills = getSoftSkills(skills)
+  const softSkills = resolveSoftSkills(skills)
   const technicalSkills = getTechnicalSkills(skills)
 
   const jsonLd = personJsonLd({
@@ -70,29 +70,32 @@ export default async function AboutPage() {
   return (
     <Container className="space-y-10 py-12 sm:space-y-16 sm:py-16">
       <JsonLd data={jsonLd} />
-      {softSkills.length ? (
-        <SoftSkillsStrip className="pb-2 sm:pb-4" skills={softSkills} />
-      ) : null}
       <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10">
-        <ReadableSurface className="space-y-5" strong>
-          {settings?.location?.trim() ? (
-            <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
-              {settings.location}
-            </span>
-          ) : null}
-          <SectionTitle
-            eyebrow="Profil"
-            subtitle={settings?.tagline || undefined}
-            title={settings?.siteName || 'À propos'}
+        <ReadableSurface className="space-y-8" strong>
+          <SoftSkillsStrip
+            lead={settings?.aboutIntro || settings?.tagline}
+            skills={softSkills}
           />
-          {settings?.aboutIntro ? (
-            <p className="max-w-2xl text-lg text-[var(--foreground-secondary)]">{settings.aboutIntro}</p>
-          ) : null}
-          {settings?.aboutBody ? (
-            <p className="max-w-2xl whitespace-pre-line text-base text-[var(--foreground-secondary)]">
-              {settings.aboutBody}
-            </p>
-          ) : null}
+          <div className="space-y-5 border-t border-[color:var(--border-subtle)] pt-8">
+            {settings?.location?.trim() ? (
+              <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+                {settings.location}
+              </span>
+            ) : null}
+            <SectionTitle
+              eyebrow="Profil"
+              subtitle={settings?.tagline || undefined}
+              title={settings?.siteName || 'À propos'}
+            />
+            {settings?.aboutIntro ? (
+              <p className="max-w-2xl text-lg text-[var(--foreground-secondary)]">{settings.aboutIntro}</p>
+            ) : null}
+            {settings?.aboutBody ? (
+              <p className="max-w-2xl whitespace-pre-line text-base text-[var(--foreground-secondary)]">
+                {settings.aboutBody}
+              </p>
+            ) : null}
+          </div>
         </ReadableSurface>
         <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
           <Image
