@@ -89,8 +89,13 @@
  * Gutter horizontal unifié des sections pleine largeur (hors Container).
  * Évite les décalages mobile entre Hero / Projets / Approche / CTA / Footer.
  * Échelle : 0.75rem → 1.25rem (sm) → 4rem (xl)
+ *
+ * Important : override `width: 100%` de `.glass-panel` — sinon
+ * width 100% + margin-inline déborde à droite et décale tout le layout.
  */
 .page-gutter {
+  width: auto;
+  max-width: none;
   margin-inline: 0.75rem;
 }
 
