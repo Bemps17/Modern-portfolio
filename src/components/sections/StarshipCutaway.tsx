@@ -69,7 +69,7 @@ function RocketSlice({
       tabIndex={0}
       transition={
         isLaunching
-          ? { duration: 1.15, ease: [0.22, 1, 0.36, 1], delay: index * 0.05 }
+          ? { duration: 2.2, ease: [0.22, 1, 0.36, 1], delay: index * 0.06 }
           : { type: 'spring', stiffness: 260, damping: 20 }
       }
     >
@@ -393,12 +393,12 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         if (current === null || current <= 1) {
           window.clearInterval(tick)
           setIsLaunching(true)
-          window.setTimeout(() => router.push('/contact'), 1800)
+          window.setTimeout(() => router.push('/contact'), 2200)
           return null
         }
         return current - 1
       })
-    }, 700)
+    }, 850)
   }, [countdown, isLaunching, reduceMotion, router])
 
   const activeStep = PROJECT_CUTAWAY_STEPS[activeStage]
@@ -440,36 +440,53 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                       exit={{ opacity: 0, scale: 1.4 }}
                       initial={{ opacity: 0, scale: 0.6 }}
                       key={countdown}
-                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
                     >
                       {countdown}
                     </motion.div>
                   ) : null}
                 </AnimatePresence>
+                {/* Fumée pré-décollage (moteurs qui s'allument pendant le compte à rebours) */}
+                <AnimatePresence>
+                  {countdown !== null && !isLaunching ? (
+                    <motion.div
+                      animate={{ opacity: [0, 0.5, 0.7], scaleX: [0.4, 0.8, 1], scaleY: [0.2, 0.6, 0.9] }}
+                      className="pointer-events-none absolute -bottom-2 left-1/2 z-0 h-28 w-28 -translate-x-1/2 rounded-full bg-gradient-to-t from-white/70 via-[var(--accent-soft)]/50 to-transparent blur-2xl"
+                      exit={{ opacity: 0 }}
+                      initial={{ opacity: 0 }}
+                      transition={{ duration: 2.5, ease: 'easeOut' }}
+                    />
+                  ) : null}
+                </AnimatePresence>
+                {/* Fumée de décollage */}
                 <AnimatePresence>
                   {isLaunching ? (
                     <motion.div
                       animate={{
-                        opacity: [0, 0.9, 1, 0.8],
-                        scaleX: [0.6, 1, 1.3, 1.6],
-                        scaleY: [0.3, 0.9, 1.4, 1.8],
+                        opacity: [0.9, 1, 0.85],
+                        scaleX: [1, 1.4, 1.8],
+                        scaleY: [0.9, 1.5, 2.2],
                       }}
-                      className="pointer-events-none absolute -bottom-4 left-1/2 z-0 h-40 w-40 -translate-x-1/2 rounded-full bg-gradient-to-t from-white/80 via-[var(--accent-soft)]/60 to-transparent blur-2xl"
-                      initial={{ opacity: 0 }}
-                      transition={{ duration: 1.8, ease: 'easeOut' }}
+                      className="pointer-events-none absolute -bottom-6 left-1/2 z-0 h-44 w-44 -translate-x-1/2 rounded-full bg-gradient-to-t from-white/85 via-[var(--accent-soft)]/65 to-transparent blur-2xl"
+                      initial={{ opacity: 0, scaleX: 1, scaleY: 0.9 }}
+                      transition={{ duration: 2.2, ease: 'easeOut' }}
                     />
                   ) : null}
                 </AnimatePresence>
                 <motion.div
                   animate={
                     isLaunching
-                      ? { y: [-2, 2, -2, 0, -32], opacity: [1, 1, 0.9, 0.7, 0] }
-                      : { y: 0, opacity: 1 }
+                      ? { y: [-2, 2, -2, 0, -40], opacity: [1, 1, 0.9, 0.7, 0] }
+                      : countdown !== null
+                        ? { y: [-1.5, 1.5, -1.5, 1.5, 0] }
+                        : { y: 0, opacity: 1 }
                   }
                   transition={
                     isLaunching
-                      ? { duration: 1.8, ease: 'easeIn' }
-                      : { duration: 0.3 }
+                      ? { duration: 2.2, ease: 'easeIn' }
+                      : countdown !== null
+                        ? { duration: 0.18, repeat: Infinity, ease: 'easeInOut' }
+                        : { duration: 0.3 }
                   }
                 >
                   <StarshipSvg
