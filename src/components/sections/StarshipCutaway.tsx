@@ -15,16 +15,16 @@ type StarshipCutawayProps = {
   subtitle?: string | null
 }
 
-const LAYER_SPREAD = 22
+const LAYER_SPREAD = 30
 const STROKE = 'rgb(232 238 247 / 0.94)'
 const STROKE_DIM = 'rgb(232 238 247 / 0.38)'
 
 const SLICE_BOUNDS = [
-  { y: 28, h: 72 },
-  { y: 100, h: 76 },
-  { y: 176, h: 76 },
-  { y: 252, h: 76 },
-  { y: 328, h: 148 },
+  { y: 24, h: 74 },
+  { y: 98, h: 82 },
+  { y: 180, h: 82 },
+  { y: 262, h: 82 },
+  { y: 344, h: 162 },
 ] as const
 
 type RocketSliceProps = {
@@ -51,7 +51,7 @@ function RocketSlice({
     <motion.g
       animate={
         isLaunching
-          ? { y: -560 - index * 32, opacity: 0 }
+          ? { y: -620 - index * 36, opacity: 0 }
           : { y: spread, opacity: 1 }
       }
       aria-label={`Étage ${index + 1} : ${PROJECT_CUTAWAY_STEPS[index]?.title}`}
@@ -72,13 +72,13 @@ function RocketSlice({
       }
     >
       <rect
-        fill={isActive ? 'rgb(255 107 26 / 0.16)' : 'transparent'}
+        fill={isActive ? 'rgb(255 107 26 / 0.14)' : 'transparent'}
         height={bounds.h}
         rx="2"
         stroke={isActive ? 'var(--accent)' : 'transparent'}
         strokeOpacity={0.75}
-        width={72}
-        x="104"
+        width={152}
+        x="74"
         y={bounds.y}
       />
       {children}
@@ -86,8 +86,8 @@ function RocketSlice({
   )
 }
 
-/** Fusée classique type Ariane 5 / Tintin — ogive, étages empilés, boosters latéraux. */
-function ClassicRocketSvg({
+/** Fusée Starship fidèle : ogive conique, corps cylindrique, ailerons, Super Heavy. */
+function StarshipSvg({
   activeStage,
   isLaunching,
   onSelect,
@@ -99,32 +99,16 @@ function ClassicRocketSvg({
   const stroke = (index: number) => (activeStage === index ? 'var(--accent-soft)' : STROKE)
 
   return (
-    <svg aria-label="Fusée classique interactive" className="mx-auto h-auto w-full max-h-[min(52vh,420px)]" viewBox="0 0 280 500">
+    <svg
+      aria-label="Plan de coupe Starship SpaceX"
+      className="mx-auto h-auto w-full max-h-[min(64vh,540px)]"
+      viewBox="0 0 300 560"
+    >
       <defs>
-        <clipPath id="rocket-cutaway-interior">
-          <rect height="460" width="72" x="140" y="20" />
+        <clipPath id="starship-right">
+          <rect height="540" width="150" x="150" y="10" />
         </clipPath>
       </defs>
-
-      {/* Boosters latéraux (Ariane) — statiques, s'illuminent à l'étape 5 */}
-      <g opacity={activeStage === 4 ? 1 : 0.55}>
-        <path
-          d="M52 300 L88 292 L92 430 L48 438 Z"
-          fill="none"
-          stroke={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM}
-          strokeWidth="1.2"
-        />
-        <path
-          d="M228 300 L192 292 L188 430 L232 438 Z"
-          fill="none"
-          stroke={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM}
-          strokeWidth="1.2"
-        />
-        <path d="M60 420 L80 416 M200 420 L220 416" stroke={STROKE_DIM} strokeWidth="0.8" />
-      </g>
-
-      {/* Socle de lancement */}
-      <path d="M88 468 H192 L184 492 H96 Z" fill="none" stroke={STROKE_DIM} strokeWidth="1" />
 
       <RocketSlice
         activeStage={activeStage}
@@ -134,16 +118,19 @@ function ClassicRocketSvg({
         onSelect={onSelect}
       >
         <path
-          d="M140 32 L168 100 H112 Z"
+          d="M150 28 C170 52 178 74 180 98 L120 98 C122 74 130 52 150 28 Z"
           fill="none"
           stroke={stroke(0)}
           strokeLinejoin="round"
           strokeWidth="1.5"
         />
-        <path d="M112 100 H168" stroke={STROKE} strokeWidth="1" />
-        <g clipPath="url(#rocket-cutaway-interior)">
-          <path d="M148 52 L188 78" stroke={STROKE_DIM} strokeWidth="0.7" />
+        <path d="M120 98 H180" stroke={STROKE} strokeWidth="1" />
+        <g clipPath="url(#starship-right)">
+          <path d="M150 48 L198 66 L150 84" fill="none" stroke={STROKE_DIM} strokeWidth="0.8" />
         </g>
+        <text fill={activeStage === 0 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="64">
+          NOSE CONE
+        </text>
       </RocketSlice>
 
       <RocketSlice
@@ -153,13 +140,20 @@ function ClassicRocketSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <rect fill="none" height="76" stroke={stroke(1)} strokeWidth="1.5" width="56" x="112" y="100" />
-        <circle cx="124" cy="128" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <circle cx="140" cy="128" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <circle cx="156" cy="128" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <g clipPath="url(#rocket-cutaway-interior)">
-          <rect fill="none" height="20" stroke={STROKE_DIM} strokeWidth="0.7" width="36" x="152" y="118" />
+        <path
+          d="M120 98 H180 L182 180 H118 Z"
+          fill="none"
+          stroke={stroke(1)}
+          strokeWidth="1.5"
+        />
+        <path d="M118 128 H182 M118 158 H182" stroke={STROKE_DIM} strokeWidth="0.7" />
+        <g clipPath="url(#starship-right)">
+          <ellipse cx="200" cy="120" fill="none" rx="42" ry="10" stroke={STROKE} strokeWidth="0.8" />
+          <ellipse cx="200" cy="160" fill="none" rx="42" ry="10" stroke={STROKE} strokeWidth="0.8" />
         </g>
+        <text fill={activeStage === 1 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="136">
+          LOX TANK
+        </text>
       </RocketSlice>
 
       <RocketSlice
@@ -169,12 +163,21 @@ function ClassicRocketSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <rect fill="none" height="76" stroke={stroke(2)} strokeWidth="1.5" width="56" x="112" y="176" />
-        <path d="M118 196 H162 M118 216 H162 M118 236 H162" stroke={STROKE_DIM} strokeWidth="0.6" />
-        <g clipPath="url(#rocket-cutaway-interior)">
-          <ellipse cx="176" cy="206" fill="none" rx="28" ry="10" stroke={STROKE} strokeWidth="0.8" />
-          <ellipse cx="176" cy="232" fill="none" rx="28" ry="10" stroke={STROKE} strokeWidth="0.8" />
+        <path
+          d="M118 180 H182 L184 262 H116 Z"
+          fill="none"
+          stroke={stroke(2)}
+          strokeWidth="1.5"
+        />
+        <circle cx="126" cy="200" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <circle cx="150" cy="200" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <circle cx="174" cy="200" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <g clipPath="url(#starship-right)">
+          <rect fill="none" height="36" stroke={STROKE} strokeWidth="0.7" width="72" x="164" y="210" />
         </g>
+        <text fill={activeStage === 2 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="218">
+          PAYLOAD / UI
+        </text>
       </RocketSlice>
 
       <RocketSlice
@@ -184,12 +187,21 @@ function ClassicRocketSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <rect fill="none" height="76" stroke={stroke(3)} strokeWidth="1.5" width="56" x="112" y="252" />
-        <g clipPath="url(#rocket-cutaway-interior)">
-          <circle cx="162" cy="286" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
-          <circle cx="184" cy="286" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
-          <circle cx="206" cy="286" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
+        <path
+          d="M116 262 H184 L180 344 H120 Z"
+          fill="none"
+          stroke={stroke(3)}
+          strokeWidth="1.5"
+        />
+        <g clipPath="url(#starship-right)">
+          <circle cx="176" cy="292" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
+          <circle cx="200" cy="292" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
+          <circle cx="224" cy="292" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
         </g>
+        <path d="M108 312 L120 262 L120 332 Z M192 312 L180 262 L180 332 Z" fill="none" stroke={stroke(3)} strokeWidth="1" />
+        <text fill={activeStage === 3 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="296">
+          RAPTOR BAY
+        </text>
       </RocketSlice>
 
       <RocketSlice
@@ -200,23 +212,58 @@ function ClassicRocketSvg({
         onSelect={onSelect}
       >
         <path
-          d="M112 328 H168 L160 420 H120 Z"
+          d="M120 344 H180 L172 460 L204 470 L204 530 L96 530 L96 470 L128 460 Z"
           fill="none"
           stroke={stroke(4)}
           strokeWidth="1.5"
         />
-        <path d="M96 400 L112 328 L112 408 Z M184 400 L168 328 L168 408 Z" fill="none" stroke={stroke(4)} strokeWidth="1" />
-        <path d="M128 448 L140 468 L152 448 Z" fill="none" stroke={STROKE} strokeWidth="1" />
+        <g clipPath="url(#starship-right)">
+          {Array.from({ length: 9 }).map((_, engine) => (
+            <circle
+              cx={162 + (engine % 3) * 18}
+              cy={498 + Math.floor(engine / 3) * 16}
+              fill="none"
+              key={engine}
+              r="5"
+              stroke={STROKE}
+              strokeWidth="0.7"
+            />
+          ))}
+        </g>
+        <path d="M88 420 L120 344 L120 448 Z M212 420 L180 344 L180 448 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
+        <text fill={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="414">
+          SUPER HEAVY
+        </text>
       </RocketSlice>
 
-      <line stroke={STROKE_DIM} strokeDasharray="3 3" strokeWidth="0.8" x1="140" x2="140" y1="28" y2="468" />
+      {/* Ligne centrale de coupe */}
+      <line stroke={STROKE_DIM} strokeDasharray="4 3" strokeWidth="0.8" x1="150" x2="150" y1="28" y2="530" />
+
+      {/* Encadrement technique */}
+      <g opacity="0.7" stroke={STROKE_DIM} strokeWidth="0.8">
+        <path d="M46 98 L56 98 L56 344 L46 344" fill="none" />
+        <path d="M46 98 L52 98 M46 216 L52 216 M46 344 L52 344" />
+      </g>
+      <text fill={STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="7" letterSpacing="0.14em" transform="rotate(-90 28 220)" x="28" y="220">
+        STARSHIP
+      </text>
+      <g opacity="0.7" stroke={STROKE_DIM} strokeWidth="0.8">
+        <path d="M46 344 L56 344 L56 530 L46 530" fill="none" />
+        <path d="M46 344 L52 344 M46 437 L52 437 M46 530 L52 530" />
+      </g>
+      <text fill={STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="7" letterSpacing="0.14em" transform="rotate(-90 28 440)" x="28" y="440">
+        SUPER HEAVY
+      </text>
 
       <g fontFamily="var(--font-space-grotesk), monospace" fontSize="7.5" letterSpacing="0.1em">
-        <text fill={STROKE_DIM} x="196" y="36">
-          ARIANE-TYPE
+        <text fill={STROKE_DIM} x="198" y="38">
+          STARSHIP CUTAWAY
         </text>
-        <text fill={STROKE_DIM} x="196" y="50">
-          CUTAWAY 1:50
+        <text fill={STROKE_DIM} x="198" y="52">
+          SCALE 1:50
+        </text>
+        <text fill={STROKE_DIM} x="198" y="66">
+          REV. 3A
         </text>
       </g>
     </svg>
@@ -237,35 +284,75 @@ function StageDetailCard({ step, className }: { step: CutawayStep; className?: s
   )
 }
 
-function MobileStageTabs({
-  steps,
+function MobileCarousel({
   activeStage,
   onSelect,
+  onPrev,
+  onNext,
 }: {
-  steps: CutawayStep[]
   activeStage: number
   onSelect: (index: number) => void
+  onPrev: () => void
+  onNext: () => void
 }) {
+  const step = PROJECT_CUTAWAY_STEPS[activeStage]
+
   return (
-    <div className="flex w-full gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      {steps.map((step, index) => (
+    <div className="space-y-4 lg:hidden">
+      <div className="flex items-center justify-between gap-3">
         <button
-          className={cn(
-            'min-w-[calc(50%-0.25rem)] shrink-0 snap-start rounded-lg border px-3 py-2.5 text-left transition sm:min-w-[42%]',
-            activeStage === index
-              ? 'border-[color:var(--accent)]/55 bg-[var(--accent)]/12'
-              : 'border-[color:var(--border)] bg-[rgb(8_18_36_/_0.65)]',
-          )}
-          key={step.id}
-          onClick={() => onSelect(index)}
+          aria-label="Étape précédente"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
+          disabled={activeStage === 0}
+          onClick={onPrev}
           type="button"
         >
-          <span className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.16em] text-[var(--accent-soft)]">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          <span className="mt-0.5 block text-sm font-medium leading-snug text-[var(--foreground)]">{step.title}</span>
+          <ChevronLeft aria-hidden className="size-5" />
         </button>
-      ))}
+
+        <div className="flex flex-1 items-center justify-center gap-1.5">
+          {PROJECT_CUTAWAY_STEPS.map((_, index) => (
+            <button
+              aria-label={`Étape ${index + 1}`}
+              className={cn(
+                'h-2 rounded-full transition-all',
+                activeStage === index ? 'w-6 bg-[var(--accent)]' : 'w-2 bg-[var(--border)]',
+              )}
+              key={index}
+              onClick={() => onSelect(index)}
+              type="button"
+            />
+          ))}
+        </div>
+
+        <button
+          aria-label="Étape suivante"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
+          disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
+          onClick={onNext}
+          type="button"
+        >
+          <ChevronRight aria-hidden className="size-5" />
+        </button>
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: 20 }}
+          key={step.id}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+        >
+          <StageDetailCard step={step} />
+        </motion.div>
+      </AnimatePresence>
+
+      <div className="flex items-center justify-between pt-1">
+        <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
+          {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
+        </p>
+      </div>
     </div>
   )
 }
@@ -359,93 +446,43 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
 
       <div className="mt-8 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[#0a1830] sm:mt-10 sm:rounded-3xl">
         <div
-          className="relative px-3 py-5 sm:px-8 sm:py-10"
+          className="relative px-4 py-6 sm:px-8 sm:py-10"
           style={{
             backgroundImage: 'radial-gradient(circle, rgb(255 255 255 / 0.13) 1px, transparent 1px)',
             backgroundSize: '18px 18px',
           }}
         >
-          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,300px)] lg:items-start lg:gap-10">
-            <div className="flex flex-col">
-              <div className="relative mx-auto w-full max-w-[300px]">
+          {/* Desktop : fusée Starship + rail */}
+          <div className="hidden items-start gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
+            <div className="flex flex-col items-center">
+              <div className="relative w-full max-w-[340px]">
                 <AnimatePresence>
                   {isLaunching ? (
                     <motion.div
                       animate={{ opacity: [0, 1, 0], scaleY: [0.5, 1.8, 2.4] }}
-                      className="pointer-events-none absolute bottom-2 left-1/2 z-0 h-36 w-20 -translate-x-1/2 bg-gradient-to-t from-[var(--accent)] via-[var(--accent-soft)] to-transparent blur-xl"
+                      className="pointer-events-none absolute bottom-2 left-1/2 z-0 h-44 w-24 -translate-x-1/2 bg-gradient-to-t from-[var(--accent)] via-[var(--accent-soft)] to-transparent blur-xl"
                       initial={{ opacity: 0 }}
                       transition={{ duration: 1.1, ease: 'easeOut' }}
                     />
                   ) : null}
                 </AnimatePresence>
-
                 <motion.div
-                  animate={isLaunching ? { y: -28, opacity: 0.65 } : { y: 0, opacity: 1 }}
+                  animate={isLaunching ? { y: -32, opacity: 0.65 } : { y: 0, opacity: 1 }}
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <ClassicRocketSvg
+                  <StarshipSvg
                     activeStage={activeStage}
                     isLaunching={isLaunching}
                     onSelect={selectStage}
                   />
                 </motion.div>
               </div>
-
-              <p className="mt-2 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[rgb(232_238_247_/_0.55)] uppercase">
-                Touchez un étage de la fusée
+              <p className="mt-3 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[rgb(232_238_247_/_0.55)] uppercase">
+                Cliquez un étage pour séparer les couches
               </p>
-
-              {/* Mobile : onglets scrollables + carte fixe en dessous (pas de superposition) */}
-              <div className="mt-5 space-y-3 lg:hidden">
-                <div className="flex items-center gap-2">
-                  <button
-                    aria-label="Étape précédente"
-                    className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
-                    disabled={activeStage === 0}
-                    onClick={goPrev}
-                    type="button"
-                  >
-                    <ChevronLeft aria-hidden className="size-4" />
-                  </button>
-                  <div className="min-w-0 flex-1">
-                    <MobileStageTabs activeStage={activeStage} onSelect={selectStage} steps={PROJECT_CUTAWAY_STEPS} />
-                  </div>
-                  <button
-                    aria-label="Étape suivante"
-                    className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
-                    disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
-                    onClick={goNext}
-                    type="button"
-                  >
-                    <ChevronRight aria-hidden className="size-4" />
-                  </button>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    initial={{ opacity: 0, y: 6 }}
-                    key={activeStep.id}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <StageDetailCard step={activeStep} />
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="flex items-center justify-between gap-3 pt-1">
-                  <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
-                    Étape {activeStage + 1} / {PROJECT_CUTAWAY_STEPS.length}
-                  </p>
-                  <Button className="gap-2" disabled={isLaunching} onClick={handleLaunch} type="button">
-                    <Rocket aria-hidden className="size-4" />
-                    {isLaunching ? 'Lancement…' : 'Lancer'}
-                  </Button>
-                </div>
-              </div>
             </div>
 
-            <div className="mt-8 hidden space-y-5 lg:mt-0 lg:block">
+            <div className="space-y-5">
               <StepRail activeStage={activeStage} onSelect={selectStage} steps={PROJECT_CUTAWAY_STEPS} />
               <AnimatePresence mode="wait">
                 <motion.div
@@ -467,6 +504,25 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                   {isLaunching ? 'Lancement…' : 'Lancer'}
                 </Button>
               </div>
+            </div>
+          </div>
+
+          {/* Mobile : diaporama propre */}
+          <div className="space-y-5 lg:hidden">
+            <MobileCarousel
+              activeStage={activeStage}
+              onNext={goNext}
+              onPrev={goPrev}
+              onSelect={selectStage}
+            />
+            <div className="flex items-center justify-between gap-3 pt-2">
+              <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
+                Diaporama méthode — {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
+              </p>
+              <Button className="gap-2" disabled={isLaunching} onClick={handleLaunch} type="button">
+                <Rocket aria-hidden className="size-4" />
+                {isLaunching ? 'Lancement…' : 'Lancer'}
+              </Button>
             </div>
           </div>
         </div>
