@@ -22,12 +22,12 @@ export function ContactForm() {
     <GlassCard className="p-6 sm:p-8">
       <form action={formAction} className="space-y-5" noValidate>
         <div className="space-y-2">
-          <label className="text-sm text-[var(--muted)]" htmlFor="name">
+          <label className="text-sm font-medium text-[var(--foreground-secondary)]" htmlFor="name">
             Nom
           </label>
           <input
             autoComplete="name"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-[color:var(--accent)]/50"
+            className="w-full rounded-xl border border-[color:var(--border)] bg-[var(--surface-glass)] px-3 py-2.5 text-[var(--foreground)] outline-none backdrop-blur-sm focus:border-[color:var(--accent)]/50"
             id="name"
             name="name"
             required
@@ -35,12 +35,12 @@ export function ContactForm() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm text-[var(--muted)]" htmlFor="email">
+          <label className="text-sm font-medium text-[var(--foreground-secondary)]" htmlFor="email">
             Email
           </label>
           <input
             autoComplete="email"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-[color:var(--accent)]/50"
+            className="w-full rounded-xl border border-[color:var(--border)] bg-[var(--surface-glass)] px-3 py-2.5 text-[var(--foreground)] outline-none backdrop-blur-sm focus:border-[color:var(--accent)]/50"
             id="email"
             name="email"
             required
@@ -48,11 +48,11 @@ export function ContactForm() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm text-[var(--muted)]" htmlFor="message">
+          <label className="text-sm font-medium text-[var(--foreground-secondary)]" htmlFor="message">
             Message
           </label>
           <textarea
-            className="min-h-36 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 outline-none focus:border-[color:var(--accent)]/50"
+            className="min-h-36 w-full rounded-xl border border-[color:var(--border)] bg-[var(--surface-glass)] px-3 py-2.5 text-[var(--foreground)] outline-none backdrop-blur-sm focus:border-[color:var(--accent)]/50"
             id="message"
             name="message"
             required

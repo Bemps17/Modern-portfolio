@@ -20,7 +20,7 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
     <section className="px-6 pb-20 xl:px-16">
       <FadeInWhenVisible>
         <motion.div
-          className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-8 sm:p-10"
+          className="relative overflow-hidden rounded-3xl readable-surface-strong p-8 sm:p-10"
           whileHover={reduceMotion ? undefined : { borderColor: 'rgba(255,107,26,0.35)' }}
         >
           <FloatingOrb className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[var(--accent)]/25 blur-3xl" />
@@ -40,7 +40,7 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
               />
               {email ? (
                 <a
-                  className="inline-block font-[family-name:var(--font-space-grotesk)] text-sm tracking-wide text-[var(--muted)] underline-offset-4 transition hover:text-white hover:underline"
+                  className="inline-block font-[family-name:var(--font-space-grotesk)] text-sm tracking-wide text-[var(--foreground-secondary)] underline-offset-4 transition hover:text-[var(--foreground)] hover:underline"
                   href={`mailto:${email}`}
                 >
                   {email}

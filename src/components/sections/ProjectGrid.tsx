@@ -79,7 +79,7 @@ export function ProjectGrid({
     : source
 
   if (!source.length) {
-    return <p className="text-[var(--muted)]">Aucun projet publié pour le moment.</p>
+    return <p className="text-[var(--foreground-secondary)]">Aucun projet publié pour le moment.</p>
   }
 
   const activeLabel = active ? (STACK_LABELS[active] ?? active) : null
@@ -115,7 +115,7 @@ export function ProjectGrid({
             )}
             {active && !filtersOpen ? (
               <button
-                className="text-sm text-[var(--muted)] underline-offset-4 hover:text-white hover:underline"
+                className="text-sm text-[var(--foreground-secondary)] underline-offset-4 hover:text-[var(--foreground)] hover:underline"
                 data-cursor="link"
                 onClick={() => setActive(null)}
                 type="button"
@@ -167,7 +167,7 @@ export function ProjectGrid({
                     </button>
                   ))}
                 </div>
-                <p className="font-[family-name:var(--font-space-grotesk)] text-sm text-[var(--muted)]">
+                <p className="font-[family-name:var(--font-space-grotesk)] text-sm text-[var(--foreground-secondary)]">
                   <AnimatePresence mode="popLayout">
                     <motion.span
                       animate={{ opacity: 1, y: 0 }}

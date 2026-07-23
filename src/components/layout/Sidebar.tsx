@@ -52,7 +52,7 @@ export function Sidebar({ siteName, socialLinks, logoUrl }: SidebarProps) {
                 'group relative flex h-11 w-11 items-center justify-center rounded-xl transition',
                 active
                   ? 'bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-[color:var(--accent)]/30'
-                  : 'text-[var(--muted)] hover:bg-white/5 hover:text-[var(--accent-soft)]',
+                  : 'text-[var(--foreground-secondary)] hover:bg-white/5 hover:text-[var(--foreground)]',
               )}
               data-cursor="link"
               href={href}
@@ -69,7 +69,7 @@ export function Sidebar({ siteName, socialLinks, logoUrl }: SidebarProps) {
         {(socialLinks || []).map((link) => (
           <a
             aria-label={link.label || link.platform || 'Réseau social'}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-[var(--muted)] transition hover:bg-white/5 hover:text-[var(--accent-soft)]"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-[var(--foreground-secondary)] transition hover:bg-white/5 hover:text-[var(--foreground)]"
             data-cursor="open"
             href={link.url}
             key={link.url}

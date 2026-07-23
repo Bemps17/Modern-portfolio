@@ -140,7 +140,7 @@ export function ProjectCard({
               ) : null}
               {project.title}
             </h3>
-            <p className="line-clamp-2 text-sm text-[var(--muted)]">{project.excerpt}</p>
+            <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">{project.excerpt}</p>
             {impact ? (
               <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--accent-soft)]">
                 {impact}

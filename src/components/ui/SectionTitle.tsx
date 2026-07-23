@@ -35,7 +35,7 @@ export function SectionTitle({ title, subtitle, className, eyebrow, editorial = 
       {subtitle ? (
         <RevealText
           as="p"
-          className="mt-3 max-w-2xl text-base text-[var(--muted)] sm:text-lg"
+          className="mt-3 max-w-2xl text-base text-[var(--foreground-secondary)] sm:text-lg"
           delay={0.2}
           text={subtitle}
         />

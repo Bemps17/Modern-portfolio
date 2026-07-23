@@ -27,16 +27,31 @@ Usage : `font-[family-name:var(--font-syne)]`
 | Token | Valeur | Usage |
 |---|---|---|
 | `--background` | `#0a0a0a` | Fond principal |
-| `--background-elevated` | `#111014` | Modales, surfaces |
-| `--foreground` | `#f5f1ea` | Texte principal |
-| `--muted` | `#8a8580` | Texte secondaire |
-| `--border` | `rgb(255 255 255 / 0.08)` | Bordures subtiles |
-| `--glass` | `rgb(255 255 255 / 0.05)` | Cartes glass |
+| `--background-elevated` | `#141418` | Modales, surfaces |
+| `--foreground` | `#f8f4ef` | Texte principal (WCAG AA) |
+| `--foreground-secondary` | `#ddd8d2` | Corps, sous-titres, labels formulaire |
+| `--muted` | `#c4bfb8` | Eyebrows, légendes, meta |
+| `--muted-subtle` | `#9a958f` | Séparateurs décoratifs uniquement |
+| `--surface-glass` | `rgb(12 12 16 / 0.78)` | Panneaux `.readable-surface` |
+| `--surface-glass-strong` | `rgb(10 10 14 / 0.9)` | Hero, footer, blocs longs |
+| `--border` | `rgb(255 255 255 / 0.12)` | Bordures subtiles |
+| `--glass` | `rgb(255 255 255 / 0.08)` | Cartes glass |
 | `--accent` | `#ff6b1a` | CTA, liens actifs |
 | `--accent-secondary` | `#991b1b` | Dégradés |
-| `--accent-soft` | `#ffb347` | Texte accentué |
+| `--accent-soft` | `#ffc266` | Texte accentué, stats |
 | `--accent-glow` | `rgb(255 107 26 / 0.18)` | Halos survol |
 | `--accent-secondary-glow` | `rgb(153 27 27 / 0.14)` | Halos secondaires |
+
+## Surfaces lisibles
+
+Classe utilitaire (`styles.css`) + composant `ReadableSurface` :
+
+| Classe | Usage |
+|---|---|
+| `.readable-surface` | Sections, cartes légères — `backdrop-filter` + fond semi-opaque |
+| `.readable-surface-strong` | Hero texte, footer, pages longues — contraste renforcé |
+
+**Règle :** tout texte de lecture (paragraphes, formulaires) sur `--foreground` ou `--foreground-secondary`, jamais en gris faible sur le parallax nu.
 
 ## Composants primitives
 
@@ -48,6 +63,7 @@ Usage : `font-[family-name:var(--font-syne)]`
 | `SectionTitle` | `src/components/ui/SectionTitle.tsx` |
 | `Container` | `src/components/ui/Container.tsx` |
 | `EditorialTitle` | `src/components/ui/EditorialTitle.tsx` |
+| `ReadableSurface` | `src/components/ui/ReadableSurface.tsx` |
 
 Icônes : **lucide-react** uniquement.
 
@@ -72,7 +88,8 @@ Icônes : **lucide-react** uniquement.
 
 ## Contraste
 
-Cible **WCAG AA** sur texte body (`--foreground`, `--muted`) sur `--background`.  
+Cible **WCAG AA** : `--foreground` / `--foreground-secondary` sur surfaces glass ou fond sombre.  
+`--muted` réservé aux labels courts ; `--muted-subtle` décoratif seulement.  
 Audit formel : 🎯 `tests/a11y.spec.ts` (à venir).
 
 ---

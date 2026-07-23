@@ -31,13 +31,15 @@ export default async function ContactPage() {
 
   return (
     <Container className="py-16">
-      <SectionTitle
-        eyebrow="Contact"
-        subtitle={settings?.email ? `Ou écrivez directement à ${settings.email}` : undefined}
-        title="Parlons de votre projet"
-      />
-      <div className="max-w-xl">
-        <ContactForm />
+      <div className="readable-surface-strong max-w-2xl rounded-3xl p-6 sm:p-8">
+        <SectionTitle
+          eyebrow="Contact"
+          subtitle={settings?.email ? `Ou écrivez directement à ${settings.email}` : undefined}
+          title="Parlons de votre projet"
+        />
+        <div className="max-w-xl">
+          <ContactForm />
+        </div>
       </div>
     </Container>
   )

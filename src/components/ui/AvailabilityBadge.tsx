@@ -30,7 +30,7 @@ export function AvailabilityBadge({
       ? 'text-emerald-300/95 ring-emerald-400/30 bg-emerald-400/10'
       : resolved === 'limited'
         ? 'text-amber-200/95 ring-amber-400/30 bg-amber-400/10'
-        : 'text-[var(--muted)] ring-white/15 bg-white/5'
+        : 'text-[var(--foreground-secondary)] ring-white/15 bg-[var(--surface-glass)]'
 
   return (
     <span

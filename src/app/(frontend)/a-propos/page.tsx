@@ -75,7 +75,7 @@ export default async function AboutPage() {
         </section>
       ) : null}
       <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="space-y-5">
+        <div className="readable-surface-strong space-y-5 rounded-3xl p-6 sm:p-8">
           {settings?.location?.trim() ? (
             <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
               {settings.location}
@@ -87,10 +87,10 @@ export default async function AboutPage() {
             title={settings?.siteName || 'À propos'}
           />
           {settings?.aboutIntro ? (
-            <p className="max-w-2xl text-lg text-[var(--muted)]">{settings.aboutIntro}</p>
+            <p className="max-w-2xl text-lg text-[var(--foreground-secondary)]">{settings.aboutIntro}</p>
           ) : null}
           {settings?.aboutBody ? (
-            <p className="max-w-2xl whitespace-pre-line text-base text-[var(--muted)]">{settings.aboutBody}</p>
+            <p className="max-w-2xl whitespace-pre-line text-base text-[var(--foreground-secondary)]">{settings.aboutBody}</p>
           ) : null}
         </div>
         <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
@@ -103,7 +103,7 @@ export default async function AboutPage() {
           />
         </div>
       </section>
-      <section>
+      <section className="readable-surface rounded-3xl p-6 sm:p-8">
         <SectionTitle
           eyebrow="En chiffres"
           subtitle="Un aperçu rapide du parcours et de la production."
@@ -115,11 +115,11 @@ export default async function AboutPage() {
           yearsExperience={yearsFromExperiences(experiences)}
         />
       </section>
-      <section>
+      <section className="readable-surface rounded-3xl p-6 sm:p-8">
         <SectionTitle title="Parcours" />
         <ExperienceTimeline experiences={experiences} />
       </section>
-      <section>
+      <section className="readable-surface rounded-3xl p-6 sm:p-8">
         <SectionTitle
           subtitle="Les outils avec lesquels je livre le plus souvent."
           title="Compétences"

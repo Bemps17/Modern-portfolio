@@ -10,7 +10,7 @@ export function GlassCard({ children, className, as: Tag = 'div' }: GlassCardPro
   return (
     <Tag
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-white/12 bg-white/[0.06] shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl backdrop-saturate-150 transition-colors duration-300 hover:border-[color:var(--accent)]/30',
+        'readable-surface relative overflow-hidden rounded-2xl shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.08)] transition-colors duration-300 hover:border-[color:var(--accent)]/30',
         className,
       )}
     >

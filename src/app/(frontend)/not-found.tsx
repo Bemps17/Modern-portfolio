@@ -9,7 +9,7 @@ export default function NotFound() {
         Erreur 404
       </p>
       <EditorialTitle as="h1" text="Page introuvable" />
-      <p className="max-w-md text-[var(--muted)]">
+      <p className="max-w-md text-[var(--foreground-secondary)]">
         La page que vous cherchez n’existe pas ou a été déplacée.
       </p>
       <div className="flex flex-wrap justify-center gap-3">

@@ -71,7 +71,7 @@ function ApproachCard({ step, index }: { step: ApproachStep; index: number }) {
         <h3 className="relative mt-3 font-[family-name:var(--font-syne)] text-xl font-semibold">
           {step.title}
         </h3>
-        <p className="relative mt-2 text-sm leading-relaxed text-[var(--muted)]">{step.description}</p>
+        <p className="relative mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
       </GlassCard>
     </motion.div>
   )
@@ -81,7 +81,7 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
   if (!steps.length) return null
 
   return (
-    <section className="px-6 py-20 xl:px-16">
+    <section className="readable-surface rounded-3xl px-6 py-20 xl:px-16">
       <SectionTitle
         editorial
         eyebrow="Méthode"

@@ -73,6 +73,7 @@ export function Hero({
       </div>
 
       <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center px-6 py-24 lg:w-[42%] lg:px-10 xl:px-16">
+        <div className="readable-surface-strong rounded-3xl p-6 sm:p-8">
         <motion.div
           className="mb-6 flex flex-wrap items-center gap-3"
           initial={reduceMotion ? false : { opacity: 0, y: 12 }}
@@ -91,14 +92,14 @@ export function Hero({
         <EditorialTitle as="h1" bleed className="mb-5" text={siteName} />
         <RevealText
           as="p"
-          className="max-w-xl text-xl text-balance text-white/90 sm:text-2xl"
+          className="max-w-xl text-xl text-balance text-[var(--foreground)] sm:text-2xl"
           delay={0.15}
           text={tagline}
         />
         {aboutIntro ? (
           <RevealText
             as="p"
-            className="mt-5 max-w-lg text-base text-[var(--muted)] sm:text-lg"
+            className="mt-5 max-w-lg text-base text-[var(--foreground-secondary)] sm:text-lg"
             delay={0.28}
             text={aboutIntro}
           />
@@ -118,6 +119,7 @@ export function Hero({
             </Button>
           </Magnetic>
         </motion.div>
+        </div>
       </div>
 
       <motion.div

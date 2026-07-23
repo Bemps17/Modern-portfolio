@@ -48,9 +48,9 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
   return (
     <>
       <ScrollProgress />
-      <div className="px-6 py-12 lg:px-10 xl:px-16">
+      <div className="readable-surface-strong rounded-3xl px-6 py-12 lg:px-10 xl:px-16">
         <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
-          <Link className="transition hover:text-[var(--accent-soft)]" data-cursor="link" href="/projets">
+          <Link className="transition hover:text-[var(--foreground)]" data-cursor="link" href="/projets">
             ← Projets
           </Link>
           <span aria-hidden>·</span>
@@ -75,7 +75,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
 
           <div className="mt-10 lg:mt-0">
             <EditorialTitle as="h1" bleed className="mb-4" text={project.title} />
-            <p className="text-lg text-[var(--muted)]">{project.excerpt}</p>
+            <p className="text-lg text-[var(--foreground-secondary)]">{project.excerpt}</p>
 
             {stackItems.length ? (
               <div className="mt-5 flex flex-wrap gap-2">

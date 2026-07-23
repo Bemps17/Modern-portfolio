@@ -24,8 +24,8 @@ export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
               {start} — {end}
             </p>
             <h3 className="mt-1 font-[family-name:var(--font-syne)] text-xl font-semibold">{experience.title}</h3>
-            <p className="text-sm text-[var(--accent-soft)]/90">{experience.company}</p>
-            <p className="mt-2 text-sm text-[var(--muted)]">{experience.description}</p>
+            <p className="text-sm text-[var(--accent-soft)]">{experience.company}</p>
+            <p className="mt-2 text-sm text-[var(--foreground-secondary)]">{experience.description}</p>
           </li>
         )
       })}

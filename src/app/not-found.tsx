@@ -17,7 +17,7 @@ export default function RootNotFound() {
         >
           <p className="text-sm tracking-[0.28em] text-[var(--accent-soft)] uppercase">Erreur 404</p>
           <h1 className="text-4xl font-bold sm:text-5xl">Page introuvable</h1>
-          <p className="max-w-md text-[var(--muted)]">
+          <p className="max-w-md text-[var(--foreground-secondary)]">
             La page que vous cherchez n’existe pas ou a été déplacée.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
