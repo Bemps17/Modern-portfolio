@@ -457,8 +457,8 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         title="Découpez le projet"
       />
 
-      {/* Mobile : diaporama pleine largeur, sans panneau blueprint */}
-      <div className="relative left-1/2 mt-8 w-screen max-w-none -translate-x-1/2 px-4 sm:px-6 lg:hidden">
+      {/* Mobile / tablette : diaporama pleine largeur, sans Lancer */}
+      <div className="relative left-1/2 mt-8 w-screen max-w-none -translate-x-1/2 px-4 sm:px-6 xl:hidden">
         <MobileCarousel
           activeStage={activeStage}
           onNext={goNext}
@@ -467,8 +467,8 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         />
       </div>
 
-      {/* Desktop : fusée Starship + panneau blueprint */}
-      <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[#0a1830] lg:block sm:mt-10">
+      {/* Desktop (xl+) : fusée Starship + panneau blueprint + Lancer */}
+      <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[#0a1830] xl:block sm:mt-10">
         <div
           className="relative px-8 py-10"
           style={{
@@ -476,7 +476,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
             backgroundSize: '18px 18px',
           }}
         >
-          <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
+          <div className="grid items-start gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
             <div className="flex flex-col items-center">
               <div className="relative w-full max-w-[340px]">
                 <AnimatePresence>
