@@ -365,6 +365,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   const reduceMotion = useReducedMotion()
   const [activeStage, setActiveStage] = useState(0)
   const [isLaunching, setIsLaunching] = useState(false)
+  const [countdown, setCountdown] = useState<number | null>(null)
 
   const selectStage = useCallback((index: number) => {
     setActiveStage(index)
@@ -379,16 +380,26 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   }, [])
 
   const handleLaunch = useCallback(() => {
-    if (isLaunching) return
+    if (isLaunching || countdown !== null) return
 
     if (reduceMotion) {
       router.push('/contact')
       return
     }
 
-    setIsLaunching(true)
-    window.setTimeout(() => router.push('/contact'), 1300)
-  }, [isLaunching, reduceMotion, router])
+    setCountdown(3)
+    const tick = window.setInterval(() => {
+      setCountdown((current) => {
+        if (current === null || current <= 1) {
+          window.clearInterval(tick)
+          setIsLaunching(true)
+          window.setTimeout(() => router.push('/contact'), 1800)
+          return null
+        }
+        return current - 1
+      })
+    }, 700)
+  }, [countdown, isLaunching, reduceMotion, router])
 
   const activeStep = PROJECT_CUTAWAY_STEPS[activeStage]
 
@@ -426,19 +437,46 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
           <div className="grid items-start gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
             <div className="flex flex-col items-center">
               <div className="relative w-full max-w-[340px]">
+                {/* Compte à rebours */}
+                <AnimatePresence>
+                  {countdown !== null ? (
+                    <motion.div
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="absolute left-1/2 top-6 z-20 -translate-x-1/2 font-[family-name:var(--font-syne)] text-6xl font-bold text-[var(--accent-soft)]"
+                      exit={{ opacity: 0, scale: 1.4 }}
+                      initial={{ opacity: 0, scale: 0.6 }}
+                      key={countdown}
+                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                    >
+                      {countdown}
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
                 <AnimatePresence>
                   {isLaunching ? (
                     <motion.div
-                      animate={{ opacity: [0, 1, 0], scaleY: [0.5, 1.8, 2.4] }}
-                      className="pointer-events-none absolute bottom-2 left-1/2 z-0 h-44 w-24 -translate-x-1/2 bg-gradient-to-t from-[var(--accent)] via-[var(--accent-soft)] to-transparent blur-xl"
+                      animate={{
+                        opacity: [0, 0.9, 1, 0.8],
+                        scaleX: [0.6, 1, 1.3, 1.6],
+                        scaleY: [0.3, 0.9, 1.4, 1.8],
+                      }}
+                      className="pointer-events-none absolute -bottom-4 left-1/2 z-0 h-40 w-40 -translate-x-1/2 rounded-full bg-gradient-to-t from-white/80 via-[var(--accent-soft)]/60 to-transparent blur-2xl"
                       initial={{ opacity: 0 }}
-                      transition={{ duration: 1.1, ease: 'easeOut' }}
+                      transition={{ duration: 1.8, ease: 'easeOut' }}
                     />
                   ) : null}
                 </AnimatePresence>
                 <motion.div
-                  animate={isLaunching ? { y: -32, opacity: 0.65 } : { y: 0, opacity: 1 }}
-                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                  animate={
+                    isLaunching
+                      ? { y: [-2, 2, -2, 0, -32], opacity: [1, 1, 0.9, 0.7, 0] }
+                      : { y: 0, opacity: 1 }
+                  }
+                  transition={
+                    isLaunching
+                      ? { duration: 1.8, ease: 'easeIn' }
+                      : { duration: 0.3 }
+                  }
                 >
                   <StarshipSvg
                     activeStage={activeStage}
@@ -469,9 +507,13 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                 <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
                   Étape {activeStage + 1} / {PROJECT_CUTAWAY_STEPS.length}
                 </p>
-                <Button className="gap-2" disabled={isLaunching} onClick={handleLaunch} type="button">
+                <Button className="gap-2" disabled={isLaunching || countdown !== null} onClick={handleLaunch} type="button">
                   <Rocket aria-hidden className="size-4" />
-                  {isLaunching ? 'Lancement…' : 'Lancer'}
+                  {countdown !== null
+                    ? `Décollage dans ${countdown}…`
+                    : isLaunching
+                      ? 'Lancement…'
+                      : 'Lancer'}
                 </Button>
               </div>
             </div>
