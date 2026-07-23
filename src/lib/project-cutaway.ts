@@ -11,32 +11,32 @@ export const PROJECT_CUTAWAY_STEPS: CutawayStep[] = [
   {
     id: 'brief',
     title: 'Brief client',
-    blueprintTag: 'NOSE / BRIEF',
+    blueprintTag: 'OGIVE / BRIEF',
     description:
       'Comprendre vos objectifs, vos utilisateurs et vos contraintes avant toute ligne de code.',
   },
   {
     id: 'cadrage',
     title: 'Cadrage & UX',
-    blueprintTag: 'CREW / UX',
+    blueprintTag: 'ÉTAGE SUP. / UX',
     description: 'Parcours, wireframes et validation — le projet prend forme avec vous.',
   },
   {
     id: 'design',
     title: 'Design & contenu',
-    blueprintTag: 'TANKS / UI',
+    blueprintTag: 'NIVEAU MÉDIAN / UI',
     description: 'UI, branding et structure éditoriale — une expérience cohérente et lisible.',
   },
   {
     id: 'dev',
     title: 'Développement',
-    blueprintTag: 'ENGINES / CODE',
+    blueprintTag: 'MOTEURS / CODE',
     description: 'Intégration typée, CMS et logique métier — solide et maintenable.',
   },
   {
     id: 'ship',
     title: 'Frontend final',
-    blueprintTag: 'BOOSTER / SHIP',
+    blueprintTag: 'BOOSTERS / SHIP',
     description: 'Performance, déploiement et handoff — prêt à être utilisé en production.',
   },
 ]

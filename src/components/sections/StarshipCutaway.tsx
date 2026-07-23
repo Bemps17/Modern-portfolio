@@ -15,22 +15,19 @@ type StarshipCutawayProps = {
   subtitle?: string | null
 }
 
-const LAYER_SPREAD = 28
+const LAYER_SPREAD = 22
 const STROKE = 'rgb(232 238 247 / 0.94)'
 const STROKE_DIM = 'rgb(232 238 247 / 0.38)'
 
-/** Positions overlay mobile (%) alignées sur les étages Starship. */
-const MOBILE_OVERLAY_TOP = ['4%', '20%', '36%', '50%', '66%'] as const
-
 const SLICE_BOUNDS = [
-  { y: 14, h: 78, label: 'NOSE CONE' },
-  { y: 92, h: 88, label: 'FORWARD LOX' },
-  { y: 180, h: 92, label: 'PAYLOAD' },
-  { y: 272, h: 88, label: 'RAPTOR BAY' },
-  { y: 360, h: 200, label: 'SUPER HEAVY' },
+  { y: 28, h: 72 },
+  { y: 100, h: 76 },
+  { y: 176, h: 76 },
+  { y: 252, h: 76 },
+  { y: 328, h: 148 },
 ] as const
 
-type BlueprintSliceProps = {
+type RocketSliceProps = {
   index: number
   activeStage: number
   isLaunching: boolean
@@ -39,14 +36,14 @@ type BlueprintSliceProps = {
   children: React.ReactNode
 }
 
-function BlueprintSlice({
+function RocketSlice({
   index,
   activeStage,
   isLaunching,
   isActive,
   onSelect,
   children,
-}: BlueprintSliceProps) {
+}: RocketSliceProps) {
   const spread = activeStage >= index ? index * LAYER_SPREAD : 0
   const bounds = SLICE_BOUNDS[index]
 
@@ -54,10 +51,10 @@ function BlueprintSlice({
     <motion.g
       animate={
         isLaunching
-          ? { y: -620 - index * 40, opacity: 0 }
+          ? { y: -560 - index * 32, opacity: 0 }
           : { y: spread, opacity: 1 }
       }
-      className="cursor-pointer"
+      aria-label={`Étage ${index + 1} : ${PROJECT_CUTAWAY_STEPS[index]?.title}`}
       onClick={() => onSelect(index)}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -66,6 +63,7 @@ function BlueprintSlice({
         }
       }}
       role="button"
+      style={{ cursor: 'pointer' }}
       tabIndex={0}
       transition={
         isLaunching
@@ -74,12 +72,13 @@ function BlueprintSlice({
       }
     >
       <rect
-        fill={isActive ? 'rgb(255 107 26 / 0.14)' : 'transparent'}
+        fill={isActive ? 'rgb(255 107 26 / 0.16)' : 'transparent'}
         height={bounds.h}
+        rx="2"
         stroke={isActive ? 'var(--accent)' : 'transparent'}
-        strokeOpacity={0.7}
-        width={168}
-        x="66"
+        strokeOpacity={0.75}
+        width={72}
+        x="104"
         y={bounds.y}
       />
       {children}
@@ -87,7 +86,8 @@ function BlueprintSlice({
   )
 }
 
-function StarshipBlueprintSvg({
+/** Fusée classique type Ariane 5 / Tintin — ogive, étages empilés, boosters latéraux. */
+function ClassicRocketSvg({
   activeStage,
   isLaunching,
   onSelect,
@@ -99,47 +99,34 @@ function StarshipBlueprintSvg({
   const stroke = (index: number) => (activeStage === index ? 'var(--accent-soft)' : STROKE)
 
   return (
-    <svg aria-label="Plan de coupe Starship interactif" className="h-auto w-full" viewBox="0 0 300 580">
+    <svg aria-label="Fusée classique interactive" className="mx-auto h-auto w-full max-h-[min(52vh,420px)]" viewBox="0 0 280 500">
       <defs>
-        <clipPath id="cutaway-right">
-          <rect height="560" width="150" x="150" y="10" />
+        <clipPath id="rocket-cutaway-interior">
+          <rect height="460" width="72" x="140" y="20" />
         </clipPath>
       </defs>
 
-      <g opacity="0.45" stroke={STROKE_DIM} strokeWidth="0.5">
-        {Array.from({ length: 28 }).map((_, row) => (
-          <line key={`grid-h-${row}`} x1="20" x2="280" y1={20 + row * 20} y2={20 + row * 20} />
-        ))}
-        {Array.from({ length: 14 }).map((_, col) => (
-          <line key={`grid-v-${col}`} x1={20 + col * 20} x2={20 + col * 20} y1="20" y2="560" />
-        ))}
+      {/* Boosters latéraux (Ariane) — statiques, s'illuminent à l'étape 5 */}
+      <g opacity={activeStage === 4 ? 1 : 0.55}>
+        <path
+          d="M52 300 L88 292 L92 430 L48 438 Z"
+          fill="none"
+          stroke={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM}
+          strokeWidth="1.2"
+        />
+        <path
+          d="M228 300 L192 292 L188 430 L232 438 Z"
+          fill="none"
+          stroke={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM}
+          strokeWidth="1.2"
+        />
+        <path d="M60 420 L80 416 M200 420 L220 416" stroke={STROKE_DIM} strokeWidth="0.8" />
       </g>
 
-      {/* Coque extérieure gauche — silhouette Starship */}
-      <path
-        d="M150 18
-           C150 18 178 52 182 92
-           L188 180
-           L184 272
-           L176 360
-           L168 420
-           L198 430
-           L198 548
-           L102 548
-           L102 430
-           L132 420
-           L124 360
-           L116 272
-           L112 180
-           L118 92
-           C122 52 150 18 150 18 Z"
-        fill="none"
-        opacity="0.35"
-        stroke={STROKE_DIM}
-        strokeWidth="1"
-      />
+      {/* Socle de lancement */}
+      <path d="M88 468 H192 L184 492 H96 Z" fill="none" stroke={STROKE_DIM} strokeWidth="1" />
 
-      <BlueprintSlice
+      <RocketSlice
         activeStage={activeStage}
         index={0}
         isActive={activeStage === 0}
@@ -147,92 +134,65 @@ function StarshipBlueprintSvg({
         onSelect={onSelect}
       >
         <path
-          d="M150 22 C165 48 172 68 174 92 L126 92 C128 68 135 48 150 22 Z"
+          d="M140 32 L168 100 H112 Z"
           fill="none"
           stroke={stroke(0)}
+          strokeLinejoin="round"
           strokeWidth="1.5"
         />
-        <path d="M126 92 H174" stroke={STROKE} strokeWidth="1" />
-        <g clipPath="url(#cutaway-right)">
-          <ellipse cx="192" cy="58" fill="none" rx="22" ry="12" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <path d="M112 100 H168" stroke={STROKE} strokeWidth="1" />
+        <g clipPath="url(#rocket-cutaway-interior)">
+          <path d="M148 52 L188 78" stroke={STROKE_DIM} strokeWidth="0.7" />
         </g>
-        <text fill={activeStage === 0 ? 'var(--accent-soft)' : STROKE_DIM} fontSize="8" letterSpacing="0.12em" x="24" y="58">
-          NOSE
-        </text>
-      </BlueprintSlice>
+      </RocketSlice>
 
-      <BlueprintSlice
+      <RocketSlice
         activeStage={activeStage}
         index={1}
         isActive={activeStage === 1}
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M126 92 H174 L178 148 L122 148 Z"
-          fill="none"
-          stroke={stroke(1)}
-          strokeWidth="1.5"
-        />
-        <path d="M118 118 H182 M118 132 H182" stroke={STROKE_DIM} strokeWidth="0.7" />
-        <g clipPath="url(#cutaway-right)">
-          <path d="M158 104 H220 M158 124 H220" stroke={STROKE_DIM} strokeWidth="0.7" />
-          <rect fill="none" height="28" stroke={STROKE_DIM} strokeWidth="0.7" width="48" x="168" y="108" />
+        <rect fill="none" height="76" stroke={stroke(1)} strokeWidth="1.5" width="56" x="112" y="100" />
+        <circle cx="124" cy="128" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <circle cx="140" cy="128" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <circle cx="156" cy="128" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <g clipPath="url(#rocket-cutaway-interior)">
+          <rect fill="none" height="20" stroke={STROKE_DIM} strokeWidth="0.7" width="36" x="152" y="118" />
         </g>
-        <text fill={activeStage === 1 ? 'var(--accent-soft)' : STROKE_DIM} fontSize="8" letterSpacing="0.12em" x="24" y="124">
-          LOX TANK
-        </text>
-      </BlueprintSlice>
+      </RocketSlice>
 
-      <BlueprintSlice
+      <RocketSlice
         activeStage={activeStage}
         index={2}
         isActive={activeStage === 2}
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M122 148 H178 L182 228 L118 228 Z"
-          fill="none"
-          stroke={stroke(2)}
-          strokeWidth="1.5"
-        />
-        <path d="M128 168 H172 M128 188 H172 M128 208 H172" stroke={STROKE_DIM} strokeWidth="0.6" />
-        <g clipPath="url(#cutaway-right)">
-          <ellipse cx="200" cy="178" fill="none" rx="36" ry="14" stroke={STROKE} strokeWidth="0.8" />
-          <ellipse cx="200" cy="208" fill="none" rx="36" ry="14" stroke={STROKE} strokeWidth="0.8" />
+        <rect fill="none" height="76" stroke={stroke(2)} strokeWidth="1.5" width="56" x="112" y="176" />
+        <path d="M118 196 H162 M118 216 H162 M118 236 H162" stroke={STROKE_DIM} strokeWidth="0.6" />
+        <g clipPath="url(#rocket-cutaway-interior)">
+          <ellipse cx="176" cy="206" fill="none" rx="28" ry="10" stroke={STROKE} strokeWidth="0.8" />
+          <ellipse cx="176" cy="232" fill="none" rx="28" ry="10" stroke={STROKE} strokeWidth="0.8" />
         </g>
-        <path d="M188 162 L208 178 L188 194 Z M112 178 L92 194 L112 210 Z" fill="none" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <text fill={activeStage === 2 ? 'var(--accent-soft)' : STROKE_DIM} fontSize="8" letterSpacing="0.12em" x="24" y="192">
-          STARSHIP
-        </text>
-      </BlueprintSlice>
+      </RocketSlice>
 
-      <BlueprintSlice
+      <RocketSlice
         activeStage={activeStage}
         index={3}
         isActive={activeStage === 3}
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M118 228 H182 L176 310 L124 310 Z"
-          fill="none"
-          stroke={stroke(3)}
-          strokeWidth="1.5"
-        />
-        <g clipPath="url(#cutaway-right)">
-          <circle cx="178" cy="262" fill="none" r="10" stroke={STROKE} strokeWidth="0.9" />
-          <circle cx="206" cy="262" fill="none" r="10" stroke={STROKE} strokeWidth="0.9" />
-          <circle cx="192" cy="286" fill="none" r="8" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <rect fill="none" height="76" stroke={stroke(3)} strokeWidth="1.5" width="56" x="112" y="252" />
+        <g clipPath="url(#rocket-cutaway-interior)">
+          <circle cx="162" cy="286" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
+          <circle cx="184" cy="286" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
+          <circle cx="206" cy="286" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
         </g>
-        <path d="M108 250 L124 228 L124 268 Z M192 250 L208 228 L208 268 Z" fill="none" stroke={stroke(3)} strokeWidth="1" />
-        <text fill={activeStage === 3 ? 'var(--accent-soft)' : STROKE_DIM} fontSize="8" letterSpacing="0.12em" x="24" y="272">
-          RAPTOR
-        </text>
-      </BlueprintSlice>
+      </RocketSlice>
 
-      <BlueprintSlice
+      <RocketSlice
         activeStage={activeStage}
         index={4}
         isActive={activeStage === 4}
@@ -240,109 +200,73 @@ function StarshipBlueprintSvg({
         onSelect={onSelect}
       >
         <path
-          d="M124 310 H176 L168 420 L198 430 L198 548 L102 548 L102 430 L132 420 Z"
+          d="M112 328 H168 L160 420 H120 Z"
           fill="none"
           stroke={stroke(4)}
           strokeWidth="1.5"
         />
-        <path d="M108 360 L124 310 L124 380 Z M192 360 L176 310 L176 380 Z" fill="none" stroke={STROKE} strokeWidth="1" />
-        <g clipPath="url(#cutaway-right)">
-          <path d="M156 330 L220 350 L156 370 Z M156 390 L220 410 L156 430 Z" fill="none" stroke={STROKE_DIM} strokeWidth="0.7" />
-          {Array.from({ length: 7 }).map((_, engine) => (
-            <circle
-              cx={162 + (engine % 4) * 16}
-              cy={500 + Math.floor(engine / 4) * 14}
-              fill="none"
-              key={engine}
-              r="5"
-              stroke={STROKE}
-              strokeWidth="0.7"
-            />
-          ))}
-        </g>
-        <text fill={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM} fontSize="8" letterSpacing="0.12em" x="24" y="400">
-          BOOSTER
-        </text>
-      </BlueprintSlice>
+        <path d="M96 400 L112 328 L112 408 Z M184 400 L168 328 L168 408 Z" fill="none" stroke={stroke(4)} strokeWidth="1" />
+        <path d="M128 448 L140 468 L152 448 Z" fill="none" stroke={STROKE} strokeWidth="1" />
+      </RocketSlice>
 
-      <line stroke={STROKE_DIM} strokeDasharray="4 3" strokeWidth="0.8" x1="150" x2="150" y1="20" y2="555" />
+      <line stroke={STROKE_DIM} strokeDasharray="3 3" strokeWidth="0.8" x1="140" x2="140" y1="28" y2="468" />
 
       <g fontFamily="var(--font-space-grotesk), monospace" fontSize="7.5" letterSpacing="0.1em">
-        <text fill={STROKE_DIM} x="210" y="34">
-          STARSHIP CUTAWAY
+        <text fill={STROKE_DIM} x="196" y="36">
+          ARIANE-TYPE
         </text>
-        <text fill={STROKE_DIM} x="210" y="48">
-          SCALE 1:50
-        </text>
-        <text fill={STROKE_DIM} x="210" y="62">
-          REV. 3A
-        </text>
-      </g>
-
-      <g opacity="0.65" stroke={STROKE_DIM} strokeWidth="0.7">
-        <path d="M38 92 L48 92 L48 310 L38 310" fill="none" />
-        <text fill={STROKE_DIM} fontSize="7" letterSpacing="0.14em" transform="rotate(-90 32 200)" x="32" y="200">
-          STARSHIP
-        </text>
-        <path d="M38 310 L48 310 L48 548 L38 548" fill="none" />
-        <text fill={STROKE_DIM} fontSize="7" letterSpacing="0.14em" transform="rotate(-90 32 430)" x="32" y="430">
-          SUPER HEAVY
+        <text fill={STROKE_DIM} x="196" y="50">
+          CUTAWAY 1:50
         </text>
       </g>
     </svg>
   )
 }
 
-function MobileStageOverlay({ step, activeStage }: { step: CutawayStep; activeStage: number }) {
+function StageDetailCard({ step, className }: { step: CutawayStep; className?: string }) {
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        className="absolute inset-x-3 z-20 max-w-[92%] sm:inset-x-6"
-        exit={{ opacity: 0, y: 6, scale: 0.98 }}
-        initial={{ opacity: 0, y: 8, scale: 0.98 }}
-        key={step.id}
-        style={{ top: MOBILE_OVERLAY_TOP[activeStage] }}
-        transition={{ duration: 0.22, ease: 'easeOut' }}
-      >
-        <div className="rounded-xl border border-[color:var(--accent)]/40 bg-[rgb(8_18_36_/_0.88)] p-3.5 shadow-[0_12px_40px_rgb(0_0_0_/_0.45)] backdrop-blur-md">
-          <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.2em] text-[var(--accent-soft)] uppercase">
-            {step.blueprintTag}
-          </p>
-          <p className="mt-1.5 font-[family-name:var(--font-syne)] text-base font-semibold leading-tight text-[var(--foreground)]">
-            {step.title}
-          </p>
-          <p className="mt-1.5 text-sm leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+    <div className={cn('rounded-xl border border-[color:var(--accent)]/30 bg-[rgb(8_18_36_/_0.9)] p-4 backdrop-blur-sm', className)}>
+      <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.2em] text-[var(--accent-soft)] uppercase">
+        {step.blueprintTag}
+      </p>
+      <p className="mt-2 font-[family-name:var(--font-syne)] text-lg font-semibold leading-tight text-[var(--foreground)]">
+        {step.title}
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
+    </div>
   )
 }
 
-function StepPill({
-  step,
-  index,
-  isActive,
+function MobileStageTabs({
+  steps,
+  activeStage,
   onSelect,
 }: {
-  step: CutawayStep
-  index: number
-  isActive: boolean
+  steps: CutawayStep[]
+  activeStage: number
   onSelect: (index: number) => void
 }) {
   return (
-    <button
-      className={cn(
-        'shrink-0 snap-center rounded-full border px-3 py-1.5 font-[family-name:var(--font-space-grotesk)] text-[11px] tracking-wide transition',
-        isActive
-          ? 'border-[color:var(--accent)]/60 bg-[var(--accent)]/15 text-[var(--accent-soft)]'
-          : 'border-[color:var(--border)] bg-[rgb(8_18_36_/_0.7)] text-[var(--foreground-secondary)]',
-      )}
-      onClick={() => onSelect(index)}
-      type="button"
-    >
-      {String(index + 1).padStart(2, '0')}
-    </button>
+    <div className="flex w-full gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {steps.map((step, index) => (
+        <button
+          className={cn(
+            'min-w-[calc(50%-0.25rem)] shrink-0 snap-start rounded-lg border px-3 py-2.5 text-left transition sm:min-w-[42%]',
+            activeStage === index
+              ? 'border-[color:var(--accent)]/55 bg-[var(--accent)]/12'
+              : 'border-[color:var(--border)] bg-[rgb(8_18_36_/_0.65)]',
+          )}
+          key={step.id}
+          onClick={() => onSelect(index)}
+          type="button"
+        >
+          <span className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.16em] text-[var(--accent-soft)]">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span className="mt-0.5 block text-sm font-medium leading-snug text-[var(--foreground)]">{step.title}</span>
+        </button>
+      ))}
+    </div>
   )
 }
 
@@ -433,23 +357,22 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         title="Découpez le projet"
       />
 
-      <div className="mt-8 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[#0a1830] shadow-[inset_0_0_0_1px_rgb(255_255_255_/_0.06)] sm:mt-10 sm:rounded-3xl">
+      <div className="mt-8 overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[#0a1830] sm:mt-10 sm:rounded-3xl">
         <div
           className="relative px-3 py-5 sm:px-8 sm:py-10"
           style={{
-            backgroundImage:
-              'radial-gradient(circle, rgb(255 255 255 / 0.13) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgb(255 255 255 / 0.13) 1px, transparent 1px)',
             backgroundSize: '18px 18px',
           }}
         >
           <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,300px)] lg:items-start lg:gap-10">
-            <div className="flex flex-col items-center">
-              <div className="relative w-full max-w-[min(100%,340px)]">
+            <div className="flex flex-col">
+              <div className="relative mx-auto w-full max-w-[300px]">
                 <AnimatePresence>
                   {isLaunching ? (
                     <motion.div
                       animate={{ opacity: [0, 1, 0], scaleY: [0.5, 1.8, 2.4] }}
-                      className="pointer-events-none absolute bottom-4 left-1/2 z-0 h-40 w-24 -translate-x-1/2 bg-gradient-to-t from-[var(--accent)] via-[var(--accent-soft)] to-transparent blur-xl"
+                      className="pointer-events-none absolute bottom-2 left-1/2 z-0 h-36 w-20 -translate-x-1/2 bg-gradient-to-t from-[var(--accent)] via-[var(--accent-soft)] to-transparent blur-xl"
                       initial={{ opacity: 0 }}
                       transition={{ duration: 1.1, ease: 'easeOut' }}
                     />
@@ -457,90 +380,84 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                 </AnimatePresence>
 
                 <motion.div
-                  animate={isLaunching ? { y: -30, opacity: 0.7 } : { y: 0, opacity: 1 }}
-                  className="relative z-[1]"
+                  animate={isLaunching ? { y: -28, opacity: 0.65 } : { y: 0, opacity: 1 }}
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <StarshipBlueprintSvg
+                  <ClassicRocketSvg
                     activeStage={activeStage}
                     isLaunching={isLaunching}
                     onSelect={selectStage}
                   />
                 </motion.div>
-
-                <div aria-live="polite" className="pointer-events-none absolute inset-0 z-20 lg:hidden">
-                  <MobileStageOverlay activeStage={activeStage} step={activeStep} />
-                </div>
               </div>
 
-              <p className="mt-3 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[rgb(232_238_247_/_0.55)] uppercase lg:mt-4">
+              <p className="mt-2 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[rgb(232_238_247_/_0.55)] uppercase">
                 Touchez un étage de la fusée
               </p>
 
-              <div className="mt-4 flex w-full max-w-[340px] items-center justify-center gap-2 lg:hidden">
-                <button
-                  aria-label="Étape précédente"
-                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
-                  disabled={activeStage === 0}
-                  onClick={goPrev}
-                  type="button"
-                >
-                  <ChevronLeft aria-hidden className="size-4" />
-                </button>
-                <div className="flex gap-1.5">
-                  {PROJECT_CUTAWAY_STEPS.map((step, index) => (
-                    <StepPill
-                      index={index}
-                      isActive={activeStage === index}
-                      key={step.id}
-                      onSelect={selectStage}
-                      step={step}
-                    />
-                  ))}
+              {/* Mobile : onglets scrollables + carte fixe en dessous (pas de superposition) */}
+              <div className="mt-5 space-y-3 lg:hidden">
+                <div className="flex items-center gap-2">
+                  <button
+                    aria-label="Étape précédente"
+                    className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
+                    disabled={activeStage === 0}
+                    onClick={goPrev}
+                    type="button"
+                  >
+                    <ChevronLeft aria-hidden className="size-4" />
+                  </button>
+                  <div className="min-w-0 flex-1">
+                    <MobileStageTabs activeStage={activeStage} onSelect={selectStage} steps={PROJECT_CUTAWAY_STEPS} />
+                  </div>
+                  <button
+                    aria-label="Étape suivante"
+                    className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
+                    disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
+                    onClick={goNext}
+                    type="button"
+                  >
+                    <ChevronRight aria-hidden className="size-4" />
+                  </button>
                 </div>
-                <button
-                  aria-label="Étape suivante"
-                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] text-[var(--foreground-secondary)] disabled:opacity-40"
-                  disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
-                  onClick={goNext}
-                  type="button"
-                >
-                  <ChevronRight aria-hidden className="size-4" />
-                </button>
-              </div>
 
-              <div className="mt-5 w-full max-w-[340px] lg:hidden">
-                <Button className="w-full gap-2" disabled={isLaunching} onClick={handleLaunch} type="button">
-                  <Rocket aria-hidden className="size-4" />
-                  {isLaunching ? 'Lancement…' : 'Lancer'}
-                </Button>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 0, y: 6 }}
+                    key={activeStep.id}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <StageDetailCard step={activeStep} />
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="flex items-center justify-between gap-3 pt-1">
+                  <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
+                    Étape {activeStage + 1} / {PROJECT_CUTAWAY_STEPS.length}
+                  </p>
+                  <Button className="gap-2" disabled={isLaunching} onClick={handleLaunch} type="button">
+                    <Rocket aria-hidden className="size-4" />
+                    {isLaunching ? 'Lancement…' : 'Lancer'}
+                  </Button>
+                </div>
               </div>
             </div>
 
             <div className="mt-8 hidden space-y-5 lg:mt-0 lg:block">
               <StepRail activeStage={activeStage} onSelect={selectStage} steps={PROJECT_CUTAWAY_STEPS} />
-
               <AnimatePresence mode="wait">
                 <motion.div
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-[color:var(--accent)]/25 bg-[rgb(8_16_30_/_0.72)] p-4 backdrop-blur-sm"
                   exit={{ opacity: 0, y: 8 }}
                   initial={{ opacity: 0, y: 8 }}
                   key={activeStep.id}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                  transition={{ duration: 0.25 }}
                 >
-                  <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.2em] text-[var(--accent-soft)] uppercase">
-                    {activeStep.blueprintTag}
-                  </p>
-                  <p className="mt-2 font-[family-name:var(--font-syne)] text-lg font-semibold text-[var(--foreground)]">
-                    {activeStep.title}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">
-                    {activeStep.description}
-                  </p>
+                  <StageDetailCard step={activeStep} />
                 </motion.div>
               </AnimatePresence>
-
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
                   Étape {activeStage + 1} / {PROJECT_CUTAWAY_STEPS.length}
