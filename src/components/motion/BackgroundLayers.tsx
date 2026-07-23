@@ -4,6 +4,7 @@ import { useReducedMotion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 
 import { SITE_IMAGES } from '@/lib/site-images'
+import { useRichMotionEffects } from '@/lib/use-client-media'
 
 const GRID_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M48 0H0V48' fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='1'/%3E%3C/svg%3E")`
 
@@ -11,26 +12,27 @@ const MAX_SCROLL = 2400
 const MAX_TRANSLATE = 280
 
 /**
- * Parallax fond Mars — v6 (perf : zero re-raster au scroll)
+ * Parallax fond Mars — v7 (mobile = fixed natif, desktop = rAF)
  *
- * Causes du lag résiduel v5 :
- * 1. Filtres CSS `saturate` / `contrast` sur l’image → re-raster à chaque frame
- * 2. Plusieurs couches `absolute inset-0` superposées → compositing lourd
- * 3. Blobs animés en `blur-3xl` qui se battent pour le GPU pendant le scroll
+ * Lag mobile v6 :
+ * iOS Safari throttle/stoppe les events `scroll` pendant le scroll inertial.
+ * Le rAF ne peut pas updater le transform → l’image “lag” derrière le doigt.
  *
  * Fix :
- * - Aucun filtre sur l’image (le traitement visuel passe dans le voile)
- * - Une seule couche voile (gradient unique) au lieu de 3 overlays
- * - `isolation: isolate` + `contain` pour limiter le paint au viewport
- * - Blobs retirés du layer parallax (statiques, hors scroll)
- * - Listener scroll + rAF inchangé (déjà optimal côté JS)
+ * - Desktop (pointer fin, pas de reduced-motion) : parallax JS rAF (profondeur)
+ * - Mobile / touch / reduced-motion : fond `position: fixed` natif, AUCUN JS,
+ *   AUCUN transform scroll. Le navigateur compose la couche sur le GPU → fluide.
+ * - L’oversize reste (pas de bord vide) mais ne bouge plus sur mobile.
  */
 export function BackgroundLayers() {
   const reduceMotion = useReducedMotion()
+  const richEffects = useRichMotionEffects()
   const layerRef = useRef<HTMLDivElement>(null)
 
+  const parallaxEnabled = richEffects && !reduceMotion
+
   useEffect(() => {
-    if (reduceMotion) return
+    if (!parallaxEnabled) return
     const node = layerRef.current
     if (!node) return
 
@@ -54,7 +56,7 @@ export function BackgroundLayers() {
       window.removeEventListener('resize', onScroll)
       if (frame) cancelAnimationFrame(frame)
     }
-  }, [reduceMotion])
+  }, [parallaxEnabled])
 
   return (
     <div
