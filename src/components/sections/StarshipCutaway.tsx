@@ -219,7 +219,7 @@ function StarshipSvg({
 
 function StageDetailCard({ step, className }: { step: CutawayStep; className?: string }) {
   return (
-    <div className={cn('rounded-xl border border-[color:var(--accent)]/30 bg-[rgb(8_18_36_/_0.9)] p-4 backdrop-blur-sm', className)}>
+    <div className={cn('rounded-xl border border-[color:var(--accent)]/30 bg-[var(--background)]/60 p-4 backdrop-blur-sm', className)}>
       <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.2em] text-[var(--accent-soft)] uppercase">
         {step.blueprintTag}
       </p>
@@ -425,15 +425,9 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         />
       </div>
 
-      {/* Desktop (xl+) : fusée Starship + panneau blueprint + Lancer */}
-      <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[#0a1830] xl:block sm:mt-10">
-        <div
-          className="relative px-8 py-10"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgb(255 255 255 / 0.13) 1px, transparent 1px)',
-            backgroundSize: '18px 18px',
-          }}
-        >
+      {/* Desktop (xl+) : fusée hybride + panneau + Lancer */}
+      <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[var(--background-elevated)] xl:block sm:mt-10">
+        <div className="relative px-8 py-10">
           <div className="grid items-start gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
             <div className="flex flex-col items-center">
               <div className="relative w-full max-w-[340px]">
@@ -485,7 +479,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                   />
                 </motion.div>
               </div>
-              <p className="mt-3 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[rgb(232_238_247_/_0.55)] uppercase">
+              <p className="mt-3 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
                 Cliquez un étage pour séparer les couches
               </p>
             </div>
@@ -504,7 +498,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                 </motion.div>
               </AnimatePresence>
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xs text-[rgb(232_238_247_/_0.55)]">
+                <p className="text-xs text-[var(--muted)]">
                   Étape {activeStage + 1} / {PROJECT_CUTAWAY_STEPS.length}
                 </p>
                 <Button className="gap-2" disabled={isLaunching || countdown !== null} onClick={handleLaunch} type="button">
