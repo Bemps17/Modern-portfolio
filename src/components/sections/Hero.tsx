@@ -74,79 +74,83 @@ export function Hero({
         </Breathing>
       </div>
 
-      <div className="relative z-10 flex min-h-[100dvh] w-full flex-col justify-center py-20 lg:w-[42%]">
+      <div className="relative z-10 flex w-full flex-col justify-center py-20 lg:min-h-[100dvh] lg:w-[42%]">
         <Container>
           <ReadableSurface strong>
             <motion.div
               className="mb-6 flex flex-wrap items-center gap-3"
-          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Unique badge disponibilité du site — uniquement ici. */}
-          <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
-          {location?.trim() ? (
-            <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
-              {location}
-            </span>
-          ) : null}
-        </motion.div>
+              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {/* Unique badge disponibilité du site — uniquement ici. */}
+              <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
+              {location?.trim() ? (
+                <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+                  {location}
+                </span>
+              ) : null}
+            </motion.div>
 
-        <EditorialTitle as="h1" bleed className="mb-5" text={siteName} />
-        <RevealText
-          as="p"
-          className="max-w-xl text-xl text-balance text-[var(--foreground)] sm:text-2xl"
-          delay={0.15}
-          text={tagline}
-        />
-        {aboutIntro ? (
-          <RevealText
-            as="p"
-            className="mt-5 max-w-lg text-base text-[var(--foreground-secondary)] sm:text-lg"
-            delay={0.28}
-            text={aboutIntro}
-          />
-        ) : null}
-        <motion.div
-          className="mt-10 flex flex-wrap gap-3"
-          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Magnetic>
-            <Button href="#projets-une">Voir mes projets</Button>
-          </Magnetic>
-          <Magnetic strength={12}>
-            <Button href="/contact" variant="glass">
-              Me contacter
-            </Button>
-          </Magnetic>
+            <EditorialTitle as="h1" bleed className="mb-5" text={siteName} when="mount" />
+            <RevealText
+              as="p"
+              className="max-w-xl text-xl text-balance text-[var(--foreground)] sm:text-2xl"
+              delay={0.15}
+              text={tagline}
+              when="mount"
+            />
+            {aboutIntro ? (
+              <RevealText
+                as="p"
+                className="mt-5 max-w-lg text-base text-[var(--foreground-secondary)] sm:text-lg"
+                delay={0.28}
+                text={aboutIntro}
+                when="mount"
+              />
+            ) : null}
+            <motion.div
+              className="mt-10 flex flex-wrap gap-3"
+              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Magnetic>
+                <Button href="#projets-une">Voir mes projets</Button>
+              </Magnetic>
+              <Magnetic strength={12}>
+                <Button href="/contact" variant="glass">
+                  Me contacter
+                </Button>
+              </Magnetic>
             </motion.div>
           </ReadableSurface>
         </Container>
-      </div>
 
-      <Container className="mb-8 lg:hidden">
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
-          animate={{ opacity: 1, y: 0, rotate: 0 }}
-          transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <ReadableSurface className="relative aspect-[3/4] overflow-hidden">
-            <Image
-              alt={portraitAlt}
-              className="object-cover object-top"
-              fill
-              sizes="90vw"
-              src={portraitSrc}
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
-            />
-          </ReadableSurface>
-        </motion.div>
-      </Container>
+        <Container className="mt-8 lg:hidden">
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ReadableSurface className="overflow-hidden p-0">
+              <div className="relative aspect-[3/4] w-full">
+                <Image
+                  alt={portraitAlt}
+                  className="object-cover object-top"
+                  fill
+                  sizes="90vw"
+                  src={portraitSrc}
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                />
+              </div>
+            </ReadableSurface>
+          </motion.div>
+        </Container>
+      </div>
     </section>
   )
 }

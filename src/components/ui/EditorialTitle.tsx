@@ -7,6 +7,7 @@ type EditorialTitleProps = {
   className?: string
   bleed?: boolean
   reveal?: boolean
+  when?: 'mount' | 'inView'
 }
 
 export function EditorialTitle({
@@ -15,6 +16,7 @@ export function EditorialTitle({
   className,
   bleed = false,
   reveal = true,
+  when = 'inView',
 }: EditorialTitleProps) {
   const classes = cn(
     'font-[family-name:var(--font-syne)] font-bold leading-[0.92] tracking-[-0.03em] text-balance',
@@ -25,7 +27,7 @@ export function EditorialTitle({
   )
 
   if (reveal) {
-    return <RevealText as={Tag} className={classes} text={text} />
+    return <RevealText as={Tag} className={classes} text={text} when={when} />
   }
 
   return <Tag className={classes}>{text}</Tag>
