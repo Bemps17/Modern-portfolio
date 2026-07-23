@@ -15,16 +15,18 @@ type StarshipCutawayProps = {
   subtitle?: string | null
 }
 
-const LAYER_SPREAD = 30
+const LAYER_SPREAD = 18
 const STROKE = 'rgb(232 238 247 / 0.94)'
 const STROKE_DIM = 'rgb(232 238 247 / 0.38)'
+const ORANGE = '#ff6b1a'
+const IVOIRE = '#f8f4ef'
 
 const SLICE_BOUNDS = [
-  { y: 24, h: 74 },
-  { y: 98, h: 82 },
-  { y: 180, h: 82 },
-  { y: 262, h: 82 },
-  { y: 344, h: 162 },
+  { y: 20, h: 70 },
+  { y: 90, h: 90 },
+  { y: 180, h: 100 },
+  { y: 280, h: 100 },
+  { y: 380, h: 130 },
 ] as const
 
 type RocketSliceProps = {
@@ -74,11 +76,11 @@ function RocketSlice({
       <rect
         fill={isActive ? 'rgb(255 107 26 / 0.14)' : 'transparent'}
         height={bounds.h}
-        rx="2"
+        rx="3"
         stroke={isActive ? 'var(--accent)' : 'transparent'}
         strokeOpacity={0.75}
-        width={152}
-        x="74"
+        width="80"
+        x="80"
         y={bounds.y}
       />
       {children}
@@ -86,7 +88,7 @@ function RocketSlice({
   )
 }
 
-/** Fusée Starship fidèle : ogive conique, corps cylindrique, ailerons, Super Heavy. */
+/** Fusée hybride rétro-technique : ogive, damier, hublots, ailerons, buses. */
 function StarshipSvg({
   activeStage,
   isLaunching,
@@ -100,16 +102,10 @@ function StarshipSvg({
 
   return (
     <svg
-      aria-label="Plan de coupe Starship SpaceX"
+      aria-label="Fusée hybride rétro-technique"
       className="mx-auto h-auto w-full max-h-[min(64vh,540px)]"
-      viewBox="0 0 300 560"
+      viewBox="0 0 240 540"
     >
-      <defs>
-        <clipPath id="starship-right">
-          <rect height="540" width="150" x="150" y="10" />
-        </clipPath>
-      </defs>
-
       <RocketSlice
         activeStage={activeStage}
         index={0}
@@ -118,19 +114,15 @@ function StarshipSvg({
         onSelect={onSelect}
       >
         <path
-          d="M150 28 C170 52 178 74 180 98 L120 98 C122 74 130 52 150 28 Z"
+          d="M120 22 C 100 50, 92 75, 90 90 H 150 C 148 75, 140 50, 120 22 Z"
           fill="none"
           stroke={stroke(0)}
           strokeLinejoin="round"
-          strokeWidth="1.5"
+          strokeWidth="1.6"
         />
-        <path d="M120 98 H180" stroke={STROKE} strokeWidth="1" />
-        <g clipPath="url(#starship-right)">
-          <path d="M150 48 L198 66 L150 84" fill="none" stroke={STROKE_DIM} strokeWidth="0.8" />
-        </g>
-        <text fill={activeStage === 0 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="64">
-          NOSE CONE
-        </text>
+        <path d="M90 90 H 150" stroke={STROKE} strokeWidth="1" />
+        <circle cx="120" cy="56" fill="none" r="4" stroke={STROKE_DIM} strokeWidth="0.8" />
+        <circle cx="120" cy="56" fill={STROKE_DIM} r="1.4" />
       </RocketSlice>
 
       <RocketSlice
@@ -140,20 +132,21 @@ function StarshipSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M120 98 H180 L182 180 H118 Z"
-          fill="none"
-          stroke={stroke(1)}
-          strokeWidth="1.5"
-        />
-        <path d="M118 128 H182 M118 158 H182" stroke={STROKE_DIM} strokeWidth="0.7" />
-        <g clipPath="url(#starship-right)">
-          <ellipse cx="200" cy="120" fill="none" rx="42" ry="10" stroke={STROKE} strokeWidth="0.8" />
-          <ellipse cx="200" cy="160" fill="none" rx="42" ry="10" stroke={STROKE} strokeWidth="0.8" />
+        <path d="M90 90 H 150 V 180 H 90 Z" fill="none" stroke={stroke(1)} strokeWidth="1.5" />
+        {/* Damier 4×2 — cases orange */}
+        <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="90" y="95" />
+        <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="120" y="95" />
+        <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="105" y="130" />
+        <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="135" y="130" />
+        {/* Damier — cases ivoire */}
+        <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="105" y="95" />
+        <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="135" y="95" />
+        <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="90" y="130" />
+        <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="120" y="130" />
+        {/* Grille du damier */}
+        <g stroke={STROKE_DIM} strokeWidth="0.5">
+          <path d="M105 95 V 165 M120 95 V 165 M135 95 V 165 M90 130 H 150" />
         </g>
-        <text fill={activeStage === 1 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="136">
-          LOX TANK
-        </text>
       </RocketSlice>
 
       <RocketSlice
@@ -163,21 +156,15 @@ function StarshipSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M118 180 H182 L184 262 H116 Z"
-          fill="none"
-          stroke={stroke(2)}
-          strokeWidth="1.5"
-        />
-        <circle cx="126" cy="200" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <circle cx="150" cy="200" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <circle cx="174" cy="200" fill="none" r="5" stroke={STROKE_DIM} strokeWidth="0.8" />
-        <g clipPath="url(#starship-right)">
-          <rect fill="none" height="36" stroke={STROKE} strokeWidth="0.7" width="72" x="164" y="210" />
-        </g>
-        <text fill={activeStage === 2 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="218">
-          PAYLOAD / UI
-        </text>
+        <path d="M90 180 H 150 V 280 H 90 Z" fill="none" stroke={stroke(2)} strokeWidth="1.5" />
+        <path d="M90 200 H 150 M90 260 H 150" stroke={STROKE_DIM} strokeWidth="0.7" />
+        {/* 3 hublots alignés */}
+        <circle cx="102" cy="230" fill="none" r="6" stroke={STROKE} strokeWidth="1" />
+        <circle cx="120" cy="230" fill="none" r="6" stroke={STROKE} strokeWidth="1" />
+        <circle cx="138" cy="230" fill="none" r="6" stroke={STROKE} strokeWidth="1" />
+        <circle cx="102" cy="230" fill={IVOIRE} opacity="0.12" r="3.5" />
+        <circle cx="120" cy="230" fill={IVOIRE} opacity="0.12" r="3.5" />
+        <circle cx="138" cy="230" fill={IVOIRE} opacity="0.12" r="3.5" />
       </RocketSlice>
 
       <RocketSlice
@@ -187,21 +174,19 @@ function StarshipSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M116 262 H184 L180 344 H120 Z"
-          fill="none"
-          stroke={stroke(3)}
-          strokeWidth="1.5"
-        />
-        <g clipPath="url(#starship-right)">
-          <circle cx="176" cy="292" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
-          <circle cx="200" cy="292" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
-          <circle cx="224" cy="292" fill="none" r="8" stroke={STROKE} strokeWidth="0.9" />
+        <path d="M90 280 H 150 V 380 H 90 Z" fill="none" stroke={stroke(3)} strokeWidth="1.5" />
+        <path d="M90 320 H 150 M90 360 H 150" stroke={STROKE_DIM} strokeWidth="0.7" />
+        {/* Rivets / panneaux d'accès */}
+        <g fill={STROKE_DIM}>
+          <circle cx="100" cy="300" r="1.2" />
+          <circle cx="120" cy="300" r="1.2" />
+          <circle cx="140" cy="300" r="1.2" />
+          <circle cx="100" cy="340" r="1.2" />
+          <circle cx="120" cy="340" r="1.2" />
+          <circle cx="140" cy="340" r="1.2" />
         </g>
-        <path d="M108 312 L120 262 L120 332 Z M192 312 L180 262 L180 332 Z" fill="none" stroke={stroke(3)} strokeWidth="1" />
-        <text fill={activeStage === 3 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="296">
-          RAPTOR BAY
-        </text>
+        {/* Petit hublot moteur */}
+        <rect fill="none" height="14" rx="2" stroke={STROKE_DIM} strokeWidth="0.7" width="22" x="109" y="358" />
       </RocketSlice>
 
       <RocketSlice
@@ -211,61 +196,23 @@ function StarshipSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        <path
-          d="M120 344 H180 L172 460 L204 470 L204 530 L96 530 L96 470 L128 460 Z"
-          fill="none"
-          stroke={stroke(4)}
-          strokeWidth="1.5"
-        />
-        <g clipPath="url(#starship-right)">
-          {Array.from({ length: 9 }).map((_, engine) => (
-            <circle
-              cx={162 + (engine % 3) * 18}
-              cy={498 + Math.floor(engine / 3) * 16}
-              fill="none"
-              key={engine}
-              r="5"
-              stroke={STROKE}
-              strokeWidth="0.7"
-            />
-          ))}
-        </g>
-        <path d="M88 420 L120 344 L120 448 Z M212 420 L180 344 L180 448 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
-        <text fill={activeStage === 4 ? 'var(--accent-soft)' : STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="8" letterSpacing="0.12em" x="26" y="414">
-          SUPER HEAVY
-        </text>
+        {/* Corps inférieur */}
+        <path d="M90 380 H 150 V 440 H 90 Z" fill="none" stroke={stroke(4)} strokeWidth="1.5" />
+        {/* Base conique (rétrécie) */}
+        <path d="M90 440 H 150 L 140 480 H 100 Z" fill="none" stroke={stroke(4)} strokeWidth="1.5" />
+        {/* 4 ailerons trapézoïdaux — damier orange/ivoire */}
+        <path d="M90 400 L 55 445 L 78 445 L 90 415 Z" fill={ORANGE} opacity="0.85" stroke={stroke(4)} strokeWidth="1.2" />
+        <path d="M90 420 L 80 450 L 90 450 Z" fill={IVOIRE} opacity="0.18" stroke={stroke(4)} strokeWidth="1" />
+        <path d="M150 400 L 185 445 L 162 445 L 150 415 Z" fill={ORANGE} opacity="0.85" stroke={stroke(4)} strokeWidth="1.2" />
+        <path d="M150 420 L 160 450 L 150 450 Z" fill={IVOIRE} opacity="0.18" stroke={stroke(4)} strokeWidth="1" />
+        {/* 3 buses */}
+        <path d="M100 480 L 98 505 L 112 505 L 110 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
+        <path d="M114 480 L 112 505 L 126 505 L 124 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
+        <path d="M128 480 L 126 505 L 140 505 L 138 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
       </RocketSlice>
 
       {/* Ligne centrale de coupe */}
-      <line stroke={STROKE_DIM} strokeDasharray="4 3" strokeWidth="0.8" x1="150" x2="150" y1="28" y2="530" />
-
-      {/* Encadrement technique */}
-      <g opacity="0.7" stroke={STROKE_DIM} strokeWidth="0.8">
-        <path d="M46 98 L56 98 L56 344 L46 344" fill="none" />
-        <path d="M46 98 L52 98 M46 216 L52 216 M46 344 L52 344" />
-      </g>
-      <text fill={STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="7" letterSpacing="0.14em" transform="rotate(-90 28 220)" x="28" y="220">
-        STARSHIP
-      </text>
-      <g opacity="0.7" stroke={STROKE_DIM} strokeWidth="0.8">
-        <path d="M46 344 L56 344 L56 530 L46 530" fill="none" />
-        <path d="M46 344 L52 344 M46 437 L52 437 M46 530 L52 530" />
-      </g>
-      <text fill={STROKE_DIM} fontFamily="var(--font-space-grotesk), monospace" fontSize="7" letterSpacing="0.14em" transform="rotate(-90 28 440)" x="28" y="440">
-        SUPER HEAVY
-      </text>
-
-      <g fontFamily="var(--font-space-grotesk), monospace" fontSize="7.5" letterSpacing="0.1em">
-        <text fill={STROKE_DIM} x="198" y="38">
-          STARSHIP CUTAWAY
-        </text>
-        <text fill={STROKE_DIM} x="198" y="52">
-          SCALE 1:50
-        </text>
-        <text fill={STROKE_DIM} x="198" y="66">
-          REV. 3A
-        </text>
-      </g>
+      <line stroke={STROKE_DIM} strokeDasharray="4 3" strokeWidth="0.8" x1="120" x2="120" y1="22" y2="480" />
     </svg>
   )
 }
