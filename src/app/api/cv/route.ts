@@ -23,15 +23,24 @@ function pdfFileName(fullName: string): string {
   return `CV-${slug || 'Portfolio'}.pdf`
 }
 
-function pdfHeaders(fileName: string): HeadersInit {
+function shouldInline(request: Request): boolean {
+  const url = new URL(request.url)
+  if (url.searchParams.get('preview') === '1') return true
+
+  const accept = request.headers.get('accept') ?? ''
+  return accept.includes('text/html')
+}
+
+function pdfHeaders(fileName: string, inline: boolean): HeadersInit {
+  const disposition = inline ? 'inline' : 'attachment'
   return {
     'Content-Type': 'application/pdf',
-    'Content-Disposition': `attachment; filename="${fileName}"`,
+    'Content-Disposition': `${disposition}; filename="${fileName}"`,
     'Cache-Control': 'private, max-age=0, must-revalidate',
   }
 }
 
-async function tryStreamUploadedCv(): Promise<Response | null> {
+async function tryStreamUploadedCv(request: Request): Promise<Response | null> {
   const settings = await getSiteSettingsContent()
   if (!isMedia(settings.cv)) return null
 
@@ -45,15 +54,16 @@ async function tryStreamUploadedCv(): Promise<Response | null> {
     const bytes = await remote.arrayBuffer()
     return new Response(bytes, {
       status: 200,
-      headers: pdfHeaders(pdfFileName(settings.siteName)),
+      headers: pdfHeaders(pdfFileName(settings.siteName), shouldInline(request)),
     })
   } catch {
     return null
   }
 }
 
-export async function GET(): Promise<Response> {
-  const uploaded = await tryStreamUploadedCv()
+export async function GET(request: Request): Promise<Response> {
+  const inline = shouldInline(request)
+  const uploaded = await tryStreamUploadedCv(request)
   if (uploaded) return uploaded
 
   const data = await getCvDocumentData()
@@ -62,6 +72,6 @@ export async function GET(): Promise<Response> {
 
   return new Response(new Uint8Array(buffer), {
     status: 200,
-    headers: pdfHeaders(pdfFileName(data.fullName)),
+    headers: pdfHeaders(pdfFileName(data.fullName), inline),
   })
 }

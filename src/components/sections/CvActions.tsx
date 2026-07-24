@@ -94,6 +94,7 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
       <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
         <button
           aria-label="Visualiser le CV"
+          aria-pressed={previewOpen}
           className={glassAction}
           onClick={() => setPreviewOpen(true)}
           type="button"
@@ -104,6 +105,7 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
 
         <button
           aria-label="Partager le CV"
+          aria-pressed={shareOpen}
           className={glassAction}
           onClick={() => setShareOpen(true)}
           type="button"
@@ -131,7 +133,11 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
         title="Aperçu du CV"
       >
         <div className="h-[70vh] overflow-hidden rounded-xl border border-[color:var(--border-subtle)] bg-black/40">
-          <iframe className="h-full w-full" src="/api/cv" title={`Aperçu CV — ${fullName}`} />
+          <iframe
+            className="h-full w-full"
+            src="/api/cv?preview=1"
+            title={`Aperçu CV — ${fullName}`}
+          />
         </div>
       </Modal>
 
