@@ -5,6 +5,8 @@ import { AboutHighlightsAccordion } from '@/components/sections/AboutHighlightsA
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { PersonalProjectsList } from '@/components/sections/PersonalProjectsList'
 import { QualificationsList } from '@/components/sections/QualificationsList'
+import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
+import { SkillGroupsList } from '@/components/sections/SkillGroupsList'
 import { SoftSkillsStrip } from '@/components/sections/SoftSkillsStrip'
 import { StatsStrip } from '@/components/sections/StatsStrip'
 import { Container } from '@/components/ui/Container'
@@ -20,7 +22,7 @@ import {
 import { JsonLd, personJsonLd } from '@/lib/json-ld'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
 import { getSiteUrl } from '@/lib/site-url'
-import { resolveSoftSkills } from '@/lib/skills'
+import { getTechnicalSkills, resolveSoftSkills } from '@/lib/skills'
 import type { Experience } from '@/payload-types'
 
 export const revalidate = 3600
@@ -59,6 +61,7 @@ export default async function AboutPage() {
     (settings?.siteName ? `Portrait de ${settings.siteName}` : 'Portrait')
 
   const softSkills = resolveSoftSkills(skills)
+  const technicalSkills = getTechnicalSkills(skills)
   const whyMePoints = settings?.whyMePoints ?? []
   const skillGroups = settings?.skillGroups ?? []
   const personalProjects = settings?.personalProjects ?? []
@@ -121,7 +124,9 @@ export default async function AboutPage() {
           </div>
         ) : null}
       </section>
-      <AboutHighlightsAccordion skillGroups={skillGroups} whyMePoints={whyMePoints} />
+
+      <AboutHighlightsAccordion whyMePoints={whyMePoints} />
+
       <ReadableSurface as="section">
         <SectionTitle
           eyebrow="En chiffres"
@@ -134,10 +139,12 @@ export default async function AboutPage() {
           yearsExperience={yearsFromExperiences(experiences)}
         />
       </ReadableSurface>
+
       <ReadableSurface as="section">
         <SectionTitle title="Parcours" />
         <ExperienceTimeline experiences={experiences} />
       </ReadableSurface>
+
       <ReadableSurface as="section">
         <SectionTitle
           subtitle="Diplômes, certifications et bases académiques."
@@ -145,6 +152,27 @@ export default async function AboutPage() {
         />
         <QualificationsList qualifications={qualifications} />
       </ReadableSurface>
+
+      {skillGroups.length ? (
+        <ReadableSurface as="section">
+          <SectionTitle
+            subtitle="Design, développement, commercial et méthodes."
+            title="Compétences"
+          />
+          <SkillGroupsList groups={skillGroups} />
+        </ReadableSurface>
+      ) : null}
+
+      {technicalSkills.length ? (
+        <ReadableSurface as="section">
+          <SectionTitle
+            subtitle="Les outils avec lesquels je livre le plus souvent."
+            title="Stack technique"
+          />
+          <SkillBadgeList skills={technicalSkills} />
+        </ReadableSurface>
+      ) : null}
+
       {personalProjects.length ? (
         <ReadableSurface as="section">
           <SectionTitle

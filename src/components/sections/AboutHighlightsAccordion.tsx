@@ -16,22 +16,16 @@ export type WhyMePoint = {
   id?: string | number | null
 }
 
-export type SkillGroup = {
-  title: string
-  items: string
-  id?: string | number | null
-}
-
-type AboutHighlightsAccordionProps = {
+type WhyMeAccordionProps = {
   whyMePoints: WhyMePoint[]
-  skillGroups: SkillGroup[]
 }
 
-export function AboutHighlightsAccordion({ whyMePoints, skillGroups }: AboutHighlightsAccordionProps) {
+/** CTA accordéon « Pourquoi moi ? » — compétences hors de ce composant. */
+export function AboutHighlightsAccordion({ whyMePoints }: WhyMeAccordionProps) {
   const [open, setOpen] = useState(false)
   const panelId = useId()
 
-  if (!whyMePoints.length && !skillGroups.length) return null
+  if (!whyMePoints.length) return null
 
   return (
     <FadeInWhenVisible>
@@ -54,12 +48,12 @@ export function AboutHighlightsAccordion({ whyMePoints, skillGroups }: AboutHigh
               Différenciation
             </p>
             <h2 className="font-[family-name:var(--font-syne)] text-2xl font-semibold sm:text-3xl">
-              Pourquoi moi ? & Compétences
+              Pourquoi moi ?
             </h2>
             <p className="text-sm text-[var(--foreground-secondary)]">
               {open
-                ? 'Polyvalence, vision 360° et socle technique — le détail en un clic.'
-                : 'Découvrir mes atouts et mon socle technique.'}
+                ? 'Polyvalence, vision 360° et disponibilité — le détail.'
+                : 'Découvrir ce qui me différencie.'}
             </p>
           </div>
           <span
@@ -82,53 +76,24 @@ export function AboutHighlightsAccordion({ whyMePoints, skillGroups }: AboutHigh
           id={panelId}
         >
           <div className="overflow-hidden">
-            <div className="mt-8 space-y-10 border-t border-[color:var(--border-subtle)] pt-8">
-              {whyMePoints.length ? (
-                <div>
-                  <h3 className="mb-4 font-[family-name:var(--font-space-grotesk)] text-sm tracking-[0.18em] text-[var(--muted)] uppercase">
-                    Pourquoi moi ?
-                  </h3>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {whyMePoints.map((point, index) => (
-                      <li
-                        className="rounded-xl border border-[color:var(--border-subtle)] bg-[var(--glass)] p-4"
-                        key={point.id ?? `${point.title}-${index}`}
-                      >
-                        <p className="font-[family-name:var(--font-syne)] text-lg font-semibold">
-                          {point.title}
-                          {point.description?.trim() ? (
-                            <span className="font-normal text-[var(--accent-soft)]"> — {point.description}</span>
-                          ) : null}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+            <div className="mt-8 space-y-8 border-t border-[color:var(--border-subtle)] pt-8">
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {whyMePoints.map((point, index) => (
+                  <li
+                    className="rounded-xl border border-[color:var(--border-subtle)] bg-[var(--glass)] p-4"
+                    key={point.id ?? `${point.title}-${index}`}
+                  >
+                    <p className="font-[family-name:var(--font-syne)] text-lg font-semibold">
+                      {point.title}
+                      {point.description?.trim() ? (
+                        <span className="font-normal text-[var(--accent-soft)]"> — {point.description}</span>
+                      ) : null}
+                    </p>
+                  </li>
+                ))}
+              </ul>
 
-              {skillGroups.length ? (
-                <div>
-                  <h3 className="mb-4 font-[family-name:var(--font-space-grotesk)] text-sm tracking-[0.18em] text-[var(--muted)] uppercase">
-                    Compétences
-                  </h3>
-                  <ul className="space-y-3">
-                    {skillGroups.map((group, index) => (
-                      <li
-                        className="text-base leading-relaxed text-[var(--foreground-secondary)]"
-                        key={group.id ?? `${group.title}-${index}`}
-                      >
-                        <span className="font-[family-name:var(--font-syne)] font-semibold text-[var(--foreground)]">
-                          {group.title}
-                        </span>
-                        <span className="text-[var(--muted)]"> : </span>
-                        <span>{group.items}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex flex-wrap gap-3">
                 <Magnetic>
                   <Button href="/contact">Me contacter</Button>
                 </Magnetic>

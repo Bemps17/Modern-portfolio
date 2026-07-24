@@ -300,6 +300,7 @@ async function seed() {
   const { siteSettings, seoDefaults, projects, experiences, qualifications, skills } = portfolioFallback
 
   console.log('Seeding site settings…')
+  const existingSettings = await payload.findGlobal({ slug: 'site-settings', depth: 0 })
   await payload.updateGlobal({
     slug: 'site-settings',
     data: {
@@ -316,6 +317,8 @@ async function seed() {
       personalProjects: siteSettings.personalProjects,
       email: siteSettings.email,
       socialLinks: siteSettings.socialLinks,
+      // Ne jamais écraser l’avatar CMS (PictureProfile1, etc.)
+      ...(existingSettings.avatar != null ? { avatar: existingSettings.avatar } : {}),
     },
   })
 
