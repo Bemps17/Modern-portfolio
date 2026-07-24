@@ -3,7 +3,6 @@ import { Lock } from 'lucide-react'
 
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { Container } from '@/components/ui/Container'
-import { SITE_VERSION } from '@/lib/site-version'
 import { cn } from '@/lib/utils'
 
 type FooterProps = {
@@ -56,18 +55,26 @@ export function Footer({
               </Link>
             ) : null}
           </div>
-          <div className="flex items-center gap-3 text-xs text-[var(--muted)]">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
             <span>© {new Date().getFullYear()}</span>
             <span aria-hidden className="text-[var(--muted-subtle)]">
               ·
             </span>
-            <span>Next.js · Vercel</span>
+            <Link
+              className="transition hover:text-[var(--foreground-secondary)]"
+              href="/mentions-legales"
+            >
+              Mentions légales
+            </Link>
             <span aria-hidden className="text-[var(--muted-subtle)]">
               ·
             </span>
-            <span className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-wider text-[var(--muted-subtle)] tabular-nums">
-              v{SITE_VERSION}
-            </span>
+            <Link
+              className="transition hover:text-[var(--foreground-secondary)]"
+              href="/confidentialite"
+            >
+              Confidentialité
+            </Link>
           </div>
         </div>
       </ReadableSurface>

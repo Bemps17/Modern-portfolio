@@ -13,6 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/a-propos`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${siteUrl}/cv`, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${siteUrl}/contact`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${siteUrl}/mentions-legales`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${siteUrl}/confidentialite`, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
   const projectRoutes = slugs.map((slug) => ({
