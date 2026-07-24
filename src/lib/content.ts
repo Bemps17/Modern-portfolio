@@ -31,6 +31,19 @@ export type SiteSettingsContent = {
   personalProjects?:
     | NonNullable<SiteSetting['personalProjects']>
     | typeof portfolioFallback.siteSettings.personalProjects
+  phone?: string | null
+  cvPitch?: string | null
+  recommendationQuote?: string | null
+  recommendationAuthor?: string | null
+  mobility?: string | null
+  interests?: string | null
+  rqthNote?: string | null
+  showRqthOnCv?: boolean | null
+  languages?: NonNullable<SiteSetting['languages']> | typeof portfolioFallback.siteSettings.languages
+  cvCompetencies?:
+    | NonNullable<SiteSetting['cvCompetencies']>
+    | typeof portfolioFallback.siteSettings.cvCompetencies
+  cv?: SiteSetting['cv']
 }
 
 /** Complète les champs éditoriaux absents du CMS sans écraser avatar / identité. */
@@ -52,6 +65,23 @@ function withEditorialFallback(
     personalProjects: settings.personalProjects?.length
       ? settings.personalProjects
       : fb.personalProjects,
+    phone: ('phone' in settings && settings.phone?.trim()) || fb.phone,
+    cvPitch: ('cvPitch' in settings && settings.cvPitch?.trim()) || fb.cvPitch,
+    recommendationQuote:
+      ('recommendationQuote' in settings && settings.recommendationQuote?.trim()) ||
+      fb.recommendationQuote,
+    recommendationAuthor:
+      ('recommendationAuthor' in settings && settings.recommendationAuthor?.trim()) ||
+      fb.recommendationAuthor,
+    mobility: ('mobility' in settings && settings.mobility?.trim()) || fb.mobility,
+    interests: ('interests' in settings && settings.interests?.trim()) || fb.interests,
+    rqthNote: ('rqthNote' in settings && settings.rqthNote?.trim()) || fb.rqthNote,
+    showRqthOnCv:
+      'showRqthOnCv' in settings && settings.showRqthOnCv !== undefined && settings.showRqthOnCv !== null
+        ? settings.showRqthOnCv
+        : fb.showRqthOnCv,
+    languages: settings.languages?.length ? settings.languages : fb.languages,
+    cvCompetencies: settings.cvCompetencies?.length ? settings.cvCompetencies : fb.cvCompetencies,
   }
 }
 

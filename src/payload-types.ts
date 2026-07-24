@@ -643,9 +643,59 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * CV PDF téléchargeable.
+   * Override optionnel : PDF statique. Si vide, /api/cv génère le PDF dynamiquement.
    */
   cv?: (number | null) | Media;
+  /**
+   * Téléphone affiché sur le CV PDF.
+   */
+  phone?: string | null;
+  /**
+   * Projet professionnel / pitch long pour le CV PDF (sinon aboutIntro).
+   */
+  cvPitch?: string | null;
+  /**
+   * Citation de recommandation (CV PDF).
+   */
+  recommendationQuote?: string | null;
+  /**
+   * Auteur de la recommandation (ex. « Directeur Commercial, Entreprise X »).
+   */
+  recommendationAuthor?: string | null;
+  /**
+   * Ex. « Permis B — véhicule personnel, déplacements régionaux ».
+   */
+  mobility?: string | null;
+  /**
+   * Centres d'intérêt (CV PDF).
+   */
+  interests?: string | null;
+  /**
+   * Mention RQTH / aménagements (sensible — contrôlé par showRqthOnCv).
+   */
+  rqthNote?: string | null;
+  showRqthOnCv?: boolean | null;
+  /**
+   * Langues pour le CV PDF.
+   */
+  languages?:
+    | {
+        name: string;
+        level: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Compétences à niveau % pour le CV PDF (distinct des badges Skills).
+   */
+  cvCompetencies?:
+    | {
+        name: string;
+        level: number;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Résumé court (Hero + intro À propos).
    */
@@ -756,6 +806,29 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   cv?: T;
+  phone?: T;
+  cvPitch?: T;
+  recommendationQuote?: T;
+  recommendationAuthor?: T;
+  mobility?: T;
+  interests?: T;
+  rqthNote?: T;
+  showRqthOnCv?: T;
+  languages?:
+    | T
+    | {
+        name?: T;
+        level?: T;
+        id?: T;
+      };
+  cvCompetencies?:
+    | T
+    | {
+        name?: T;
+        level?: T;
+        description?: T;
+        id?: T;
+      };
   aboutIntro?: T;
   aboutHeadline?: T;
   aboutBody?: T;

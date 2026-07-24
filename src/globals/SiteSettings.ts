@@ -88,8 +88,100 @@ export const SiteSettings: GlobalConfig = {
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'CV PDF téléchargeable.',
+        description: 'Override optionnel : PDF statique. Si vide, /api/cv génère le PDF dynamiquement.',
       },
+    },
+    {
+      name: 'phone',
+      type: 'text',
+      admin: {
+        description: 'Téléphone affiché sur le CV PDF.',
+      },
+    },
+    {
+      name: 'cvPitch',
+      type: 'textarea',
+      admin: {
+        description: 'Projet professionnel / pitch long pour le CV PDF (sinon aboutIntro).',
+      },
+    },
+    {
+      name: 'recommendationQuote',
+      type: 'textarea',
+      admin: {
+        description: 'Citation de recommandation (CV PDF).',
+      },
+    },
+    {
+      name: 'recommendationAuthor',
+      type: 'text',
+      admin: {
+        description: 'Auteur de la recommandation (ex. « Directeur Commercial, Entreprise X »).',
+      },
+    },
+    {
+      name: 'mobility',
+      type: 'text',
+      admin: {
+        description: 'Ex. « Permis B — véhicule personnel, déplacements régionaux ».',
+      },
+    },
+    {
+      name: 'interests',
+      type: 'text',
+      admin: {
+        description: "Centres d'intérêt (CV PDF).",
+      },
+    },
+    {
+      name: 'rqthNote',
+      type: 'textarea',
+      admin: {
+        description: 'Mention RQTH / aménagements (sensible — contrôlé par showRqthOnCv).',
+      },
+    },
+    {
+      name: 'showRqthOnCv',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Afficher la mention RQTH sur le CV PDF',
+    },
+    {
+      name: 'languages',
+      type: 'array',
+      labels: { singular: 'Langue', plural: 'Langues' },
+      admin: {
+        description: 'Langues pour le CV PDF.',
+      },
+      fields: [
+        { name: 'name', type: 'text', required: true, label: 'Langue' },
+        { name: 'level', type: 'text', required: true, label: 'Niveau' },
+      ],
+    },
+    {
+      name: 'cvCompetencies',
+      type: 'array',
+      labels: { singular: 'Compétence CV', plural: 'Compétences CV' },
+      admin: {
+        description: 'Compétences à niveau % pour le CV PDF (distinct des badges Skills).',
+      },
+      fields: [
+        { name: 'name', type: 'text', required: true, label: 'Compétence' },
+        {
+          name: 'level',
+          type: 'number',
+          required: true,
+          min: 0,
+          max: 100,
+          label: 'Niveau (%)',
+        },
+        {
+          name: 'description',
+          type: 'text',
+          required: true,
+          label: 'Description courte',
+        },
+      ],
     },
     {
       name: 'aboutIntro',
