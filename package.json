@@ -35,6 +35,7 @@
     "@payloadcms/storage-vercel-blob": "3.86.0",
     "@payloadcms/translations": "3.86.0",
     "@payloadcms/ui": "3.86.0",
+    "@react-pdf/renderer": "^4.5.1",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
