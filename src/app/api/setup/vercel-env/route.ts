@@ -156,12 +156,16 @@ export async function POST(request: Request) {
       NEXT_PUBLIC_SITE_URL: siteUrl,
     }
 
-    if (body.enableAdminTestLogin !== false) {
+    if (body.seedAdminEmail?.trim()) vars.SEED_ADMIN_EMAIL = body.seedAdminEmail.trim()
+    if (body.seedAdminPassword?.trim()) {
+      vars.SEED_ADMIN_PASSWORD = body.seedAdminPassword.trim()
+    }
+
+    // Bypass 1 clic : jamais activé par défaut ; uniquement si demandé explicitement (dev).
+    if (body.enableAdminTestLogin === true) {
       vars.ENABLE_ADMIN_TEST_LOGIN = 'true'
-      if (body.seedAdminEmail?.trim()) vars.SEED_ADMIN_EMAIL = body.seedAdminEmail.trim()
-      if (body.seedAdminPassword?.trim()) {
-        vars.SEED_ADMIN_PASSWORD = body.seedAdminPassword.trim()
-      }
+    } else {
+      vars.ENABLE_ADMIN_TEST_LOGIN = 'false'
     }
 
     const applied: string[] = []

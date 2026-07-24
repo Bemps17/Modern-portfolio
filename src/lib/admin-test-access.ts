@@ -1,11 +1,15 @@
 import { getDatabaseUri, getPayloadSecret, isPayloadConfigured } from '@/lib/payload-env'
 
-/** Connexion admin automatique — activer via ENABLE_ADMIN_TEST_LOGIN=true sur Vercel. */
+/**
+ * Ancien bypass « 1 clic » — uniquement hors production et si flag explicite.
+ * Le footer n’utilise plus cette voie.
+ */
 export function isAdminTestLoginEnabled(): boolean {
+  if (process.env.NODE_ENV === 'production') return false
   return process.env.ENABLE_ADMIN_TEST_LOGIN === 'true'
 }
 
-/** Lien footer toujours visible. */
+/** Lien footer toujours visible (point d’entrée sécurisé). */
 export function isAdminLinkVisible(): boolean {
   return true
 }
@@ -18,23 +22,21 @@ export function getAdminTestCredentials(): { email: string; password: string } |
   return { email, password }
 }
 
-function isOneClickAdminLoginAvailable(): boolean {
-  return (
-    isPayloadConfigured() && isAdminTestLoginEnabled() && getAdminTestCredentials() !== null
-  )
-}
-
-/** Footer : connexion 1 clic si configuré, sinon setup ou login. */
+/**
+ * Footer cadenas :
+ * - CMS non configuré → setup
+ * - sinon → gateway (appareil de confiance ou login mot de passe)
+ */
 export function getAdminHref(): string {
-  if (isOneClickAdminLoginAvailable()) return '/api/admin/test-login'
-  if (isPayloadConfigured()) return '/admin/login'
-  return '/setup-admin'
+  if (!isPayloadConfigured()) return '/setup-admin'
+  return '/api/admin/gateway'
 }
 
 export function getAdminLinkTitle(): string {
-  if (isOneClickAdminLoginAvailable()) return 'Backoffice — connexion en 1 clic'
-  if (isPayloadConfigured()) return 'Backoffice Payload CMS — se connecter'
-  return 'Configurer le backoffice Payload (variables Vercel manquantes)'
+  if (!isPayloadConfigured()) {
+    return 'Configurer le backoffice Payload (variables Vercel manquantes)'
+  }
+  return 'Backoffice Payload CMS — connexion sécurisée'
 }
 
 export function getPayloadConfigSummary() {

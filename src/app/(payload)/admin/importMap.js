@@ -25,7 +25,7 @@ import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../co
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { default as default_caa1618058b0d91ac86368a4b26b8c36 } from '../../../components/admin/RevalidateSiteButton'
 import { default as default_2420b3ffc9fd7dd2e79b4cdba2c1b4e0 } from '../../../components/admin/CmsSyncBanner'
-import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
+import { default as default_b285ebec604c3425771e35779f5bff26 } from '../../../components/admin/TrustedDevicePanel'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -57,6 +57,6 @@ export const importMap = {
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/RevalidateSiteButton#default": default_caa1618058b0d91ac86368a4b26b8c36,
   "/components/admin/CmsSyncBanner#default": default_2420b3ffc9fd7dd2e79b4cdba2c1b4e0,
-  "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e,
+  "/components/admin/TrustedDevicePanel#default": default_b285ebec604c3425771e35779f5bff26,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

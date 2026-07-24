@@ -142,6 +142,19 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   name?: string | null;
+  /**
+   * Appareils autorisés à ouvrir /admin sans resaisir le mot de passe (gérés via le bandeau dashboard).
+   */
+  trustedDevices?:
+    | {
+        deviceId: string;
+        label: string;
+        secretHash: string;
+        createdAt: string;
+        lastUsedAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -428,6 +441,16 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  trustedDevices?:
+    | T
+    | {
+        deviceId?: T;
+        label?: T;
+        secretHash?: T;
+        createdAt?: T;
+        lastUsedAt?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   email?: T;
