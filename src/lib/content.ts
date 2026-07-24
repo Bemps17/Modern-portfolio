@@ -13,7 +13,10 @@ export type SiteSettingsContent = {
   siteName: string
   tagline: string
   aboutIntro?: string | null
+  aboutHeadline?: string | null
   aboutBody?: string | null
+  skillsTitle?: string | null
+  skillsSubtitle?: string | null
   location?: string | null
   availability?: 'available' | 'limited' | 'unavailable' | null
   availabilityLabel?: string | null
@@ -38,7 +41,12 @@ function withEditorialFallback(
   return {
     ...fb,
     ...settings,
+    aboutHeadline:
+      ('aboutHeadline' in settings && settings.aboutHeadline?.trim()) || fb.aboutHeadline,
     aboutBody: settings.aboutBody?.trim() || fb.aboutBody,
+    skillsTitle: ('skillsTitle' in settings && settings.skillsTitle?.trim()) || fb.skillsTitle,
+    skillsSubtitle:
+      ('skillsSubtitle' in settings && settings.skillsSubtitle?.trim()) || fb.skillsSubtitle,
     whyMePoints: settings.whyMePoints?.length ? settings.whyMePoints : fb.whyMePoints,
     skillGroups: settings.skillGroups?.length ? settings.skillGroups : fb.skillGroups,
     personalProjects: settings.personalProjects?.length

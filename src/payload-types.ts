@@ -646,9 +646,21 @@ export interface SiteSetting {
    */
   aboutIntro?: string | null;
   /**
+   * Titre fort sous le profil (ex. « Profil Unique : La Polyvalence… »).
+   */
+  aboutHeadline?: string | null;
+  /**
    * Texte long de la page À propos (CMS-first, pas de copy en dur).
    */
   aboutBody?: string | null;
+  /**
+   * Titre de la section Compétences (À propos).
+   */
+  skillsTitle?: string | null;
+  /**
+   * Sous-titre de la section Compétences (À propos).
+   */
+  skillsSubtitle?: string | null;
   /**
    * Ex. « La Rochelle · ouvert au remote ».
    */
@@ -688,7 +700,7 @@ export interface SiteSetting {
     | {
         title: string;
         /**
-         * Liste séparée par des virgules.
+         * Une ligne par sous-compétence (ex. « Suite Adobe CC : Photoshop… »).
          */
         items: string;
         id?: string | null;
@@ -740,7 +752,10 @@ export interface SiteSettingsSelect<T extends boolean = true> {
       };
   cv?: T;
   aboutIntro?: T;
+  aboutHeadline?: T;
   aboutBody?: T;
+  skillsTitle?: T;
+  skillsSubtitle?: T;
   location?: T;
   availability?: T;
   availabilityLabel?: T;

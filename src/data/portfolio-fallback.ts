@@ -366,8 +366,11 @@ export const portfolioFallback = {
     tagline: 'Je transforme les défis complexes en solutions élégantes.',
     aboutIntro:
       'Web Designer Junior & Profil Polyvalent — une expertise unique forgée par 10+ ans d’expérience : Commercial B2B • Création Web • Logistique.',
+    aboutHeadline: 'Profil Unique : La Polyvalence au Service de vos Projets',
     aboutBody:
-      'Mon parcours est atypique, et c’est ma plus grande force. Après plus de 10 ans dans le commerce et la logistique, j’ai pivoté vers le numérique. Cette expérience m’a appris la rigueur, la gestion de projet et l’importance de la relation client.\n\nDesigner-développeur avec près de 20 ans d’expérience cumulée (commercial, logistique, design et développement), je conçois des interfaces utiles et des sites performants. Le vibe coding et l’IA assistée accélèrent mes itérations sans sacrifier la qualité livrable.',
+      'Designer-développeur avec 20 ans d’expérience transversale, je combine créativité visuelle, compétences techniques et sens commercial. Expert en prototypage rapide et création d’applications web assistée par IA (« vibe coding »), je recherche un poste où ma polyvalence sera un véritable atout pour votre équipe, dans un environnement privilégiant la qualité et l’équilibre de vie.\n\nMon parcours est atypique, et c’est ma plus grande force. Après plus de 10 ans dans le commerce et la logistique, j’ai pivoté vers le numérique. Cette expérience m’a appris la rigueur, la gestion de projet et l’importance de la relation client.',
+    skillsTitle: 'Compétences Clés',
+    skillsSubtitle: 'Votre couteau suisse digital',
     whyMePoints: [
       { id: '1', title: 'Polyvalence', description: 'Commerce, logistique, design et dev — un seul interlocuteur.' },
       { id: '2', title: 'Vision 360°', description: 'Du brief client au déploiement, avec le sens du résultat.' },
@@ -375,10 +378,24 @@ export const portfolioFallback = {
       { id: '4', title: 'Basé à La Rochelle', description: 'Disponible sur place, en remote ou en hybride.' },
     ],
     skillGroups: [
-      { id: '1', title: 'Design', items: 'Suite Adobe, Figma, UI/UX' },
-      { id: '2', title: 'Développement', items: 'HTML/CSS, JavaScript, WordPress, PWA' },
-      { id: '3', title: 'Commercial', items: 'Prospection, gestion client, négociation B2B' },
-      { id: '4', title: 'Méthodes', items: 'Agile, Git, prototypage, vibe coding' },
+      {
+        id: '1',
+        title: 'Design & Création',
+        items:
+          'Suite Adobe CC : Photoshop, Illustrator, InDesign (niveau expert)\nUI/UX Design : Figma, création d’interfaces intuitives\nIdentité visuelle : Logos, chartes graphiques, supports print/web',
+      },
+      {
+        id: '2',
+        title: 'Développement & Technique',
+        items:
+          'Front-End : HTML5/CSS3, JavaScript, responsive design\nCMS & Frameworks : WordPress (expert), WooCommerce\nInnovation : PWA (Progressive Web Apps), IA assistée (GitHub Copilot, ChatGPT)\nMéthodes : Agilité, prototypage rapide, versionning Git',
+      },
+      {
+        id: '3',
+        title: 'Commercial & Relationnel',
+        items:
+          'Gestion client : De la prospection à la fidélisation\nPédagogie : Formation utilisateurs, vulgarisation technique\nManagement : Coordination d’équipes (4+ personnes), gestion de projets',
+      },
     ],
     personalProjects: [
       {

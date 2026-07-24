@@ -105,6 +105,11 @@ export default async function AboutPage() {
             {settings?.aboutIntro ? (
               <p className="max-w-2xl text-lg text-[var(--foreground-secondary)]">{settings.aboutIntro}</p>
             ) : null}
+            {settings?.aboutHeadline?.trim() ? (
+              <h3 className="max-w-2xl font-[family-name:var(--font-syne)] text-2xl font-semibold text-balance sm:text-3xl">
+                {settings.aboutHeadline}
+              </h3>
+            ) : null}
             {settings?.aboutBody ? (
               <p className="max-w-2xl whitespace-pre-line text-base text-[var(--foreground-secondary)]">
                 {settings.aboutBody}
@@ -156,8 +161,8 @@ export default async function AboutPage() {
       {skillGroups.length ? (
         <ReadableSurface as="section">
           <SectionTitle
-            subtitle="Design, développement, commercial et méthodes."
-            title="Compétences"
+            subtitle={settings?.skillsSubtitle || 'Design, développement, commercial et relationnel.'}
+            title={settings?.skillsTitle || 'Compétences clés'}
           />
           <SkillGroupsList groups={skillGroups} />
         </ReadableSurface>

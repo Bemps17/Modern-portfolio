@@ -99,10 +99,31 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'aboutHeadline',
+      type: 'text',
+      admin: {
+        description: 'Titre fort sous le profil (ex. « Profil Unique : La Polyvalence… »).',
+      },
+    },
+    {
       name: 'aboutBody',
       type: 'textarea',
       admin: {
         description: 'Texte long de la page À propos (CMS-first, pas de copy en dur).',
+      },
+    },
+    {
+      name: 'skillsTitle',
+      type: 'text',
+      admin: {
+        description: 'Titre de la section Compétences (À propos).',
+      },
+    },
+    {
+      name: 'skillsSubtitle',
+      type: 'text',
+      admin: {
+        description: 'Sous-titre de la section Compétences (À propos).',
       },
     },
     {
@@ -175,10 +196,12 @@ export const SiteSettings: GlobalConfig = {
         { name: 'title', type: 'text', required: true, label: 'Catégorie' },
         {
           name: 'items',
-          type: 'text',
+          type: 'textarea',
           required: true,
           label: 'Compétences',
-          admin: { description: 'Liste séparée par des virgules.' },
+          admin: {
+            description: 'Une ligne par sous-compétence (ex. « Suite Adobe CC : Photoshop… »).',
+          },
         },
       ],
     },

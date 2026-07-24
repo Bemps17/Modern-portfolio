@@ -51,6 +51,9 @@ describe('Payload schema — collections & globals', () => {
         'whyMePoints',
         'skillGroups',
         'personalProjects',
+        'aboutHeadline',
+        'skillsTitle',
+        'skillsSubtitle',
       ]),
     )
     const avatar = SiteSettings.fields.find((field) => 'name' in field && field.name === 'avatar')
