@@ -187,12 +187,40 @@ html {
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
   color: var(--foreground);
   font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   /* Transparent : le fond opaque est fourni par BackgroundLayers (fixed z-0),
      ce qui permet aux couches parallax de rester visibles derrière le contenu. */
   background: transparent;
+}
+
+/* Parallax Mars via scroll-driven animations (Chrome + Safari récents, mobile inclus).
+   Remplace le rAF JS qui lagguait pendant le scroll inertiel iOS. */
+@keyframes bg-mars-parallax {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 280px, 0);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .bg-mars-parallax {
+    animation-name: bg-mars-parallax;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root);
+    animation-range: 0 2400px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-mars-parallax {
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
 a {
