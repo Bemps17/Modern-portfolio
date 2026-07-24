@@ -5,8 +5,10 @@ import type { ReactElement } from 'react'
 
 import { CvDocument } from '@/components/cv/CvDocument'
 import { getSiteSettingsContent } from '@/lib/content'
+import { resolveCvOverrideUrl } from '@/lib/cv/resolve-cv-override-url'
 import { getCvDocumentData } from '@/lib/cv/get-cv-document-data'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
+import { getSiteUrl } from '@/lib/site-url'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -33,8 +35,8 @@ async function tryStreamUploadedCv(): Promise<Response | null> {
   const settings = await getSiteSettingsContent()
   if (!isMedia(settings.cv)) return null
 
-  const url = resolveMediaUrl(settings.cv)
-  if (!url?.startsWith('http')) return null
+  const url = resolveCvOverrideUrl(resolveMediaUrl(settings.cv), getSiteUrl())
+  if (!url) return null
 
   try {
     const remote = await fetch(url)
