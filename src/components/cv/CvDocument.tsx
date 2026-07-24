@@ -1,213 +1,443 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
-import type { CvDocumentData } from '@/lib/cv/types'
+import type { CvCompetencyItem, CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
 
+/** Palette alignée sur le design system du site (styles.css). */
 const colors = {
+  sidebar: '#141418',
+  sidebarText: '#f8f4ef',
+  sidebarMuted: '#c4bfb8',
+  accent: '#ff6b1a',
+  accentSoft: '#ffc266',
+  page: '#f8f4ef',
   ink: '#1a1a1a',
   muted: '#4a4a4a',
-  accent: '#ff6b1a',
-  line: '#e5e0d8',
-  soft: '#f7f4ef',
+  line: '#ddd8d2',
+  soft: '#efeae3',
+  timeline: '#c4bfb8',
 }
+
+const SIDEBAR_WIDTH = 190
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 36,
-    paddingBottom: 40,
-    paddingHorizontal: 40,
-    fontSize: 10,
+    flexDirection: 'row',
+    fontSize: 9.5,
     fontFamily: 'Helvetica',
     color: colors.ink,
+    backgroundColor: colors.page,
+  },
+  sidebar: {
+    width: SIDEBAR_WIDTH,
+    backgroundColor: colors.sidebar,
+    paddingTop: 28,
+    paddingBottom: 28,
+    paddingHorizontal: 16,
+    color: colors.sidebarText,
+  },
+  main: {
+    flex: 1,
+    paddingTop: 28,
+    paddingBottom: 28,
+    paddingHorizontal: 24,
+  },
+  brandMark: {
+    width: 28,
+    height: 4,
+    backgroundColor: colors.accent,
+    marginBottom: 14,
+  },
+  sideSectionTitle: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.accentSoft,
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginTop: 16,
+    marginBottom: 6,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,107,26,0.35)',
+  },
+  sideBody: {
+    fontSize: 8.5,
+    lineHeight: 1.45,
+    color: colors.sidebarMuted,
+  },
+  sideContact: {
+    fontSize: 8.5,
+    lineHeight: 1.5,
+    color: colors.sidebarText,
+    marginBottom: 4,
+  },
+  sideLabel: {
+    fontSize: 7.5,
+    color: colors.accent,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: 1,
+  },
+  langRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  bullet: {
+    width: 5,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.accent,
+    marginRight: 6,
+  },
+  langName: {
+    fontSize: 8.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.sidebarText,
+  },
+  langLevel: {
+    fontSize: 7.5,
+    color: colors.sidebarMuted,
+  },
+  competencyBlock: {
+    marginBottom: 8,
+  },
+  competencyName: {
+    fontSize: 8,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.sidebarText,
+    marginBottom: 3,
+    textTransform: 'uppercase',
+  },
+  barTrack: {
+    height: 3,
+    backgroundColor: 'rgba(248,244,239,0.15)',
+    marginBottom: 2,
+  },
+  barFill: {
+    height: 3,
+    backgroundColor: colors.accent,
+  },
+  competencyHint: {
+    fontSize: 7,
+    color: colors.sidebarMuted,
+    lineHeight: 1.3,
   },
   headerName: {
     fontSize: 22,
     fontFamily: 'Helvetica-Bold',
-    color: colors.accent,
+    color: colors.ink,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
     marginBottom: 4,
   },
   headerTagline: {
-    fontSize: 11,
-    color: colors.muted,
-    marginBottom: 8,
-  },
-  contactLine: {
-    fontSize: 9,
-    color: colors.muted,
-    marginBottom: 2,
+    fontSize: 10,
+    color: colors.accent,
+    textTransform: 'uppercase',
+    letterSpacing: 1.4,
+    marginBottom: 14,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
-    color: colors.accent,
-    marginTop: 14,
-    marginBottom: 6,
-    paddingBottom: 3,
+    color: colors.ink,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginTop: 12,
+    marginBottom: 8,
+    paddingBottom: 4,
     borderBottomWidth: 1,
     borderBottomColor: colors.line,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
   },
   body: {
-    fontSize: 10,
+    fontSize: 9,
     lineHeight: 1.45,
     color: colors.ink,
   },
+  timelineItem: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  timelineMeta: {
+    width: 88,
+    paddingRight: 8,
+  },
+  timelineRail: {
+    width: 12,
+    alignItems: 'center',
+  },
+  timelineDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: colors.accent,
+    marginTop: 2,
+  },
+  timelineLine: {
+    width: 1.5,
+    flexGrow: 1,
+    backgroundColor: colors.timeline,
+    marginTop: 3,
+    marginBottom: 2,
+  },
+  timelineContent: {
+    flex: 1,
+    paddingLeft: 6,
+    paddingBottom: 2,
+  },
+  company: {
+    fontSize: 8,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.ink,
+    marginBottom: 2,
+  },
+  dateLabel: {
+    fontSize: 7.5,
+    color: colors.muted,
+    lineHeight: 1.35,
+  },
+  jobTitle: {
+    fontSize: 9.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.ink,
+    marginBottom: 2,
+  },
+  jobBody: {
+    fontSize: 8.5,
+    lineHeight: 1.4,
+    color: colors.muted,
+  },
   quote: {
-    marginTop: 4,
+    marginTop: 2,
     padding: 8,
     backgroundColor: colors.soft,
-    fontSize: 9,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.accent,
+  },
+  quoteText: {
+    fontSize: 8.5,
     fontStyle: 'italic',
     color: colors.muted,
     lineHeight: 1.4,
   },
   quoteAuthor: {
     marginTop: 4,
-    fontSize: 8,
-    color: colors.muted,
-  },
-  jobTitle: {
-    fontSize: 10,
-    fontFamily: 'Helvetica-Bold',
-  },
-  jobMeta: {
-    fontSize: 9,
-    color: colors.muted,
-    marginBottom: 2,
-  },
-  jobBlock: {
-    marginBottom: 8,
-  },
-  competencyRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 2,
-  },
-  barTrack: {
-    height: 4,
-    backgroundColor: colors.line,
-    marginBottom: 6,
-  },
-  barFill: {
-    height: 4,
-    backgroundColor: colors.accent,
-  },
-  metaItem: {
-    fontSize: 9,
+    fontSize: 7.5,
     color: colors.ink,
-    marginBottom: 3,
+  },
+  interestRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  interestChip: {
+    fontSize: 7.5,
+    color: colors.sidebarText,
+    marginRight: 8,
+    marginBottom: 4,
   },
 })
+
+function SidebarCompetency({ item }: { item: CvCompetencyItem }) {
+  return (
+    <View style={styles.competencyBlock} wrap={false}>
+      <Text style={styles.competencyName}>{item.name}</Text>
+      <View style={styles.barTrack}>
+        <View style={[styles.barFill, { width: `${item.level}%` }]} />
+      </View>
+      <Text style={styles.competencyHint}>{item.description}</Text>
+    </View>
+  )
+}
+
+function TimelineExperience({
+  experience,
+  isLast,
+}: {
+  experience: CvExperienceItem
+  isLast: boolean
+}) {
+  return (
+    <View style={styles.timelineItem} wrap={false}>
+      <View style={styles.timelineMeta}>
+        <Text style={styles.company}>{experience.company}</Text>
+        <Text style={styles.dateLabel}>{experience.dateLabel}</Text>
+      </View>
+      <View style={styles.timelineRail}>
+        <View style={styles.timelineDot} />
+        {isLast ? null : <View style={styles.timelineLine} />}
+      </View>
+      <View style={styles.timelineContent}>
+        <Text style={styles.jobTitle}>{experience.title}</Text>
+        <Text style={styles.jobBody}>{experience.description}</Text>
+      </View>
+    </View>
+  )
+}
+
+function splitInterests(interests: string): string[] {
+  return interests
+    .split(/[,·•|/]+/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+}
 
 export function CvDocument({ data }: { data: CvDocumentData }) {
   const recent = data.experiences.filter((item) => !item.earlyCareer)
   const early = data.experiences.filter((item) => item.earlyCareer)
+  const interestItems = data.interests ? splitInterests(data.interests) : []
 
   return (
-    <Document
-      author={data.fullName}
-      title={`CV — ${data.fullName}`}
-      subject={data.tagline}
-    >
+    <Document author={data.fullName} subject={data.tagline} title={`CV — ${data.fullName}`}>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.headerName}>{data.fullName}</Text>
-        <Text style={styles.headerTagline}>{data.tagline}</Text>
-        {data.location ? <Text style={styles.contactLine}>{data.location}</Text> : null}
-        {data.phone ? <Text style={styles.contactLine}>{data.phone}</Text> : null}
-        <Text style={styles.contactLine}>{data.email}</Text>
-        {data.availabilityLabel ? (
-          <Text style={styles.contactLine}>{data.availabilityLabel}</Text>
-        ) : null}
+        <View style={styles.sidebar}>
+          <View style={styles.brandMark} />
 
-        <Text style={styles.sectionTitle}>Projet professionnel</Text>
-        <Text style={styles.body}>{data.pitch}</Text>
-
-        {data.recommendationQuote ? (
-          <>
-            <Text style={styles.sectionTitle}>Recommandation</Text>
-            <View style={styles.quote}>
-              <Text>« {data.recommendationQuote} »</Text>
-              {data.recommendationAuthor ? (
-                <Text style={styles.quoteAuthor}>— {data.recommendationAuthor}</Text>
-              ) : null}
+          <Text style={styles.sideSectionTitle}>Contact</Text>
+          {data.location ? (
+            <View style={{ marginBottom: 6 }}>
+              <Text style={styles.sideLabel}>Localisation</Text>
+              <Text style={styles.sideContact}>{data.location}</Text>
             </View>
-          </>
-        ) : null}
-
-        <Text style={styles.sectionTitle}>Expériences professionnelles</Text>
-        {recent.map((experience, index) => (
-          <View key={`exp-${index}`} style={styles.jobBlock} wrap={false}>
-            <Text style={styles.jobTitle}>
-              {experience.title} — {experience.company}
-            </Text>
-            <Text style={styles.jobMeta}>{experience.dateLabel}</Text>
-            <Text style={styles.body}>{experience.description}</Text>
+          ) : null}
+          {data.phone ? (
+            <View style={{ marginBottom: 6 }}>
+              <Text style={styles.sideLabel}>Téléphone</Text>
+              <Text style={styles.sideContact}>{data.phone}</Text>
+            </View>
+          ) : null}
+          <View style={{ marginBottom: 6 }}>
+            <Text style={styles.sideLabel}>Email</Text>
+            <Text style={styles.sideContact}>{data.email}</Text>
           </View>
-        ))}
+          {data.availabilityLabel ? (
+            <View style={{ marginBottom: 6 }}>
+              <Text style={styles.sideLabel}>Disponibilité</Text>
+              <Text style={styles.sideContact}>{data.availabilityLabel}</Text>
+            </View>
+          ) : null}
 
-        {early.length > 0 ? (
-          <>
-            <Text style={styles.sectionTitle}>Premières expériences</Text>
-            {early.map((experience, index) => (
-              <View key={`early-${index}`} style={styles.jobBlock} wrap={false}>
-                <Text style={styles.jobTitle}>
-                  {experience.title} — {experience.company}
-                </Text>
-                <Text style={styles.jobMeta}>{experience.dateLabel}</Text>
-                <Text style={styles.body}>{experience.description}</Text>
-              </View>
-            ))}
-          </>
-        ) : null}
+          <Text style={styles.sideSectionTitle}>Profil</Text>
+          <Text style={styles.sideBody}>{data.pitch}</Text>
 
-        {data.competencies.length > 0 ? (
-          <>
-            <Text style={styles.sectionTitle}>Compétences clés</Text>
-            {data.competencies.map((item, index) => (
-              <View key={`comp-${index}`} wrap={false}>
-                <View style={styles.competencyRow}>
-                  <Text style={styles.jobTitle}>{item.name}</Text>
-                  <Text style={styles.jobMeta}>{item.level}%</Text>
+          {data.languages.length > 0 ? (
+            <>
+              <Text style={styles.sideSectionTitle}>Langues</Text>
+              {data.languages.map((lang, index) => (
+                <View key={`lang-${index}`} style={styles.langRow}>
+                  <View style={styles.bullet} />
+                  <View>
+                    <Text style={styles.langName}>{lang.name}</Text>
+                    <Text style={styles.langLevel}>{lang.level}</Text>
+                  </View>
                 </View>
-                <View style={styles.barTrack}>
-                  <View style={[styles.barFill, { width: `${item.level}%` }]} />
+              ))}
+            </>
+          ) : null}
+
+          {data.competencies.length > 0 ? (
+            <>
+              <Text style={styles.sideSectionTitle}>Compétences</Text>
+              {data.competencies.map((item, index) => (
+                <SidebarCompetency key={`comp-${index}`} item={item} />
+              ))}
+            </>
+          ) : null}
+
+          {data.mobility || (data.showRqthOnCv && data.rqthNote) || interestItems.length > 0 ? (
+            <>
+              <Text style={styles.sideSectionTitle}>Infos</Text>
+              {data.mobility ? (
+                <View style={{ marginBottom: 6 }}>
+                  <Text style={styles.sideLabel}>Mobilité</Text>
+                  <Text style={styles.sideBody}>{data.mobility}</Text>
                 </View>
-                <Text style={[styles.body, { marginBottom: 6 }]}>{item.description}</Text>
-              </View>
-            ))}
-          </>
-        ) : null}
+              ) : null}
+              {data.showRqthOnCv && data.rqthNote ? (
+                <View style={{ marginBottom: 6 }}>
+                  <Text style={styles.sideLabel}>Statut</Text>
+                  <Text style={styles.sideBody}>{data.rqthNote}</Text>
+                </View>
+              ) : null}
+              {interestItems.length > 0 ? (
+                <View>
+                  <Text style={styles.sideLabel}>Centres d’intérêt</Text>
+                  <View style={styles.interestRow}>
+                    {interestItems.map((item, index) => (
+                      <Text key={`interest-${index}`} style={styles.interestChip}>
+                        • {item.toUpperCase()}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+              ) : null}
+            </>
+          ) : null}
+        </View>
 
-        {data.qualifications.length > 0 ? (
-          <>
-            <Text style={styles.sectionTitle}>Formations</Text>
-            {data.qualifications.map((item, index) => (
-              <View key={`qual-${index}`} style={styles.jobBlock} wrap={false}>
-                <Text style={styles.jobTitle}>
-                  {item.yearLabel ? `${item.yearLabel} · ` : ''}
-                  {item.title}
-                  {item.organization ? ` — ${item.organization}` : ''}
-                </Text>
-                {item.description ? <Text style={styles.body}>{item.description}</Text> : null}
-              </View>
-            ))}
-          </>
-        ) : null}
+        <View style={styles.main}>
+          <Text style={styles.headerName}>{data.fullName}</Text>
+          <Text style={styles.headerTagline}>{data.tagline}</Text>
 
-        <Text style={styles.sectionTitle}>Informations complémentaires</Text>
-        {data.showRqthOnCv && data.rqthNote ? (
-          <Text style={styles.metaItem}>Statut — {data.rqthNote}</Text>
-        ) : null}
-        {data.mobility ? <Text style={styles.metaItem}>Mobilité — {data.mobility}</Text> : null}
-        {data.languages.length > 0 ? (
-          <Text style={styles.metaItem}>
-            Langues —{' '}
-            {data.languages.map((lang) => `${lang.name} (${lang.level})`).join(' · ')}
-          </Text>
-        ) : null}
-        {data.interests ? (
-          <Text style={styles.metaItem}>Centres d’intérêt — {data.interests}</Text>
-        ) : null}
+          <Text style={styles.sectionTitle}>Expériences professionnelles</Text>
+          {recent.map((experience, index) => (
+            <TimelineExperience
+              key={`exp-${index}`}
+              experience={experience}
+              isLast={index === recent.length - 1 && early.length === 0}
+            />
+          ))}
+
+          {early.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle}>Premières expériences</Text>
+              {early.map((experience, index) => (
+                <TimelineExperience
+                  key={`early-${index}`}
+                  experience={experience}
+                  isLast={index === early.length - 1}
+                />
+              ))}
+            </>
+          ) : null}
+
+          {data.qualifications.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle}>Formations</Text>
+              {data.qualifications.map((item, index) => (
+                <View key={`qual-${index}`} style={styles.timelineItem} wrap={false}>
+                  <View style={styles.timelineMeta}>
+                    {item.organization ? (
+                      <Text style={styles.company}>{item.organization}</Text>
+                    ) : null}
+                    {item.yearLabel ? <Text style={styles.dateLabel}>{item.yearLabel}</Text> : null}
+                  </View>
+                  <View style={styles.timelineRail}>
+                    <View style={styles.timelineDot} />
+                    {index === data.qualifications.length - 1 ? null : (
+                      <View style={styles.timelineLine} />
+                    )}
+                  </View>
+                  <View style={styles.timelineContent}>
+                    <Text style={styles.jobTitle}>{item.title}</Text>
+                    {item.description ? <Text style={styles.jobBody}>{item.description}</Text> : null}
+                  </View>
+                </View>
+              ))}
+            </>
+          ) : null}
+
+          {data.recommendationQuote ? (
+            <>
+              <Text style={styles.sectionTitle}>Recommandation</Text>
+              <View style={styles.quote} wrap={false}>
+                <Text style={styles.quoteText}>« {data.recommendationQuote} »</Text>
+                {data.recommendationAuthor ? (
+                  <Text style={styles.quoteAuthor}>— {data.recommendationAuthor}</Text>
+                ) : null}
+              </View>
+            </>
+          ) : null}
+        </View>
       </Page>
     </Document>
   )
