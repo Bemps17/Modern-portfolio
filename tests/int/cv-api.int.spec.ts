@@ -15,5 +15,10 @@ describe('GET /api/cv', () => {
     const buffer = Buffer.from(await response.arrayBuffer())
     expect(buffer.byteLength).toBeGreaterThan(500)
     expect(buffer.subarray(0, 4).toString('utf8')).toBe('%PDF')
+
+    const text = buffer.toString('latin1')
+    const pageCount = (text.match(/\/Type\s*\/Page\b/g) || []).length
+    expect(pageCount).toBeGreaterThanOrEqual(1)
+    expect(pageCount).toBe(2)
   })
 })

@@ -1,5 +1,6 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
+import { splitCvPages } from '@/lib/cv/split-cv-pages'
 import type { CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
 
 /** Palette alignée sur le design system du site (styles.css). */
@@ -27,6 +28,14 @@ const styles = StyleSheet.create({
     color: colors.ink,
     backgroundColor: colors.page,
   },
+  page1: {
+    paddingTop: 28,
+    paddingBottom: 40,
+  },
+  page2: {
+    paddingTop: 40,
+    paddingBottom: 36,
+  },
   sidebar: {
     position: 'absolute',
     left: 0,
@@ -38,9 +47,16 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     paddingHorizontal: 16,
   },
-  main: {
+  sidebarContent: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: SIDEBAR_WIDTH,
     paddingTop: 28,
-    paddingBottom: 28,
+    paddingBottom: 24,
+    paddingHorizontal: 16,
+  },
+  main: {
     paddingHorizontal: 22,
   },
   brandMark: {
@@ -260,29 +276,15 @@ function splitInterests(interests: string): string[] {
 }
 
 export function CvDocument({ data }: { data: CvDocumentData }) {
-  const recent = data.experiences.filter((item) => !item.earlyCareer)
-  const early = data.experiences.filter((item) => item.earlyCareer)
+  const plan = splitCvPages(data)
   const interestItems = data.interests ? splitInterests(data.interests) : []
 
   return (
     <Document author={data.fullName} subject={data.tagline} title={`CV — ${data.fullName}`}>
-      <Page size="A4" style={styles.page}>
-        {/* Bandeau sombre répété sur chaque page */}
+      <Page size="A4" style={[styles.page, styles.page1]}>
         <View fixed style={styles.sidebar} />
 
-        {/* Contenu sidebar (page 1 principalement) */}
-        <View
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: SIDEBAR_WIDTH,
-            paddingTop: 28,
-            paddingBottom: 24,
-            paddingHorizontal: 16,
-          }}
-          wrap={false}
-        >
+        <View style={styles.sidebarContent} wrap={false}>
           <View style={styles.brandMark} />
 
           <Text style={styles.sideSectionTitle}>Contact</Text>
@@ -373,66 +375,78 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           <Text style={styles.headerTagline}>{data.tagline}</Text>
 
           <Text style={styles.sectionTitle}>Expériences professionnelles</Text>
-          {recent.map((experience, index) => (
+          {plan.page1.recentExperiences.map((experience, index) => (
             <TimelineExperience
               key={`exp-${index}`}
               experience={experience}
-              isLast={index === recent.length - 1 && early.length === 0}
+              isLast={index === plan.page1.recentExperiences.length - 1}
             />
           ))}
-
-          {early.length > 0 ? (
-            <>
-              <Text style={styles.sectionTitle}>Premières expériences</Text>
-              {early.map((experience, index) => (
-                <TimelineExperience
-                  key={`early-${index}`}
-                  experience={experience}
-                  isLast={index === early.length - 1}
-                />
-              ))}
-            </>
-          ) : null}
-
-          {data.qualifications.length > 0 ? (
-            <>
-              <Text style={styles.sectionTitle}>Formations</Text>
-              {data.qualifications.map((item, index) => (
-                <View key={`qual-${index}`} style={styles.timelineItem} wrap={false}>
-                  <View style={styles.timelineMeta}>
-                    {item.organization ? (
-                      <Text style={styles.company}>{item.organization}</Text>
-                    ) : null}
-                    {item.yearLabel ? <Text style={styles.dateLabel}>{item.yearLabel}</Text> : null}
-                  </View>
-                  <View style={styles.timelineRail}>
-                    <View style={styles.timelineDot} />
-                    {index === data.qualifications.length - 1 ? null : (
-                      <View style={styles.timelineLine} />
-                    )}
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.jobTitle}>{item.title}</Text>
-                    {item.description ? <Text style={styles.jobBody}>{item.description}</Text> : null}
-                  </View>
-                </View>
-              ))}
-            </>
-          ) : null}
-
-          {data.recommendationQuote ? (
-            <>
-              <Text style={styles.sectionTitle}>Recommandation</Text>
-              <View style={styles.quote} wrap={false}>
-                <Text style={styles.quoteText}>« {data.recommendationQuote} »</Text>
-                {data.recommendationAuthor ? (
-                  <Text style={styles.quoteAuthor}>— {data.recommendationAuthor}</Text>
-                ) : null}
-              </View>
-            </>
-          ) : null}
         </View>
       </Page>
+
+      {plan.page2 ? (
+        <Page size="A4" style={[styles.page, styles.page2]}>
+          <View fixed style={styles.sidebar} />
+
+          <View style={styles.main}>
+            {plan.page2.earlyExperiences.length > 0 ? (
+              <>
+                <Text style={styles.sectionTitle}>Premières expériences</Text>
+                {plan.page2.earlyExperiences.map((experience, index) => (
+                  <TimelineExperience
+                    key={`early-${index}`}
+                    experience={experience}
+                    isLast={index === plan.page2!.earlyExperiences.length - 1}
+                  />
+                ))}
+              </>
+            ) : null}
+
+            {plan.page2.qualifications.length > 0 ? (
+              <>
+                <Text style={styles.sectionTitle}>Formations</Text>
+                {plan.page2.qualifications.map((item, index) => (
+                  <View key={`qual-${index}`} style={styles.timelineItem} wrap={false}>
+                    <View style={styles.timelineMeta}>
+                      {item.organization ? (
+                        <Text style={styles.company}>{item.organization}</Text>
+                      ) : null}
+                      {item.yearLabel ? (
+                        <Text style={styles.dateLabel}>{item.yearLabel}</Text>
+                      ) : null}
+                    </View>
+                    <View style={styles.timelineRail}>
+                      <View style={styles.timelineDot} />
+                      {index === plan.page2!.qualifications.length - 1 ? null : (
+                        <View style={styles.timelineLine} />
+                      )}
+                    </View>
+                    <View style={styles.timelineContent}>
+                      <Text style={styles.jobTitle}>{item.title}</Text>
+                      {item.description ? (
+                        <Text style={styles.jobBody}>{item.description}</Text>
+                      ) : null}
+                    </View>
+                  </View>
+                ))}
+              </>
+            ) : null}
+
+            {plan.page2.recommendationQuote ? (
+              <>
+                <Text style={styles.sectionTitle}>Recommandation</Text>
+                <View style={styles.quote} wrap={false}>
+                  <Text style={styles.quoteText}>« {plan.page2.recommendationQuote} »</Text>
+                  {plan.page2.recommendationAuthor ? (
+                    <Text style={styles.quoteAuthor}>— {plan.page2.recommendationAuthor}</Text>
+                  ) : null}
+                </View>
+              </>
+            ) : null}
+          </View>
+        </Page>
+      ) : null}
     </Document>
   )
 }
