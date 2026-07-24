@@ -1,6 +1,6 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
-import type { CvCompetencyItem, CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
+import type { CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
 
 /** Palette alignée sur le design system du site (styles.css). */
 const colors = {
@@ -109,6 +109,24 @@ const styles = StyleSheet.create({
     color: colors.sidebarText,
     marginBottom: 3,
   },
+  sideCompetencyRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 4,
+  },
+  sideCompetencyName: {
+    flex: 1,
+    fontSize: 7.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.sidebarText,
+    paddingRight: 6,
+  },
+  sideCompetencyLevel: {
+    fontSize: 7.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.accentSoft,
+  },
   headerName: {
     fontSize: 20,
     fontFamily: 'Helvetica-Bold',
@@ -189,36 +207,6 @@ const styles = StyleSheet.create({
     lineHeight: 1.35,
     color: colors.muted,
   },
-  skillsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  skillCell: {
-    width: '48%',
-    marginBottom: 8,
-  },
-  skillName: {
-    fontSize: 7.5,
-    fontFamily: 'Helvetica-Bold',
-    color: colors.ink,
-    textTransform: 'uppercase',
-    marginBottom: 3,
-  },
-  barTrack: {
-    height: 3,
-    backgroundColor: colors.line,
-    marginBottom: 2,
-  },
-  barFill: {
-    height: 3,
-    backgroundColor: colors.accent,
-  },
-  skillHint: {
-    fontSize: 7,
-    color: colors.muted,
-    lineHeight: 1.3,
-  },
   quote: {
     marginTop: 2,
     padding: 8,
@@ -260,18 +248,6 @@ function TimelineExperience({
         <Text style={styles.jobTitle}>{experience.title}</Text>
         <Text style={styles.jobBody}>{experience.description}</Text>
       </View>
-    </View>
-  )
-}
-
-function SkillCell({ item }: { item: CvCompetencyItem }) {
-  return (
-    <View style={styles.skillCell} wrap={false}>
-      <Text style={styles.skillName}>{item.name}</Text>
-      <View style={styles.barTrack}>
-        <View style={[styles.barFill, { width: `${item.level}%` }]} />
-      </View>
-      <Text style={styles.skillHint}>{item.description}</Text>
     </View>
   )
 }
@@ -346,6 +322,18 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
                     <Text style={styles.langName}>{lang.name}</Text>
                     <Text style={styles.langLevel}>{lang.level}</Text>
                   </View>
+                </View>
+              ))}
+            </>
+          ) : null}
+
+          {data.competencies.length > 0 ? (
+            <>
+              <Text style={styles.sideSectionTitle}>Compétences</Text>
+              {data.competencies.map((item, index) => (
+                <View key={`comp-${index}`} style={styles.sideCompetencyRow} wrap={false}>
+                  <Text style={styles.sideCompetencyName}>{item.name}</Text>
+                  <Text style={styles.sideCompetencyLevel}>{item.level}%</Text>
                 </View>
               ))}
             </>
@@ -429,17 +417,6 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
                   </View>
                 </View>
               ))}
-            </>
-          ) : null}
-
-          {data.competencies.length > 0 ? (
-            <>
-              <Text style={styles.sectionTitle}>Compétences</Text>
-              <View style={styles.skillsGrid}>
-                {data.competencies.map((item, index) => (
-                  <SkillCell key={`skill-${index}`} item={item} />
-                ))}
-              </View>
             </>
           ) : null}
 
