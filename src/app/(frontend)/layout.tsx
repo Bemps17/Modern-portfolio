@@ -1,5 +1,5 @@
 import { Syne, DM_Sans, Space_Grotesk } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
