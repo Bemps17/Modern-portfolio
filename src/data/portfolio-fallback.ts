@@ -464,8 +464,20 @@ export const portfolioFallback = {
     },
     {
       id: 3,
+      title: 'Assistant Logistique & Planification',
+      company: 'Sonotra / Paprec CRV 17 / Groupe Hautier',
+      dateStart: '2023-06-01',
+      dateEnd: '2024-10-01',
+      current: false,
+      description:
+        'Optimisation et planification de circuits de collecte et des plannings chauffeurs. Saisie de données, gestion de la relation client/exploitation et traitement des flux.',
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 4,
       title: 'Chargé de projet informatique embarquée',
-      company: 'Transports Hautié',
+      company: 'Transports Hautier',
       dateStart: '2023-06-01',
       dateEnd: '2023-09-01',
       current: false,
@@ -475,7 +487,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 4,
+      id: 5,
       title: 'Alternance Infographiste Designer Web',
       company: 'La Casquette Digital',
       dateStart: '2023-02-01',
@@ -487,7 +499,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 5,
+      id: 6,
       title: 'Responsable de tournée marchés',
       company: 'Couleur Marché',
       dateStart: '2017-01-01',
@@ -499,7 +511,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 6,
+      id: 7,
       title: 'Freelance Infographiste multimédia',
       company: 'Auto-entrepreneur',
       dateStart: '2016-01-01',
@@ -511,7 +523,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 7,
+      id: 8,
       title: 'Attaché commercial / VRP B2B',
       company: 'Telenet, DJM, Paritel, Berner…',
       dateStart: '2006-01-01',
@@ -523,7 +535,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 8,
+      id: 9,
       title: 'Opérations terrain (intérim & saisonnier)',
       company: 'Logistique & événementiel',
       dateStart: '2001-01-01',
