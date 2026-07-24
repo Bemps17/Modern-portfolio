@@ -165,16 +165,11 @@ export const SEODefaults: GlobalConfig = {
     update: isAuthenticated,
   },
   fields: [
-    {
-      type: 'tabs',
-      tabs: [
-        { label: 'Général', fields: generalFields },
-        { label: 'Open Graph', fields: openGraphFields },
-        { label: 'Twitter', fields: twitterFields },
-        { label: 'Indexation', fields: indexingFields },
-        { label: 'JSON-LD', fields: structuredDataFields },
-      ],
-    },
+    { type: 'collapsible', label: 'Général', admin: { initCollapsed: false }, fields: generalFields },
+    { type: 'collapsible', label: 'Open Graph', admin: { initCollapsed: true }, fields: openGraphFields },
+    { type: 'collapsible', label: 'Twitter', admin: { initCollapsed: true }, fields: twitterFields },
+    { type: 'collapsible', label: 'Indexation', admin: { initCollapsed: true }, fields: indexingFields },
+    { type: 'collapsible', label: 'JSON-LD', admin: { initCollapsed: true }, fields: structuredDataFields },
   ],
   hooks: {
     afterChange: [revalidateGlobals],

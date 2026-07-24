@@ -383,17 +383,12 @@ export const SiteSettings: GlobalConfig = {
     update: isAuthenticated,
   },
   fields: [
-    {
-      type: 'tabs',
-      tabs: [
-        { label: 'Identité', fields: identityFields },
-        { label: 'Contact', fields: contactFields },
-        { label: 'Contenu', fields: contentFields },
-        { label: 'CV', fields: cvFields },
-        { label: 'Légal', fields: legalFields },
-        { label: 'Avancé', fields: advancedFields },
-      ],
-    },
+    { type: 'collapsible', label: 'Identité', admin: { initCollapsed: false }, fields: identityFields },
+    { type: 'collapsible', label: 'Contact', admin: { initCollapsed: true }, fields: contactFields },
+    { type: 'collapsible', label: 'Contenu', admin: { initCollapsed: true }, fields: contentFields },
+    { type: 'collapsible', label: 'CV', admin: { initCollapsed: true }, fields: cvFields },
+    { type: 'collapsible', label: 'Légal', admin: { initCollapsed: true }, fields: legalFields },
+    { type: 'collapsible', label: 'Avancé', admin: { initCollapsed: true }, fields: advancedFields },
   ],
   hooks: {
     afterChange: [revalidateGlobals],

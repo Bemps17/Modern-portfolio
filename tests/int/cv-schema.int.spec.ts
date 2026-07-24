@@ -17,8 +17,11 @@ function fieldNames(
       for (const tab of field.tabs) {
         if (tab.fields) names.push(...fieldNames(tab.fields as typeof fields))
       }
+    } else if (field.type === 'collapsible' && field.fields) {
+      names.push(...fieldNames(field.fields as typeof fields))
+    } else if (field.fields) {
+      names.push(...fieldNames(field.fields as typeof fields))
     }
-    if (field.fields) names.push(...fieldNames(field.fields as typeof fields))
   }
   return names
 }
@@ -26,7 +29,11 @@ function fieldNames(
 function findField(fieldName: string) {
   return SiteSettings.fields
     .flatMap((field) =>
-      'tabs' in field && field.tabs ? field.tabs.flatMap((tab) => tab.fields || []) : [field],
+      field.type === 'collapsible' && 'fields' in field && field.fields
+        ? field.fields
+        : 'tabs' in field && field.tabs
+          ? field.tabs.flatMap((tab) => tab.fields || [])
+          : [field],
     )
     .find((field) => 'name' in field && field.name === fieldName)
 }
