@@ -332,23 +332,6 @@ body {
   background: var(--brand-bg);
 }
 
-.card,
-.dashboard .card {
-  background: var(--brand-surface);
-  border: 1px solid var(--brand-border-subtle);
-  border-radius: var(--style-radius-m);
-  box-shadow: none;
-  transition:
-    border-color 120ms ease,
-    background-color 120ms ease;
-}
-
-.card:hover,
-.dashboard .card:hover {
-  border-color: var(--brand-border);
-  background: var(--brand-surface-2);
-}
-
 /* -------------------------------------------------------------------------- */
 /* 8. Tables / listes                                                          */
 /* -------------------------------------------------------------------------- */
@@ -564,36 +547,6 @@ body {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 14b. Bandeau synchro dashboard                                              */
-/* -------------------------------------------------------------------------- */
-
-.cms-sync-banner {
-  margin-bottom: 1.25rem;
-  padding: 0.9rem 1.1rem;
-  border-radius: var(--style-radius-m);
-  border: 1px solid var(--brand-border-subtle);
-  background: var(--brand-surface);
-  color: var(--brand-text-muted);
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
-.cms-sync-banner__title {
-  display: block;
-  color: var(--brand-text);
-  font-weight: 600;
-}
-
-.cms-sync-banner__text {
-  margin: 0.35rem 0 0;
-}
-
-.cms-sync-banner__text strong {
-  color: var(--brand-text);
-  font-weight: 600;
-}
-
-/* -------------------------------------------------------------------------- */
 /* 15. Scrollbars (WebKit) — discrètes                                         */
 /* -------------------------------------------------------------------------- */
 
@@ -618,109 +571,6 @@ body {
   background: var(--theme-elevation-350);
   background-clip: padding-box;
   border: 2px solid transparent;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 16. Dashboard hero — accès rapide                                           */
-/* -------------------------------------------------------------------------- */
-
-.admin-dashboard-hero {
-  margin-bottom: 1.25rem;
-  padding: 1.25rem;
-  border-radius: var(--style-radius-l);
-  border: 1px solid var(--brand-border-subtle);
-  background:
-    radial-gradient(120% 140% at 100% 0%, rgb(255 133 10 / 0.16), transparent 55%),
-    linear-gradient(160deg, var(--brand-surface) 0%, var(--brand-surface-2) 100%);
-  box-shadow: var(--brand-shadow-sm);
-}
-
-.admin-dashboard-hero__eyebrow {
-  margin: 0;
-  color: var(--brand-accent);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.admin-dashboard-hero__title {
-  margin: 0.35rem 0 0;
-  color: var(--brand-text);
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-}
-
-.admin-dashboard-hero__text {
-  margin: 0.55rem 0 0;
-  max-width: 42rem;
-  color: var(--brand-text-muted);
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-.admin-dashboard-hero__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.65rem;
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.admin-dashboard-hero__card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  min-height: 44px;
-  padding: 0.85rem 1rem;
-  border-radius: var(--style-radius-m);
-  border: 1px solid var(--brand-border-subtle);
-  background: color-mix(in srgb, var(--brand-bg) 55%, transparent);
-  color: inherit;
-  text-decoration: none;
-  transition:
-    border-color 140ms ease,
-    transform 140ms ease,
-    background-color 140ms ease,
-    box-shadow 140ms ease;
-}
-
-.admin-dashboard-hero__card:hover {
-  border-color: color-mix(in srgb, var(--brand-accent) 45%, var(--brand-border));
-  background: var(--brand-surface-3);
-  box-shadow: 0 0 0 1px rgb(255 133 10 / 0.12);
-  transform: translateY(-1px);
-}
-
-.admin-dashboard-hero__card-label {
-  color: var(--brand-text);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.admin-dashboard-hero__card-hint {
-  color: var(--brand-text-muted);
-  font-size: 0.78rem;
-}
-
-@media (min-width: 640px) {
-  .admin-dashboard-hero__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .admin-dashboard-hero {
-    padding: 1.5rem 1.65rem;
-  }
-
-  .admin-dashboard-hero__grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -751,43 +601,10 @@ body {
     padding-inline: 0.75rem;
   }
 
-  .dashboard .card,
-  .card {
-    border-radius: var(--style-radius-l);
-  }
-
   .collection-list__wrap,
   .document-fields__edit,
   .render-fields {
     padding-inline: 0.75rem;
-  }
-
-  .tabs-field__tabs-wrap,
-  .tabs-field__tabs {
-    gap: 0.35rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .tabs-field__tabs-wrap::-webkit-scrollbar,
-  .tabs-field__tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tabs-field__tab-button {
-    min-height: 44px;
-    white-space: nowrap;
-    border-radius: 999px;
-    border: 1px solid var(--brand-border-subtle);
-    background: var(--brand-surface-2);
-    padding-inline: 0.9rem;
-  }
-
-  .tabs-field__tab-button[aria-selected='true'] {
-    border-color: color-mix(in srgb, var(--brand-accent) 50%, var(--brand-border));
-    background: var(--brand-accent-muted);
-    color: var(--brand-text);
   }
 
   .form-submit,
@@ -862,5 +679,96 @@ body {
   .doc-tabs {
     overflow-x: auto;
     flex-wrap: nowrap;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Portfolio admin — composants custom UNIQUEMENT                                */
+/* -------------------------------------------------------------------------- */
+
+.portfolio-admin__welcome {
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--style-radius-l);
+  border: 1px solid var(--brand-border-subtle);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgb(255 133 10 / 0.14), transparent 55%),
+    var(--brand-surface);
+}
+
+.portfolio-admin__welcome-eyebrow {
+  margin: 0;
+  color: var(--brand-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portfolio-admin__welcome-title {
+  margin: 0.35rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--brand-text);
+}
+
+.portfolio-admin__welcome-text {
+  margin: 0.45rem 0 0;
+  color: var(--brand-text-muted);
+  font-size: 0.9rem;
+}
+
+.portfolio-admin__welcome-hint {
+  margin: 0.65rem 0 0;
+  color: var(--brand-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.portfolio-admin__security {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border-subtle);
+  background: var(--brand-surface-2);
+  color: var(--brand-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.portfolio-admin__security-title {
+  display: block;
+  color: var(--brand-text);
+  font-weight: 600;
+}
+
+.portfolio-admin__security-text {
+  margin: 0.35rem 0 0;
+}
+
+.portfolio-admin__security-text strong {
+  color: var(--brand-text);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .portfolio-admin__welcome,
+  .portfolio-admin__security {
+    margin-inline: 0;
+    border-radius: var(--style-radius-m);
+  }
+
+  .doc-controls__wrapper,
+  .form-submit {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    padding-block: 0.75rem;
+    background: linear-gradient(to top, var(--brand-bg) 72%, transparent);
+  }
+
+  .btn {
+    min-height: 44px;
   }
 }

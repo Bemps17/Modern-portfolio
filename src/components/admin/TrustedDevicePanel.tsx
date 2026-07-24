@@ -106,9 +106,9 @@ export default function TrustedDevicePanel() {
   }
 
   return (
-    <aside className="cms-sync-banner" style={{ marginTop: '0.75rem' }}>
-      <strong className="cms-sync-banner__title">Sécurité — appareils administrateur</strong>
-      <p className="cms-sync-banner__text">
+    <aside className="portfolio-admin__security" style={{ marginTop: '0.75rem' }}>
+      <strong className="portfolio-admin__security-title">Sécurité — appareils administrateur</strong>
+      <p className="portfolio-admin__security-text">
         Sans appareil enregistré, chaque accès au cadenas demande le mot de passe. Enregistrez cet
         appareil pour ouvrir l’admin directement depuis ce navigateur.
       </p>
@@ -125,7 +125,7 @@ export default function TrustedDevicePanel() {
       ) : (
         <>
           {isCurrentTrusted ? (
-            <p className="cms-sync-banner__text">
+            <p className="portfolio-admin__security-text">
               Cet appareil est <strong>enregistré</strong> comme administrateur.
             </p>
           ) : (
@@ -141,7 +141,7 @@ export default function TrustedDevicePanel() {
 
           {devices.length > 0 ? (
             <ul
-              className="cms-sync-banner__text"
+              className="portfolio-admin__security-text"
               style={{ marginTop: '0.75rem', paddingLeft: '1.1rem' }}
             >
               {devices.map((device) => (
@@ -167,7 +167,7 @@ export default function TrustedDevicePanel() {
               ))}
             </ul>
           ) : (
-            <p className="cms-sync-banner__text">Aucun appareil enregistré pour le moment.</p>
+            <p className="portfolio-admin__security-text">Aucun appareil enregistré pour le moment.</p>
           )}
 
           {devices.length > 1 ? (
@@ -183,9 +183,9 @@ export default function TrustedDevicePanel() {
         </>
       )}
 
-      {message ? <p className="cms-sync-banner__text">{message}</p> : null}
+      {message ? <p className="portfolio-admin__security-text">{message}</p> : null}
       {error ? (
-        <p className="cms-sync-banner__text" style={{ color: '#fca5a5' }}>
+        <p className="portfolio-admin__security-text" style={{ color: '#fca5a5' }}>
           {error}
         </p>
       ) : null}
