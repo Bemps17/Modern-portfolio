@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
+import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { PROJECT_CUTAWAY_STEPS, type CutawayStep } from '@/lib/project-cutaway'
 import { cn } from '@/lib/utils'
@@ -14,6 +15,9 @@ import { cn } from '@/lib/utils'
 type StarshipCutawayProps = {
   subtitle?: string | null
 }
+
+const METHOD_LEAD =
+  'Du brief client au frontend final : voici comment j’organise un projet, étape par étape — la même logique que le découpage d’une fusée en étages.'
 
 const LAYER_SPREAD = 18
 const STROKE = 'rgb(232 238 247 / 0.94)'
@@ -28,6 +32,8 @@ const SLICE_BOUNDS = [
   { y: 280, h: 100 },
   { y: 380, h: 130 },
 ] as const
+
+const MOBILE_STAGE_HEIGHTS = [14, 18, 20, 20, 24] as const
 
 type RocketSliceProps = {
   index: number
@@ -133,17 +139,14 @@ function StarshipSvg({
         onSelect={onSelect}
       >
         <path d="M90 90 H 150 V 180 H 90 Z" fill="none" stroke={stroke(1)} strokeWidth="1.5" />
-        {/* Damier 4×2 — cases orange */}
         <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="90" y="95" />
         <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="120" y="95" />
         <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="105" y="130" />
         <rect fill={ORANGE} height="35" opacity="0.92" width="15" x="135" y="130" />
-        {/* Damier — cases ivoire */}
         <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="105" y="95" />
         <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="135" y="95" />
         <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="90" y="130" />
         <rect fill={IVOIRE} height="35" opacity="0.16" width="15" x="120" y="130" />
-        {/* Grille du damier */}
         <g stroke={STROKE_DIM} strokeWidth="0.5">
           <path d="M105 95 V 165 M120 95 V 165 M135 95 V 165 M90 130 H 150" />
         </g>
@@ -158,7 +161,6 @@ function StarshipSvg({
       >
         <path d="M90 180 H 150 V 280 H 90 Z" fill="none" stroke={stroke(2)} strokeWidth="1.5" />
         <path d="M90 200 H 150 M90 260 H 150" stroke={STROKE_DIM} strokeWidth="0.7" />
-        {/* 3 hublots alignés */}
         <circle cx="102" cy="230" fill="none" r="6" stroke={STROKE} strokeWidth="1" />
         <circle cx="120" cy="230" fill="none" r="6" stroke={STROKE} strokeWidth="1" />
         <circle cx="138" cy="230" fill="none" r="6" stroke={STROKE} strokeWidth="1" />
@@ -176,7 +178,6 @@ function StarshipSvg({
       >
         <path d="M90 280 H 150 V 380 H 90 Z" fill="none" stroke={stroke(3)} strokeWidth="1.5" />
         <path d="M90 320 H 150 M90 360 H 150" stroke={STROKE_DIM} strokeWidth="0.7" />
-        {/* Rivets / panneaux d'accès */}
         <g fill={STROKE_DIM}>
           <circle cx="100" cy="300" r="1.2" />
           <circle cx="120" cy="300" r="1.2" />
@@ -185,7 +186,6 @@ function StarshipSvg({
           <circle cx="120" cy="340" r="1.2" />
           <circle cx="140" cy="340" r="1.2" />
         </g>
-        {/* Petit hublot moteur */}
         <rect fill="none" height="14" rx="2" stroke={STROKE_DIM} strokeWidth="0.7" width="22" x="109" y="358" />
       </RocketSlice>
 
@@ -196,24 +196,78 @@ function StarshipSvg({
         isLaunching={isLaunching}
         onSelect={onSelect}
       >
-        {/* Corps inférieur */}
         <path d="M90 380 H 150 V 440 H 90 Z" fill="none" stroke={stroke(4)} strokeWidth="1.5" />
-        {/* Base conique (rétrécie) */}
         <path d="M90 440 H 150 L 140 480 H 100 Z" fill="none" stroke={stroke(4)} strokeWidth="1.5" />
-        {/* 4 ailerons trapézoïdaux — damier orange/ivoire */}
         <path d="M90 400 L 55 445 L 78 445 L 90 415 Z" fill={ORANGE} opacity="0.85" stroke={stroke(4)} strokeWidth="1.2" />
         <path d="M90 420 L 80 450 L 90 450 Z" fill={IVOIRE} opacity="0.18" stroke={stroke(4)} strokeWidth="1" />
         <path d="M150 400 L 185 445 L 162 445 L 150 415 Z" fill={ORANGE} opacity="0.85" stroke={stroke(4)} strokeWidth="1.2" />
         <path d="M150 420 L 160 450 L 150 450 Z" fill={IVOIRE} opacity="0.18" stroke={stroke(4)} strokeWidth="1" />
-        {/* 3 buses */}
         <path d="M100 480 L 98 505 L 112 505 L 110 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
         <path d="M114 480 L 112 505 L 126 505 L 124 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
         <path d="M128 480 L 126 505 L 140 505 L 138 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
       </RocketSlice>
 
-      {/* Ligne centrale de coupe */}
       <line stroke={STROKE_DIM} strokeDasharray="4 3" strokeWidth="0.8" x1="120" x2="120" y1="22" y2="480" />
     </svg>
+  )
+}
+
+/** Mini-fusée verticale pour mobile — repère visuel des 5 étapes. */
+function MobileRocketTrack({
+  activeStage,
+  onSelect,
+}: {
+  activeStage: number
+  onSelect: (index: number) => void
+}) {
+  return (
+    <div
+      aria-label="Étapes de la méthode en forme de fusée"
+      className="flex shrink-0 flex-col items-center gap-0.5"
+      role="tablist"
+    >
+      {PROJECT_CUTAWAY_STEPS.map((step, index) => {
+        const isActive = activeStage === index
+        const isPast = index < activeStage
+
+        return (
+          <button
+            aria-label={`Étape ${index + 1} : ${step.title}`}
+            aria-selected={isActive}
+            className="group relative flex w-11 flex-col items-center"
+            key={step.id}
+            onClick={() => onSelect(index)}
+            role="tab"
+            type="button"
+          >
+            <span
+              className={cn(
+                'block w-full rounded-sm border transition',
+                index === 0 && 'rounded-t-full',
+                index === PROJECT_CUTAWAY_STEPS.length - 1 && 'rounded-b-md',
+                isActive
+                  ? 'border-[color:var(--accent)] bg-[var(--accent)]/25 shadow-[0_0_16px_var(--accent-glow)]'
+                  : isPast
+                    ? 'border-[color:var(--accent)]/35 bg-[var(--accent)]/10'
+                    : 'border-[color:var(--border)] bg-white/5 group-hover:border-[color:var(--accent)]/30',
+              )}
+              style={{ height: MOBILE_STAGE_HEIGHTS[index] }}
+            />
+            <span
+              className={cn(
+                'absolute -right-1 top-1/2 flex size-4 -translate-y-1/2 translate-x-full items-center justify-center rounded-full text-[9px] font-semibold tabular-nums',
+                isActive
+                  ? 'bg-[var(--accent)] text-black'
+                  : 'border border-[color:var(--border)] bg-[var(--background-elevated)] text-[var(--muted)]',
+              )}
+            >
+              {index + 1}
+            </span>
+          </button>
+        )
+      })}
+      <Rocket aria-hidden className="mt-1 size-3.5 text-[var(--accent-soft)]" />
+    </div>
   )
 }
 
@@ -231,21 +285,52 @@ function StageDetailCard({ step, className }: { step: CutawayStep; className?: s
   )
 }
 
-function MobileSlideContent({ step }: { step: CutawayStep }) {
+function MobileStepList({
+  activeStage,
+  onSelect,
+}: {
+  activeStage: number
+  onSelect: (index: number) => void
+}) {
   return (
-    <div className="w-full space-y-3">
-      <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--accent-soft)] uppercase">
-        {step.blueprintTag}
-      </p>
-      <p className="font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight text-[var(--foreground)]">
-        {step.title}
-      </p>
-      <p className="text-base leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
+    <div className="space-y-2">
+      {PROJECT_CUTAWAY_STEPS.map((step, index) => {
+        const isActive = activeStage === index
+
+        return (
+          <button
+            className={cn(
+              'flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition',
+              isActive
+                ? 'border-[color:var(--accent)]/45 bg-[var(--accent)]/10'
+                : 'border-[color:var(--border-subtle)] bg-black/10 hover:border-[color:var(--border)]',
+            )}
+            key={step.id}
+            onClick={() => onSelect(index)}
+            type="button"
+          >
+            <span
+              className={cn(
+                'flex size-7 shrink-0 items-center justify-center rounded-full font-[family-name:var(--font-space-grotesk)] text-[11px] font-semibold tabular-nums',
+                isActive ? 'bg-[var(--accent)] text-black' : 'border border-[color:var(--border)] text-[var(--muted)]',
+              )}
+            >
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-[family-name:var(--font-syne)] text-sm font-semibold text-[var(--foreground)]">
+                {step.title}
+              </span>
+              <span className="mt-0.5 block text-xs leading-snug text-[var(--muted)]">{step.blueprintTag}</span>
+            </span>
+          </button>
+        )
+      })}
     </div>
   )
 }
 
-function MobileCarousel({
+function MobileMethodPanel({
   activeStage,
   onSelect,
   onPrev,
@@ -259,61 +344,92 @@ function MobileCarousel({
   const step = PROJECT_CUTAWAY_STEPS[activeStage]
 
   return (
-    <div className="w-full space-y-5">
-      <div className="flex items-center justify-between gap-2">
-        <button
-          aria-label="Étape précédente"
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
-          disabled={activeStage === 0}
-          onClick={onPrev}
-          type="button"
-        >
-          <ChevronLeft aria-hidden className="size-5" />
-        </button>
-
-        <div className="flex flex-1 items-center justify-center gap-1.5">
-          {PROJECT_CUTAWAY_STEPS.map((_, index) => (
-            <button
-              aria-label={`Étape ${index + 1}`}
-              className={cn(
-                'h-2 rounded-full transition-all',
-                activeStage === index ? 'w-6 bg-[var(--accent)]' : 'w-2 bg-[var(--border)]',
-              )}
-              key={index}
-              onClick={() => onSelect(index)}
-              type="button"
-            />
-          ))}
+    <ReadableSurface as="section" aria-labelledby="method-mobile-title" bleed strong className="mt-8 xl:hidden">
+      <div className="space-y-6">
+        <div className="flex items-start gap-4">
+          <div
+            aria-hidden
+            className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-[color:var(--accent)]/35 bg-[var(--accent)]/10 text-[var(--accent-soft)]"
+          >
+            <Rocket className="size-5" />
+          </div>
+          <div className="min-w-0 space-y-2">
+            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase">
+              Méthode · {PROJECT_CUTAWAY_STEPS.length} étapes
+            </p>
+            <h2
+              className="font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight tracking-tight text-[var(--foreground)] sm:text-3xl"
+              id="method-mobile-title"
+            >
+              Ma méthode de travail
+            </h2>
+            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)] sm:text-base">{METHOD_LEAD}</p>
+          </div>
         </div>
 
-        <button
-          aria-label="Étape suivante"
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
-          disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
-          onClick={onNext}
-          type="button"
-        >
-          <ChevronRight aria-hidden className="size-5" />
-        </button>
+        <div className="rounded-2xl border border-[color:var(--border-subtle)] bg-black/15 p-4">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
+              Étape en cours
+            </p>
+            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tabular-nums text-[var(--accent-soft)]">
+              {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
+            </p>
+          </div>
+
+          <div className="flex gap-4">
+            <MobileRocketTrack activeStage={activeStage} onSelect={onSelect} />
+            <AnimatePresence mode="wait">
+              <motion.div
+                animate={{ opacity: 1, y: 0 }}
+                className="min-w-0 flex-1"
+                exit={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: 8 }}
+                key={step.id}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+              >
+                <StageDetailCard step={step} className="h-full border-[color:var(--accent)]/40" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-2">
+            <button
+              aria-label="Étape précédente"
+              className="inline-flex size-10 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
+              disabled={activeStage === 0}
+              onClick={onPrev}
+              type="button"
+            >
+              <ChevronLeft aria-hidden className="size-5" />
+            </button>
+            <p className="text-center text-xs text-[var(--muted)]">Balayez les étapes ou touchez la fusée</p>
+            <button
+              aria-label="Étape suivante"
+              className="inline-flex size-10 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
+              disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
+              onClick={onNext}
+              type="button"
+            >
+              <ChevronRight aria-hidden className="size-5" />
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-3 font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
+            Parcours complet
+          </p>
+          <MobileStepList activeStage={activeStage} onSelect={onSelect} />
+        </div>
+
+        <div className="flex justify-center pt-1">
+          <Button href="/contact" variant="glass">
+            Discuter de votre projet
+          </Button>
+        </div>
       </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          animate={{ opacity: 1, x: 0 }}
-          className="min-h-[9rem] w-full"
-          exit={{ opacity: 0, x: -20 }}
-          initial={{ opacity: 0, x: 20 }}
-          key={step.id}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-        >
-          <MobileSlideContent step={step} />
-        </motion.div>
-      </AnimatePresence>
-
-      <p className="text-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)]">
-        {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
-      </p>
-    </div>
+    </ReadableSurface>
   )
 }
 
@@ -370,7 +486,6 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   const [isLaunching, setIsLaunching] = useState(false)
   const [countdown, setCountdown] = useState<number | null>(null)
 
-  // Compte à rebours 3 → 2 → 1, puis décollage (machine à états, safe Strict Mode)
   useEffect(() => {
     if (countdown === null) return
 
@@ -386,7 +501,6 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
     return () => window.clearTimeout(timer)
   }, [countdown])
 
-  // Redirection après le vol
   useEffect(() => {
     if (!isLaunching) return
 
@@ -421,36 +535,33 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   }, [countdown, isLaunching, reduceMotion, router])
 
   const activeStep = PROJECT_CUTAWAY_STEPS[activeStage]
+  const desktopSubtitle =
+    subtitle ||
+    'Je centre chaque projet sur vos besoins — du brief au frontend final, étape par étape.'
 
   return (
     <Container as="section" className="py-12 sm:py-16 lg:py-20">
-      <SectionTitle
-        editorial
-        eyebrow="Méthode"
-        subtitle={
-          subtitle ||
-          'Je centre chaque projet sur vos besoins — du brief au frontend final, étape par étape.'
-        }
-        title="Découpez le projet"
-      />
-
-      {/* Mobile / tablette : diaporama pleine largeur, sans Lancer */}
-      <div className="relative left-1/2 mt-8 w-screen max-w-none -translate-x-1/2 px-4 sm:px-6 xl:hidden">
-        <MobileCarousel
-          activeStage={activeStage}
-          onNext={goNext}
-          onPrev={goPrev}
-          onSelect={selectStage}
+      <div className="hidden xl:block">
+        <SectionTitle
+          editorial
+          eyebrow="Méthode"
+          subtitle={desktopSubtitle}
+          title="Découpez le projet"
         />
       </div>
 
-      {/* Desktop (xl+) : fusée hybride + panneau + Lancer */}
+      <MobileMethodPanel
+        activeStage={activeStage}
+        onNext={goNext}
+        onPrev={goPrev}
+        onSelect={selectStage}
+      />
+
       <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[var(--background-elevated)] xl:block sm:mt-10">
         <div className="relative px-8 py-10">
           <div className="grid items-start gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
             <div className="flex flex-col items-center">
               <div className="relative w-full max-w-[340px]">
-                {/* Compte à rebours */}
                 <AnimatePresence>
                   {countdown !== null ? (
                     <motion.div
@@ -465,7 +576,6 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                     </motion.div>
                   ) : null}
                 </AnimatePresence>
-                {/* Fumée pré-décollage (moteurs qui s'allument pendant le compte à rebours) */}
                 <AnimatePresence>
                   {countdown !== null && !isLaunching ? (
                     <motion.div
@@ -477,7 +587,6 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                     />
                   ) : null}
                 </AnimatePresence>
-                {/* Fumée de décollage */}
                 <AnimatePresence>
                   {isLaunching ? (
                     <motion.div

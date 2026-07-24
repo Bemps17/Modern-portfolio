@@ -58,21 +58,23 @@ export function RevealText({
 
   return (
     <Tag className={className} ref={ref as never}>
-      {words.map((word, index) => (
-        <motion.span
-          className="mr-[0.28em] inline-block"
-          initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
-          animate={
-            visible
-              ? { opacity: 1, y: 0, filter: 'blur(0px)' }
-              : { opacity: 0, y: 18, filter: 'blur(6px)' }
-          }
-          key={`${word}-${index}`}
-          transition={{ duration: 0.45, delay: delay + index * 0.07, ease: 'easeOut' }}
-        >
-          {word}
-        </motion.span>
-      ))}
+      <span className="inline-flex flex-wrap gap-x-[0.35em] gap-y-1">
+        {words.map((word, index) => (
+          <motion.span
+            className="inline-block"
+            initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
+            animate={
+              visible
+                ? { opacity: 1, y: 0, filter: 'blur(0px)' }
+                : { opacity: 0, y: 18, filter: 'blur(6px)' }
+            }
+            key={`${word}-${index}`}
+            transition={{ duration: 0.45, delay: delay + index * 0.07, ease: 'easeOut' }}
+          >
+            {word}
+          </motion.span>
+        ))}
+      </span>
     </Tag>
   )
 }
