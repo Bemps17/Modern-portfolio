@@ -103,4 +103,10 @@ describe('Payload collections — smoke CRUD', () => {
     expect(seo.defaultTitle).toBeTruthy()
     expect(seo.defaultDescription).toBeTruthy()
   })
+
+  it('seo-defaults contient titleTemplate après seed shape', async () => {
+    const seo = await payload.findGlobal({ slug: 'seo-defaults', depth: 0 })
+    expect(seo).toHaveProperty('titleTemplate')
+    expect(seo).toHaveProperty('robotsIndex')
+  })
 })
