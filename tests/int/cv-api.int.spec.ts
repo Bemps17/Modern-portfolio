@@ -32,4 +32,17 @@ describe('GET /api/cv', () => {
     expect(disposition).toContain('inline')
     expect(disposition).toContain('.pdf')
   })
+
+  it('serves attachment disposition when download=1', async () => {
+    const { GET } = await import('../../src/app/api/cv/route')
+    const response = await GET(
+      new Request('http://localhost/api/cv?download=1', {
+        headers: { Accept: 'text/html' },
+      }),
+    )
+
+    expect(response.status).toBe(200)
+    const disposition = response.headers.get('Content-Disposition') || ''
+    expect(disposition).toContain('attachment')
+  })
 })

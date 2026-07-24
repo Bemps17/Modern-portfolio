@@ -25,6 +25,9 @@ function pdfFileName(fullName: string): string {
 
 function shouldInline(request: Request): boolean {
   const url = new URL(request.url)
+  // Téléchargement explicite (bouton « Télécharger »)
+  if (url.searchParams.get('download') === '1') return false
+  // Lien partagé / aperçu : PDF affichable dans le navigateur
   if (url.searchParams.get('preview') === '1') return true
 
   const accept = request.headers.get('accept') ?? ''

@@ -2,8 +2,9 @@ function trimTrailingSlash(url: string): string {
   return url.replace(/\/$/, '')
 }
 
+/** Lien partageable : PDF en aperçu inline (pas en téléchargement forcé). */
 export function buildCvShareUrl(siteUrl: string): string {
-  return `${trimTrailingSlash(siteUrl)}/api/cv`
+  return `${trimTrailingSlash(siteUrl)}/api/cv?preview=1`
 }
 
 export function buildMailtoShareUrl(cvUrl: string, fullName: string): string {
