@@ -41,6 +41,25 @@ export default buildConfig({
         images: [{ url: '/brand/favicon.png' }],
       },
     },
+    dashboard: {
+      widgets: [
+        {
+          slug: 'portfolio-welcome',
+          Component: '/components/admin/AdminWelcomeWidget',
+          minWidth: 'full',
+          maxWidth: 'full',
+        },
+        {
+          slug: 'collections',
+          Component: '@payloadcms/next/rsc#CollectionCards',
+          minWidth: 'full',
+        },
+      ],
+      defaultLayout: [
+        { widgetSlug: 'portfolio-welcome', width: 'full' },
+        { widgetSlug: 'collections', width: 'full' },
+      ],
+    },
     components: {
       graphics: {
         Logo: '/components/admin/Logo',
@@ -48,11 +67,7 @@ export default buildConfig({
       },
       /** Bouton header : force la revalidation du front + toast. */
       actions: ['/components/admin/RevalidateSiteButton'],
-      beforeDashboard: [
-        '/components/admin/AdminDashboardHero',
-        '/components/admin/CmsSyncBanner',
-        '/components/admin/TrustedDevicePanel',
-      ],
+      beforeDashboard: ['/components/admin/TrustedDevicePanel'],
     },
     /** Toasts de confirmation un peu plus visibles. */
     toast: {

@@ -24,9 +24,8 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../components/admin/Icon'
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { default as default_caa1618058b0d91ac86368a4b26b8c36 } from '../../../components/admin/RevalidateSiteButton'
-import { default as default_15ef46a6b2a1b616dc4cfedeac84ecc8 } from '../../../components/admin/AdminDashboardHero'
-import { default as default_2420b3ffc9fd7dd2e79b4cdba2c1b4e0 } from '../../../components/admin/CmsSyncBanner'
 import { default as default_b285ebec604c3425771e35779f5bff26 } from '../../../components/admin/TrustedDevicePanel'
+import { default as default_3c23bb8b7400c7bc02092a1b68884a76 } from '../../../components/admin/AdminWelcomeWidget'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -57,8 +56,7 @@ export const importMap = {
   "/components/admin/Icon#default": default_dfe4008080d895d460898c3a6155e9ba,
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/RevalidateSiteButton#default": default_caa1618058b0d91ac86368a4b26b8c36,
-  "/components/admin/AdminDashboardHero#default": default_15ef46a6b2a1b616dc4cfedeac84ecc8,
-  "/components/admin/CmsSyncBanner#default": default_2420b3ffc9fd7dd2e79b4cdba2c1b4e0,
   "/components/admin/TrustedDevicePanel#default": default_b285ebec604c3425771e35779f5bff26,
+  "/components/admin/AdminWelcomeWidget#default": default_3c23bb8b7400c7bc02092a1b68884a76,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
