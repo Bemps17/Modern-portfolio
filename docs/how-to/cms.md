@@ -39,6 +39,7 @@ Après changement de `admin.components` : `pnpm generate:importmap`.
 ## CV PDF
 
 Les champs **Profil CV** dans Paramètres du site (`phone`, `cvPitch`, compétences CV, langues, RQTH…) alimentent `GET /api/cv`.
+Sur `/a-propos` : **Visualiser** (aperçu), **Partager** (lien / e-mail / WhatsApp / LinkedIn), **Télécharger** (PDF).
 Le bouton « Télécharger le CV » sur `/a-propos` pointe vers cette route.
 Si un fichier PDF est uploadé dans le champ **CV**, il est servi à la place de la génération dynamique.
 

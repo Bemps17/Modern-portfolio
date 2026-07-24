@@ -1,7 +1,7 @@
 'use client'
 
 import { Download, Eye, Link2, Linkedin, Mail, Share2 } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState, useSyncExternalStore } from 'react'
 import { toast } from 'sonner'
 
 import { Modal } from '@/components/ui/Modal'
@@ -15,6 +15,18 @@ import { cn } from '@/lib/utils'
 type CvActionsProps = {
   shareUrl: string
   fullName: string
+}
+
+function subscribeNoop() {
+  return () => {}
+}
+
+function getCanNativeShareSnapshot() {
+  return typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+}
+
+function getCanNativeShareServerSnapshot() {
+  return false
 }
 
 const actionBase =
@@ -37,11 +49,11 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [downloading, setDownloading] = useState(false)
-  const [canNativeShare, setCanNativeShare] = useState(false)
-
-  useEffect(() => {
-    setCanNativeShare(typeof navigator.share === 'function')
-  }, [])
+  const canNativeShare = useSyncExternalStore(
+    subscribeNoop,
+    getCanNativeShareSnapshot,
+    getCanNativeShareServerSnapshot,
+  )
 
   const onDownload = useCallback(() => {
     setDownloading(true)
