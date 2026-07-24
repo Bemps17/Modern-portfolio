@@ -72,6 +72,7 @@ export interface Config {
     projects: Project;
     skills: Skill;
     experiences: Experience;
+    qualifications: Qualification;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +86,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     skills: SkillsSelect<false> | SkillsSelect<true>;
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
+    qualifications: QualificationsSelect<false> | QualificationsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -297,6 +299,18 @@ export interface Experience {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "qualifications".
+ */
+export interface Qualification {
+  id: number;
+  title: string;
+  institution?: string | null;
+  year: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Messages reçus via le formulaire de contact.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -353,6 +367,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'experiences';
         value: number | Experience;
+      } | null)
+    | ({
+        relationTo: 'qualifications';
+        value: number | Qualification;
       } | null)
     | ({
         relationTo: 'form-submissions';
@@ -528,6 +546,17 @@ export interface ExperiencesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "qualifications_select".
+ */
+export interface QualificationsSelect<T extends boolean = true> {
+  title?: T;
+  institution?: T;
+  year?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions_select".
  */
 export interface FormSubmissionsSelect<T extends boolean = true> {
@@ -642,6 +671,39 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Arguments différenciants (accordéon À propos).
+   */
+  whyMePoints?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Blocs compétences (accordéon À propos).
+   */
+  skillGroups?:
+    | {
+        title: string;
+        /**
+         * Liste séparée par des virgules.
+         */
+        items: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Initiatives perso sur la page À propos.
+   */
+  personalProjects?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -683,6 +745,27 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   availability?: T;
   availabilityLabel?: T;
   approachSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  whyMePoints?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  skillGroups?:
+    | T
+    | {
+        title?: T;
+        items?: T;
+        id?: T;
+      };
+  personalProjects?:
     | T
     | {
         title?: T;

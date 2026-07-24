@@ -11,7 +11,7 @@ import { Container } from '@/components/ui/Container'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { Button } from '@/components/ui/Button'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
-import { SITE_IMAGES } from '@/lib/site-images'
+import { cn } from '@/lib/utils'
 
 type HeroProps = {
   siteName: string
@@ -34,7 +34,7 @@ export function Hero({
   availabilityLabel,
   location,
 }: HeroProps) {
-  const portraitSrc = avatarUrl?.trim() || SITE_IMAGES.profile
+  const portraitSrc = avatarUrl?.trim() || null
   const portraitAlt = avatarAlt?.trim() || `Portrait de ${siteName}`
   const reduceMotion = useReducedMotion()
 
@@ -54,27 +54,37 @@ export function Hero({
       ) : null}
 
       <div
-        className="absolute inset-y-0 right-0 hidden w-[58%] lg:block"
+        className={cn(
+          'absolute inset-y-0 right-0 hidden w-[58%] lg:block',
+          !portraitSrc && 'hidden',
+        )}
         style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 100%, 0% 100%)' }}
       >
-        <Breathing className="relative h-full w-full">
-          <Image
-            alt={portraitAlt}
-            className="object-cover object-top"
-            data-cursor="view"
-            fill
-            priority
-            sizes="58vw"
-            src={portraitSrc}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[var(--background)]/80"
-          />
-        </Breathing>
+        {portraitSrc ? (
+          <Breathing className="relative h-full w-full">
+            <Image
+              alt={portraitAlt}
+              className="object-cover object-top"
+              data-cursor="view"
+              fill
+              priority
+              sizes="58vw"
+              src={portraitSrc}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[var(--background)]/80"
+            />
+          </Breathing>
+        ) : null}
       </div>
 
-      <div className="relative z-10 flex w-full flex-col justify-center py-20 lg:min-h-[100dvh] lg:w-[42%]">
+      <div
+        className={cn(
+          'relative z-10 flex w-full flex-col justify-center py-20 lg:min-h-[100dvh]',
+          portraitSrc ? 'lg:w-[42%]' : 'lg:w-full',
+        )}
+      >
         <Container>
           <ReadableSurface strong>
             <motion.div
@@ -128,27 +138,29 @@ export function Hero({
         </Container>
 
         <Container className="mt-8 lg:hidden">
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <ReadableSurface className="overflow-hidden p-0">
-              <div className="relative aspect-[3/4] w-full">
-                <Image
-                  alt={portraitAlt}
-                  className="object-cover object-top"
-                  fill
-                  sizes="90vw"
-                  src={portraitSrc}
-                />
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
-                />
-              </div>
-            </ReadableSurface>
-          </motion.div>
+          {portraitSrc ? (
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
+              animate={{ opacity: 1, y: 0, rotate: 0 }}
+              transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ReadableSurface className="overflow-hidden p-0">
+                <div className="relative aspect-[3/4] w-full">
+                  <Image
+                    alt={portraitAlt}
+                    className="object-cover object-top"
+                    fill
+                    sizes="90vw"
+                    src={portraitSrc}
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  />
+                </div>
+              </ReadableSurface>
+            </motion.div>
+          ) : null}
         </Container>
       </div>
     </section>

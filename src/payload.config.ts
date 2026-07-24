@@ -11,6 +11,7 @@ import { Experiences } from './collections/Experiences'
 import { FormSubmissions } from './collections/FormSubmissions'
 import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
+import { Qualifications } from './collections/Qualifications'
 import { Skills } from './collections/Skills'
 import { Users } from './collections/Users'
 import { SEODefaults } from './globals/SEODefaults'
@@ -63,7 +64,7 @@ export default buildConfig({
     fallbackLanguage: 'fr',
     supportedLanguages: { fr },
   },
-  collections: [Users, Media, Projects, Skills, Experiences, FormSubmissions],
+  collections: [Users, Media, Projects, Skills, Experiences, Qualifications, FormSubmissions],
   globals: [SiteSettings, SEODefaults],
   editor: lexicalEditor(),
   secret: getPayloadSecret(),
@@ -74,7 +75,7 @@ export default buildConfig({
     pool: {
       connectionString: getDatabaseUri(),
     },
-    push: process.env.NODE_ENV !== 'production',
+    push: process.env.PAYLOAD_DB_PUSH === 'true' || process.env.NODE_ENV !== 'production',
   }),
   sharp,
   plugins: [

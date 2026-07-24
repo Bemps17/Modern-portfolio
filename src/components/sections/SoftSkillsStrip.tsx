@@ -45,15 +45,11 @@ const chipClassName =
 
 export function SoftSkillsStrip({ skills, className }: SoftSkillsStripProps) {
   const reduceMotion = useReducedMotion()
-  const [revealed, setRevealed] = useState(reduceMotion === true)
+  const [revealed, setRevealed] = useState(() => reduceMotion === true)
 
   useEffect(() => {
-    if (reduceMotion) {
-      setRevealed(true)
-      return
-    }
-    setRevealed(true)
-    const timer = window.setTimeout(() => setRevealed(true), 1200)
+    if (reduceMotion) return
+    const timer = window.setTimeout(() => setRevealed(true), 120)
     return () => window.clearTimeout(timer)
   }, [reduceMotion])
 

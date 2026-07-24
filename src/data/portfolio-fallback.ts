@@ -1,4 +1,4 @@
-import type { Experience, Media, Project, Skill } from '@/payload-types'
+import type { Experience, Media, Project, Qualification, Skill } from '@/payload-types'
 
 const LEGACY_SITE = 'https://projet-refonte-portfolio-persov1-0.vercel.app'
 
@@ -367,7 +367,33 @@ export const portfolioFallback = {
     aboutIntro:
       'Web Designer Junior & Profil Polyvalent — une expertise unique forgée par 10+ ans d’expérience : Commercial B2B • Création Web • Logistique.',
     aboutBody:
-      'Mon parcours est atypique, et c’est ma plus grande force. Après plus de 10 ans dans le commerce et la logistique, j’ai pivoté vers le numérique. Cette expérience m’a appris la rigueur, la gestion de projet et l’importance de la relation client.',
+      'Mon parcours est atypique, et c’est ma plus grande force. Après plus de 10 ans dans le commerce et la logistique, j’ai pivoté vers le numérique. Cette expérience m’a appris la rigueur, la gestion de projet et l’importance de la relation client.\n\nDesigner-développeur avec près de 20 ans d’expérience cumulée (commercial, logistique, design et développement), je conçois des interfaces utiles et des sites performants. Le vibe coding et l’IA assistée accélèrent mes itérations sans sacrifier la qualité livrable.',
+    whyMePoints: [
+      { id: '1', title: 'Polyvalence', description: 'Commerce, logistique, design et dev — un seul interlocuteur.' },
+      { id: '2', title: 'Vision 360°', description: 'Du brief client au déploiement, avec le sens du résultat.' },
+      { id: '3', title: 'Innovation', description: 'Prototypage rapide, PWA et outils IA au service du produit.' },
+      { id: '4', title: 'Basé à La Rochelle', description: 'Disponible sur place, en remote ou en hybride.' },
+    ],
+    skillGroups: [
+      { id: '1', title: 'Design', items: 'Suite Adobe, Figma, UI/UX' },
+      { id: '2', title: 'Développement', items: 'HTML/CSS, JavaScript, WordPress, PWA' },
+      { id: '3', title: 'Commercial', items: 'Prospection, gestion client, négociation B2B' },
+      { id: '4', title: 'Méthodes', items: 'Agile, Git, prototypage, vibe coding' },
+    ],
+    personalProjects: [
+      {
+        id: '1',
+        title: 'PWA personnelle (2023–2025)',
+        description:
+          'Application web progressive pour organiser mes projets et ma veille — offline-first, itérations rapides.',
+      },
+      {
+        id: '2',
+        title: 'Veille techno & expérimentation',
+        description:
+          'Exploration continue des stacks modernes (Next.js, Payload, IA assistée) via side projects et contributions open source.',
+      },
+    ],
     location: 'La Rochelle · ouvert au remote',
     availability: 'available' as const,
     availabilityLabel: 'Disponible pour CDI / Freelance',
@@ -390,7 +416,7 @@ export const portfolioFallback = {
         description: 'Valider l’impact, itérer vite, documenter ce qui compte pour la suite.',
       },
     ],
-    /** Portrait CMS — null en démo (Hero utilise SITE_IMAGES.profile). */
+    /** Portrait CMS uniquement — null en mode démo (pas de fallback statique). */
     avatar: null,
     logo: null,
     favicon: null,
@@ -426,18 +452,42 @@ export const portfolioFallback = {
     },
     {
       id: 2,
-      title: 'Chargé de projet digital & Infographiste',
-      company: 'Freelance',
-      dateStart: '2023-01-01',
-      dateEnd: '2023-12-01',
+      title: 'Assistant logistique',
+      company: 'PAPREC — La Rochelle',
+      dateStart: '2023-10-01',
+      dateEnd: '2024-06-01',
       current: false,
       description:
-        'Sites WordPress/WooCommerce livrés clé en main. Maquettes Figma et intégration responsive HTML/CSS/JS. Développement de PWA internes via vibe coding (IA assistée).',
+        'Gestion des flux entrants et sortants, coordination avec les équipes terrain et suivi des indicateurs opérationnels. Rigoureux sur la traçabilité et la qualité de service.',
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     },
     {
       id: 3,
+      title: 'Chargé de projet informatique embarquée',
+      company: 'Transports Hautié',
+      dateStart: '2023-06-01',
+      dateEnd: '2023-09-01',
+      current: false,
+      description:
+        'Pilotage de solutions embarquées pour la flotte : cadrage besoin, coordination technique et déploiement terrain. Interface entre métiers transport et équipes IT.',
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 4,
+      title: 'Alternance Infographiste Designer Web',
+      company: 'La Casquette Digital',
+      dateStart: '2023-02-01',
+      dateEnd: '2023-03-01',
+      current: false,
+      description:
+        'Création de maquettes et intégration web responsive. Première immersion en agence digitale : workflow design → intégration → livraison client.',
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 5,
       title: 'Responsable de tournée marchés',
       company: 'Couleur Marché',
       dateStart: '2017-01-01',
@@ -449,7 +499,19 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 4,
+      id: 6,
+      title: 'Freelance Infographiste multimédia',
+      company: 'Auto-entrepreneur',
+      dateStart: '2016-01-01',
+      dateEnd: '2017-12-01',
+      current: false,
+      description:
+        'Identités visuelles, supports print et motion pour TPE/PME. Gestion complète de la relation client : brief, production et livraison.',
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 7,
       title: 'Attaché commercial / VRP B2B',
       company: 'Telenet, DJM, Paritel, Berner…',
       dateStart: '2006-01-01',
@@ -461,7 +523,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 5,
+      id: 8,
       title: 'Opérations terrain (intérim & saisonnier)',
       company: 'Logistique & événementiel',
       dateStart: '2001-01-01',
@@ -473,6 +535,32 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
   ] satisfies Experience[],
+  qualifications: [
+    {
+      id: 1,
+      title: 'Certification Infographiste Designer Web (Niveau 5)',
+      institution: 'AP Formation',
+      year: 2023,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 2,
+      title: 'Titre Professionnel Attaché Commercial (Niveau 4)',
+      institution: 'AFPA Poitiers',
+      year: 2007,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 3,
+      title: 'Bac économique et social',
+      institution: null,
+      year: 2003,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+  ] satisfies Qualification[],
   skills: [
     { id: 1, name: 'HTML5', category: 'frontend' },
     { id: 2, name: 'CSS3', category: 'frontend' },

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 
+import { AboutHighlightsAccordion } from '@/components/sections/AboutHighlightsAccordion'
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
-import { SkillBadgeList } from '@/components/sections/SkillBadgeList'
+import { PersonalProjectsList } from '@/components/sections/PersonalProjectsList'
+import { QualificationsList } from '@/components/sections/QualificationsList'
 import { SoftSkillsStrip } from '@/components/sections/SoftSkillsStrip'
 import { StatsStrip } from '@/components/sections/StatsStrip'
 import { Container } from '@/components/ui/Container'
@@ -11,14 +13,14 @@ import { SectionTitle } from '@/components/ui/SectionTitle'
 import {
   getExperiences,
   getPublishedProjects,
+  getQualifications,
   getSiteSettingsContent,
   getSkills,
 } from '@/lib/content'
 import { JsonLd, personJsonLd } from '@/lib/json-ld'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
-import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
-import { getTechnicalSkills, resolveSoftSkills } from '@/lib/skills'
+import { resolveSoftSkills } from '@/lib/skills'
 import type { Experience } from '@/payload-types'
 
 export const revalidate = 3600
@@ -43,20 +45,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const [settings, experiences, skills, projects] = await Promise.all([
+  const [settings, experiences, skills, projects, qualifications] = await Promise.all([
     getSiteSettingsContent(),
     getExperiences(),
     getSkills(),
     getPublishedProjects(),
+    getQualifications(),
   ])
 
-  const portraitSrc = resolveMediaUrl(settings?.avatar) || SITE_IMAGES.profile
+  const portraitSrc = resolveMediaUrl(settings?.avatar)
   const portraitAlt =
     (isMedia(settings?.avatar) ? settings.avatar.alt : null) ||
     (settings?.siteName ? `Portrait de ${settings.siteName}` : 'Portrait')
 
   const softSkills = resolveSoftSkills(skills)
-  const technicalSkills = getTechnicalSkills(skills)
+  const whyMePoints = settings?.whyMePoints ?? []
+  const skillGroups = settings?.skillGroups ?? []
+  const personalProjects = settings?.personalProjects ?? []
 
   const jsonLd = personJsonLd({
     name: settings?.siteName,
@@ -64,13 +69,23 @@ export default async function AboutPage() {
     description: settings?.aboutIntro || settings?.tagline,
     url: getSiteUrl(),
     sameAs: (settings?.socialLinks || []).map((link) => link.url).filter(Boolean) as string[],
-    image: portraitSrc.startsWith('http') ? portraitSrc : `${getSiteUrl()}${portraitSrc}`,
+    image: portraitSrc
+      ? portraitSrc.startsWith('http')
+        ? portraitSrc
+        : `${getSiteUrl()}${portraitSrc}`
+      : undefined,
   })
 
   return (
     <Container className="space-y-10 py-12 sm:space-y-16 sm:py-16">
       <JsonLd data={jsonLd} />
-      <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10">
+      <section
+        className={
+          portraitSrc
+            ? 'grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10'
+            : 'grid items-start gap-8'
+        }
+      >
         <ReadableSurface className="space-y-8" strong>
           <SoftSkillsStrip skills={softSkills} />
           <div className="space-y-5 border-t border-[color:var(--border-subtle)] pt-8">
@@ -94,16 +109,19 @@ export default async function AboutPage() {
             ) : null}
           </div>
         </ReadableSurface>
-        <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
-          <Image
-            alt={portraitAlt}
-            className="object-cover object-top"
-            fill
-            sizes="280px"
-            src={portraitSrc}
-          />
-        </div>
+        {portraitSrc ? (
+          <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-[color:var(--accent)]/20 lg:mx-0">
+            <Image
+              alt={portraitAlt}
+              className="object-cover object-top"
+              fill
+              sizes="280px"
+              src={portraitSrc}
+            />
+          </div>
+        ) : null}
       </section>
+      <AboutHighlightsAccordion skillGroups={skillGroups} whyMePoints={whyMePoints} />
       <ReadableSurface as="section">
         <SectionTitle
           eyebrow="En chiffres"
@@ -122,11 +140,20 @@ export default async function AboutPage() {
       </ReadableSurface>
       <ReadableSurface as="section">
         <SectionTitle
-          subtitle="Les outils avec lesquels je livre le plus souvent."
-          title="Compétences"
+          subtitle="Diplômes, certifications et bases académiques."
+          title="Formation & certifications"
         />
-        <SkillBadgeList skills={technicalSkills} />
+        <QualificationsList qualifications={qualifications} />
       </ReadableSurface>
+      {personalProjects.length ? (
+        <ReadableSurface as="section">
+          <SectionTitle
+            subtitle="Initiatives perso, veille et expérimentation."
+            title="Projets personnels"
+          />
+          <PersonalProjectsList projects={personalProjects} />
+        </ReadableSurface>
+      ) : null}
     </Container>
   )
 }

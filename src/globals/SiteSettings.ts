@@ -152,6 +152,48 @@ export const SiteSettings: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'whyMePoints',
+      type: 'array',
+      labels: { singular: 'Argument', plural: 'Pourquoi moi' },
+      admin: {
+        description: 'Arguments différenciants (accordéon À propos).',
+      },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Titre' },
+        { name: 'description', type: 'text', label: 'Complément' },
+      ],
+    },
+    {
+      name: 'skillGroups',
+      type: 'array',
+      labels: { singular: 'Famille', plural: 'Compétences (à propos)' },
+      admin: {
+        description: 'Blocs compétences (accordéon À propos).',
+      },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Catégorie' },
+        {
+          name: 'items',
+          type: 'text',
+          required: true,
+          label: 'Compétences',
+          admin: { description: 'Liste séparée par des virgules.' },
+        },
+      ],
+    },
+    {
+      name: 'personalProjects',
+      type: 'array',
+      labels: { singular: 'Projet personnel', plural: 'Projets personnels' },
+      admin: {
+        description: 'Initiatives perso sur la page À propos.',
+      },
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Titre' },
+        { name: 'description', type: 'textarea', required: true, label: 'Description' },
+      ],
+    },
   ],
   hooks: {
     afterChange: [revalidateGlobals],

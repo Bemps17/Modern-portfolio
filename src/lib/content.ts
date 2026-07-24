@@ -1,5 +1,5 @@
 import { portfolioFallback } from '@/data/portfolio-fallback'
-import type { Experience, Project, Skill } from '@/payload-types'
+import type { Experience, Project, Qualification, Skill } from '@/payload-types'
 
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
@@ -95,6 +95,21 @@ export async function getExperiences(): Promise<Experience[]> {
     return result.docs
   }
   return portfolioFallback.experiences
+}
+
+export async function getQualifications(): Promise<Qualification[]> {
+  const payload = await getPayloadClientSafe()
+  if (payload) {
+    const result = await payload
+      .find({
+        collection: 'qualifications',
+        sort: '-year',
+        limit: 50,
+      })
+      .catch(() => ({ docs: portfolioFallback.qualifications }))
+    return result.docs
+  }
+  return portfolioFallback.qualifications
 }
 
 export async function getSkills(): Promise<Skill[]> {

@@ -186,15 +186,118 @@ async function upsertProject(
   })
 }
 
+async function upsertSkill(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  skill: (typeof portfolioFallback.skills)[number],
+) {
+  const existing = await payload.find({
+    collection: 'skills',
+    where: { name: { equals: skill.name } },
+    limit: 1,
+  })
+
+  const data = {
+    name: skill.name,
+    category: skill.category,
+  }
+
+  if (existing.docs[0]) {
+    await payload.update({
+      collection: 'skills',
+      id: existing.docs[0].id,
+      data,
+    })
+    return
+  }
+
+  await payload.create({
+    collection: 'skills',
+    data,
+  })
+}
+
+async function upsertExperience(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  experience: (typeof portfolioFallback.experiences)[number],
+) {
+  const existing = await payload.find({
+    collection: 'experiences',
+    where: {
+      and: [
+        { title: { equals: experience.title } },
+        { company: { equals: experience.company } },
+      ],
+    },
+    limit: 1,
+  })
+
+  const data = {
+    title: experience.title,
+    company: experience.company,
+    dateStart: experience.dateStart,
+    dateEnd: experience.dateEnd,
+    current: experience.current,
+    description: experience.description,
+  }
+
+  if (existing.docs[0]) {
+    await payload.update({
+      collection: 'experiences',
+      id: existing.docs[0].id,
+      data,
+    })
+    return
+  }
+
+  await payload.create({
+    collection: 'experiences',
+    data,
+  })
+}
+
+async function upsertQualification(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  qualification: (typeof portfolioFallback.qualifications)[number],
+) {
+  const existing = await payload.find({
+    collection: 'qualifications',
+    where: {
+      and: [
+        { title: { equals: qualification.title } },
+        { year: { equals: qualification.year } },
+      ],
+    },
+    limit: 1,
+  })
+
+  const data = {
+    title: qualification.title,
+    institution: qualification.institution,
+    year: qualification.year,
+  }
+
+  if (existing.docs[0]) {
+    await payload.update({
+      collection: 'qualifications',
+      id: existing.docs[0].id,
+      data,
+    })
+    return
+  }
+
+  await payload.create({
+    collection: 'qualifications',
+    data,
+  })
+}
+
 async function seed() {
   if (!process.env.DATABASE_URI || !process.env.PAYLOAD_SECRET) {
     throw new Error('DATABASE_URI and PAYLOAD_SECRET are required')
   }
 
   const payload = await getPayload({ config })
-  const { siteSettings, seoDefaults, projects, experiences, skills } = portfolioFallback
-
-  const existingProjects = await payload.find({ collection: 'projects', limit: 1 })
+  const { siteSettings, seoDefaults, projects, experiences, qualifications, skills } = portfolioFallback
 
   console.log('Seeding site settings…')
   await payload.updateGlobal({
@@ -203,6 +306,14 @@ async function seed() {
       siteName: siteSettings.siteName,
       tagline: siteSettings.tagline,
       aboutIntro: siteSettings.aboutIntro,
+      aboutBody: siteSettings.aboutBody,
+      location: siteSettings.location,
+      availability: siteSettings.availability,
+      availabilityLabel: siteSettings.availabilityLabel,
+      approachSteps: siteSettings.approachSteps,
+      whyMePoints: siteSettings.whyMePoints,
+      skillGroups: siteSettings.skillGroups,
+      personalProjects: siteSettings.personalProjects,
       email: siteSettings.email,
       socialLinks: siteSettings.socialLinks,
     },
@@ -216,34 +327,19 @@ async function seed() {
     },
   })
 
-  console.log('Seeding skills…')
-  if (existingProjects.totalDocs === 0) {
-    for (const skill of skills) {
-      await payload.create({
-        collection: 'skills',
-        data: {
-          name: skill.name,
-          category: skill.category,
-        },
-      })
-    }
+  console.log('Syncing skills…')
+  for (const skill of skills) {
+    await upsertSkill(payload, skill)
   }
 
-  console.log('Seeding experiences…')
-  if (existingProjects.totalDocs === 0) {
-    for (const experience of experiences) {
-      await payload.create({
-        collection: 'experiences',
-        data: {
-          title: experience.title,
-          company: experience.company,
-          dateStart: experience.dateStart,
-          dateEnd: experience.dateEnd,
-          current: experience.current,
-          description: experience.description,
-        },
-      })
-    }
+  console.log('Syncing experiences…')
+  for (const experience of experiences) {
+    await upsertExperience(payload, experience)
+  }
+
+  console.log('Syncing qualifications…')
+  for (const qualification of qualifications) {
+    await upsertQualification(payload, qualification)
   }
 
   console.log('Syncing projects…')

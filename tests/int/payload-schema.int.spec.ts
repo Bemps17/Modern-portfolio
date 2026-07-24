@@ -5,6 +5,7 @@ import { Experiences } from '@/collections/Experiences'
 import { FormSubmissions } from '@/collections/FormSubmissions'
 import { Media } from '@/collections/Media'
 import { Projects } from '@/collections/Projects'
+import { Qualifications } from '@/collections/Qualifications'
 import { Skills } from '@/collections/Skills'
 import { Users } from '@/collections/Users'
 import { SEODefaults } from '@/globals/SEODefaults'
@@ -21,6 +22,7 @@ describe('Payload schema — collections & globals', () => {
     expect(Projects.slug).toBe('projects')
     expect(Skills.slug).toBe('skills')
     expect(Experiences.slug).toBe('experiences')
+    expect(Qualifications.slug).toBe('qualifications')
     expect(FormSubmissions.slug).toBe('form-submissions')
   })
 
@@ -46,6 +48,9 @@ describe('Payload schema — collections & globals', () => {
         'availability',
         'availabilityLabel',
         'approachSteps',
+        'whyMePoints',
+        'skillGroups',
+        'personalProjects',
       ]),
     )
     const avatar = SiteSettings.fields.find((field) => 'name' in field && field.name === 'avatar')

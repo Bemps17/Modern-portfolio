@@ -19,7 +19,6 @@ import {
 } from '@/lib/content'
 import { JsonLd, personJsonLd, websiteJsonLd } from '@/lib/json-ld'
 import { resolveMediaUrl, isMedia } from '@/lib/media'
-import { SITE_IMAGES } from '@/lib/site-images'
 import { getSiteUrl } from '@/lib/site-url'
 import { getTechnicalSkills } from '@/lib/skills'
 
@@ -61,7 +60,7 @@ export default async function HomePage() {
   const siteName = settings?.siteName || 'Portfolio'
   const tagline = settings?.tagline || 'Créateur digital'
   const aboutIntro = settings?.aboutIntro
-  const avatarUrl = resolveMediaUrl(settings?.avatar) || SITE_IMAGES.profile
+  const avatarUrl = resolveMediaUrl(settings?.avatar) || null
   const avatarAlt = isMedia(settings?.avatar) ? settings.avatar.alt : null
   const techItems = getTechnicalSkills(skills).map((skill) => skill.name)
   const siteUrl = getSiteUrl()
@@ -89,7 +88,11 @@ export default async function HomePage() {
           description: aboutIntro || tagline,
           url: siteUrl,
           sameAs,
-          image: avatarUrl.startsWith('http') ? avatarUrl : `${siteUrl}${avatarUrl}`,
+          image: avatarUrl
+            ? avatarUrl.startsWith('http')
+              ? avatarUrl
+              : `${siteUrl}${avatarUrl}`
+            : undefined,
         })}
       />
       <Hero
