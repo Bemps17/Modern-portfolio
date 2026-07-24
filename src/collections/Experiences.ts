@@ -54,6 +54,17 @@ export const Experiences: CollectionConfig = {
       name: 'current',
       type: 'checkbox',
       defaultValue: false,
+      label: 'Poste actuel',
+    },
+    {
+      name: 'earlyCareer',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Premières expériences',
+      admin: {
+        description: 'Affiché dans l’accordéon « Premières expériences » (parcours ancien).',
+        position: 'sidebar',
+      },
     },
     {
       name: 'description',

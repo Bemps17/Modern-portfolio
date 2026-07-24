@@ -294,6 +294,10 @@ export interface Experience {
   dateStart: string;
   dateEnd?: string | null;
   current?: boolean | null;
+  /**
+   * Affiché dans l’accordéon « Premières expériences » (parcours ancien).
+   */
+  earlyCareer?: boolean | null;
   description: string;
   updatedAt: string;
   createdAt: string;
@@ -540,6 +544,7 @@ export interface ExperiencesSelect<T extends boolean = true> {
   dateStart?: T;
   dateEnd?: T;
   current?: T;
+  earlyCareer?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -237,6 +237,7 @@ async function upsertExperience(
     dateStart: experience.dateStart,
     dateEnd: experience.dateEnd,
     current: experience.current,
+    earlyCareer: Boolean(experience.earlyCareer),
     description: experience.description,
   }
 
@@ -341,6 +342,20 @@ async function seed() {
   console.log('Syncing experiences…')
   for (const experience of experiences) {
     await upsertExperience(payload, experience)
+  }
+
+  // Retire les entrées agrégées remplacées par le détail « premières expériences »
+  const obsoleteCompanies = ['Telenet, DJM, Paritel, Berner…', 'Logistique & événementiel']
+  for (const company of obsoleteCompanies) {
+    const obsolete = await payload.find({
+      collection: 'experiences',
+      where: { company: { equals: company } },
+      limit: 10,
+    })
+    for (const doc of obsolete.docs) {
+      await payload.delete({ collection: 'experiences', id: doc.id })
+      console.log(`Removed obsolete experience: ${doc.title} @ ${company}`)
+    }
   }
 
   console.log('Syncing qualifications…')

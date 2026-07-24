@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 
 import { AboutHighlightsAccordion } from '@/components/sections/AboutHighlightsAccordion'
+import { EarlyCareerAccordion } from '@/components/sections/EarlyCareerAccordion'
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { PersonalProjectsList } from '@/components/sections/PersonalProjectsList'
 import { QualificationsList } from '@/components/sections/QualificationsList'
@@ -65,6 +66,8 @@ export default async function AboutPage() {
   const whyMePoints = settings?.whyMePoints ?? []
   const skillGroups = settings?.skillGroups ?? []
   const personalProjects = settings?.personalProjects ?? []
+  const recentExperiences = experiences.filter((experience) => !experience.earlyCareer)
+  const earlyExperiences = experiences.filter((experience) => experience.earlyCareer)
 
   const jsonLd = personJsonLd({
     name: settings?.siteName,
@@ -147,8 +150,10 @@ export default async function AboutPage() {
 
       <ReadableSurface as="section">
         <SectionTitle title="Parcours" />
-        <ExperienceTimeline experiences={experiences} />
+        <ExperienceTimeline experiences={recentExperiences} />
       </ReadableSurface>
+
+      <EarlyCareerAccordion experiences={earlyExperiences} />
 
       <ReadableSurface as="section">
         <SectionTitle
