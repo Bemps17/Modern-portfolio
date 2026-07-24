@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Home } from 'lucide-react'
+import { Lock } from 'lucide-react'
 
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { Container } from '@/components/ui/Container'
@@ -52,7 +52,7 @@ export function Footer({
                 prefetch={false}
                 title={adminLinkTitle}
               >
-                <Home aria-hidden className="h-4 w-4" />
+                <Lock aria-hidden className="h-4 w-4" />
               </Link>
             ) : null}
           </div>
