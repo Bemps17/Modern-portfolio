@@ -15,7 +15,13 @@ export function CvDownloadButton({
   label = 'Télécharger le CV (PDF)',
 }: CvDownloadButtonProps) {
   return (
-    <a className={cn(glassClasses, className)} data-cursor="link" href="/api/cv" rel="noopener">
+    <a
+      className={cn(glassClasses, className)}
+      data-cursor="link"
+      download
+      href="/api/cv"
+      rel="noopener"
+    >
       <Download aria-hidden className="size-4 shrink-0" />
       <span>{label}</span>
     </a>

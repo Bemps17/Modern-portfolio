@@ -36,6 +36,12 @@ Après changement de `admin.components` : `pnpm generate:importmap`.
 - `site-settings` — nom, tagline, **logo**, **favicon**, avatar, email, réseaux, intro à propos, **disponibilité**, **localisation**, **approche**, **aboutBody**
 - `seo-defaults` — titre/description/OG par défaut
 
+## CV PDF
+
+Les champs **Profil CV** dans Paramètres du site (`phone`, `cvPitch`, compétences CV, langues, RQTH…) alimentent `GET /api/cv`.
+Le bouton « Télécharger le CV » sur `/a-propos` pointe vers cette route.
+Si un fichier PDF est uploadé dans le champ **CV**, il est servi à la place de la génération dynamique.
+
 ## Accueil (structure v0.8)
 
 1. Hero — brand + badge disponibilité + CTAs  

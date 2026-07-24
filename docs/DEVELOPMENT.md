@@ -45,6 +45,12 @@ src/lib/content.ts    # Couche données (CMS ou fallback)
 | `pnpm generate:types` après modif schéma | ✅ |
 | Mode démo sans env (`portfolio-fallback.ts`) | ✅ [ADR 002](decisions/002-demo-mode-without-env.md) |
 
+### Routes API (front)
+
+| Route | Rôle | Statut |
+|---|---|---|
+| `GET /api/cv` | PDF CV dynamique (override si `site-settings.cv` uploadé) | ✅ |
+
 ---
 
 ## UI & accessibilité
