@@ -17,29 +17,31 @@ const colors = {
   timeline: '#c4bfb8',
 }
 
-const SIDEBAR_WIDTH = 190
+const SIDEBAR_WIDTH = 185
 
 const styles = StyleSheet.create({
   page: {
-    flexDirection: 'row',
+    paddingLeft: SIDEBAR_WIDTH,
     fontSize: 9.5,
     fontFamily: 'Helvetica',
     color: colors.ink,
     backgroundColor: colors.page,
   },
   sidebar: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
     width: SIDEBAR_WIDTH,
     backgroundColor: colors.sidebar,
     paddingTop: 28,
-    paddingBottom: 28,
+    paddingBottom: 24,
     paddingHorizontal: 16,
-    color: colors.sidebarText,
   },
   main: {
-    flex: 1,
     paddingTop: 28,
     paddingBottom: 28,
-    paddingHorizontal: 24,
+    paddingHorizontal: 22,
   },
   brandMark: {
     width: 28,
@@ -53,33 +55,36 @@ const styles = StyleSheet.create({
     color: colors.accentSoft,
     textTransform: 'uppercase',
     letterSpacing: 1.2,
-    marginTop: 16,
+    marginTop: 14,
     marginBottom: 6,
     paddingBottom: 4,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,107,26,0.35)',
   },
   sideBody: {
-    fontSize: 8.5,
-    lineHeight: 1.45,
+    fontSize: 8,
+    lineHeight: 1.4,
     color: colors.sidebarMuted,
   },
   sideContact: {
-    fontSize: 8.5,
-    lineHeight: 1.5,
+    fontSize: 8,
+    lineHeight: 1.45,
     color: colors.sidebarText,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   sideLabel: {
-    fontSize: 7.5,
+    fontSize: 7,
     color: colors.accent,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
     marginBottom: 1,
   },
+  sideBlock: {
+    marginBottom: 6,
+  },
   langRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 5,
   },
   bullet: {
@@ -88,88 +93,65 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: colors.accent,
     marginRight: 6,
+    marginTop: 2,
   },
   langName: {
-    fontSize: 8.5,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: colors.sidebarText,
   },
   langLevel: {
-    fontSize: 7.5,
-    color: colors.sidebarMuted,
-  },
-  competencyBlock: {
-    marginBottom: 8,
-  },
-  competencyName: {
-    fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
-    color: colors.sidebarText,
-    marginBottom: 3,
-    textTransform: 'uppercase',
-  },
-  barTrack: {
-    height: 3,
-    backgroundColor: 'rgba(248,244,239,0.15)',
-    marginBottom: 2,
-  },
-  barFill: {
-    height: 3,
-    backgroundColor: colors.accent,
-  },
-  competencyHint: {
     fontSize: 7,
     color: colors.sidebarMuted,
-    lineHeight: 1.3,
+  },
+  interestChip: {
+    fontSize: 7.5,
+    color: colors.sidebarText,
+    marginBottom: 3,
   },
   headerName: {
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   headerTagline: {
-    fontSize: 10,
+    fontSize: 9.5,
     color: colors.accent,
     textTransform: 'uppercase',
-    letterSpacing: 1.4,
-    marginBottom: 14,
+    letterSpacing: 1.2,
+    marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 10,
+    fontSize: 9.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginTop: 12,
-    marginBottom: 8,
-    paddingBottom: 4,
+    marginTop: 10,
+    marginBottom: 7,
+    paddingBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: colors.line,
   },
-  body: {
-    fontSize: 9,
-    lineHeight: 1.45,
-    color: colors.ink,
-  },
   timelineItem: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   timelineMeta: {
-    width: 88,
-    paddingRight: 8,
+    width: 82,
+    paddingRight: 6,
   },
   timelineRail: {
-    width: 12,
+    width: 10,
     alignItems: 'center',
   },
   timelineDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.accent,
     marginTop: 2,
   },
@@ -177,35 +159,65 @@ const styles = StyleSheet.create({
     width: 1.5,
     flexGrow: 1,
     backgroundColor: colors.timeline,
-    marginTop: 3,
-    marginBottom: 2,
+    marginTop: 2,
+    marginBottom: 1,
   },
   timelineContent: {
     flex: 1,
-    paddingLeft: 6,
+    paddingLeft: 5,
     paddingBottom: 2,
   },
   company: {
-    fontSize: 8,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     marginBottom: 2,
   },
   dateLabel: {
-    fontSize: 7.5,
+    fontSize: 7,
     color: colors.muted,
-    lineHeight: 1.35,
+    lineHeight: 1.3,
   },
   jobTitle: {
-    fontSize: 9.5,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     marginBottom: 2,
   },
   jobBody: {
-    fontSize: 8.5,
-    lineHeight: 1.4,
+    fontSize: 8,
+    lineHeight: 1.35,
     color: colors.muted,
+  },
+  skillsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  skillCell: {
+    width: '48%',
+    marginBottom: 8,
+  },
+  skillName: {
+    fontSize: 7.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.ink,
+    textTransform: 'uppercase',
+    marginBottom: 3,
+  },
+  barTrack: {
+    height: 3,
+    backgroundColor: colors.line,
+    marginBottom: 2,
+  },
+  barFill: {
+    height: 3,
+    backgroundColor: colors.accent,
+  },
+  skillHint: {
+    fontSize: 7,
+    color: colors.muted,
+    lineHeight: 1.3,
   },
   quote: {
     marginTop: 2,
@@ -215,7 +227,7 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.accent,
   },
   quoteText: {
-    fontSize: 8.5,
+    fontSize: 8,
     fontStyle: 'italic',
     color: colors.muted,
     lineHeight: 1.4,
@@ -225,29 +237,7 @@ const styles = StyleSheet.create({
     fontSize: 7.5,
     color: colors.ink,
   },
-  interestRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  interestChip: {
-    fontSize: 7.5,
-    color: colors.sidebarText,
-    marginRight: 8,
-    marginBottom: 4,
-  },
 })
-
-function SidebarCompetency({ item }: { item: CvCompetencyItem }) {
-  return (
-    <View style={styles.competencyBlock} wrap={false}>
-      <Text style={styles.competencyName}>{item.name}</Text>
-      <View style={styles.barTrack}>
-        <View style={[styles.barFill, { width: `${item.level}%` }]} />
-      </View>
-      <Text style={styles.competencyHint}>{item.description}</Text>
-    </View>
-  )
-}
 
 function TimelineExperience({
   experience,
@@ -274,6 +264,18 @@ function TimelineExperience({
   )
 }
 
+function SkillCell({ item }: { item: CvCompetencyItem }) {
+  return (
+    <View style={styles.skillCell} wrap={false}>
+      <Text style={styles.skillName}>{item.name}</Text>
+      <View style={styles.barTrack}>
+        <View style={[styles.barFill, { width: `${item.level}%` }]} />
+      </View>
+      <Text style={styles.skillHint}>{item.description}</Text>
+    </View>
+  )
+}
+
 function splitInterests(interests: string): string[] {
   return interests
     .split(/[,·•|/]+/)
@@ -289,28 +291,43 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
   return (
     <Document author={data.fullName} subject={data.tagline} title={`CV — ${data.fullName}`}>
       <Page size="A4" style={styles.page}>
-        <View style={styles.sidebar}>
+        {/* Bandeau sombre répété sur chaque page */}
+        <View fixed style={styles.sidebar} />
+
+        {/* Contenu sidebar (page 1 principalement) */}
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: SIDEBAR_WIDTH,
+            paddingTop: 28,
+            paddingBottom: 24,
+            paddingHorizontal: 16,
+          }}
+          wrap={false}
+        >
           <View style={styles.brandMark} />
 
           <Text style={styles.sideSectionTitle}>Contact</Text>
           {data.location ? (
-            <View style={{ marginBottom: 6 }}>
+            <View style={styles.sideBlock}>
               <Text style={styles.sideLabel}>Localisation</Text>
               <Text style={styles.sideContact}>{data.location}</Text>
             </View>
           ) : null}
           {data.phone ? (
-            <View style={{ marginBottom: 6 }}>
+            <View style={styles.sideBlock}>
               <Text style={styles.sideLabel}>Téléphone</Text>
               <Text style={styles.sideContact}>{data.phone}</Text>
             </View>
           ) : null}
-          <View style={{ marginBottom: 6 }}>
+          <View style={styles.sideBlock}>
             <Text style={styles.sideLabel}>Email</Text>
             <Text style={styles.sideContact}>{data.email}</Text>
           </View>
           {data.availabilityLabel ? (
-            <View style={{ marginBottom: 6 }}>
+            <View style={styles.sideBlock}>
               <Text style={styles.sideLabel}>Disponibilité</Text>
               <Text style={styles.sideContact}>{data.availabilityLabel}</Text>
             </View>
@@ -334,40 +351,29 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
             </>
           ) : null}
 
-          {data.competencies.length > 0 ? (
-            <>
-              <Text style={styles.sideSectionTitle}>Compétences</Text>
-              {data.competencies.map((item, index) => (
-                <SidebarCompetency key={`comp-${index}`} item={item} />
-              ))}
-            </>
-          ) : null}
-
           {data.mobility || (data.showRqthOnCv && data.rqthNote) || interestItems.length > 0 ? (
             <>
               <Text style={styles.sideSectionTitle}>Infos</Text>
               {data.mobility ? (
-                <View style={{ marginBottom: 6 }}>
+                <View style={styles.sideBlock}>
                   <Text style={styles.sideLabel}>Mobilité</Text>
                   <Text style={styles.sideBody}>{data.mobility}</Text>
                 </View>
               ) : null}
               {data.showRqthOnCv && data.rqthNote ? (
-                <View style={{ marginBottom: 6 }}>
+                <View style={styles.sideBlock}>
                   <Text style={styles.sideLabel}>Statut</Text>
                   <Text style={styles.sideBody}>{data.rqthNote}</Text>
                 </View>
               ) : null}
               {interestItems.length > 0 ? (
                 <View>
-                  <Text style={styles.sideLabel}>Centres d’intérêt</Text>
-                  <View style={styles.interestRow}>
-                    {interestItems.map((item, index) => (
-                      <Text key={`interest-${index}`} style={styles.interestChip}>
-                        • {item.toUpperCase()}
-                      </Text>
-                    ))}
-                  </View>
+                  <Text style={styles.sideLabel}>Loisirs</Text>
+                  {interestItems.map((item, index) => (
+                    <Text key={`interest-${index}`} style={styles.interestChip}>
+                      • {item.toUpperCase()}
+                    </Text>
+                  ))}
                 </View>
               ) : null}
             </>
@@ -423,6 +429,17 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
                   </View>
                 </View>
               ))}
+            </>
+          ) : null}
+
+          {data.competencies.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle}>Compétences</Text>
+              <View style={styles.skillsGrid}>
+                {data.competencies.map((item, index) => (
+                  <SkillCell key={`skill-${index}`} item={item} />
+                ))}
+              </View>
             </>
           ) : null}
 
