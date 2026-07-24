@@ -112,6 +112,6 @@ export async function GET(request: Request) {
     return response
   } catch (error) {
     console.error('[admin/gateway]', error)
-    return redirectHome(origin)
+    return redirectLogin(origin)
   }
 }

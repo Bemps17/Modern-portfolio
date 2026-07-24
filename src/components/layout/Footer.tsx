@@ -5,6 +5,10 @@ import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { Container } from '@/components/ui/Container'
 import { cn } from '@/lib/utils'
 
+function isAdminGatewayHref(href: string): boolean {
+  return href.startsWith('/api/admin/')
+}
+
 type FooterProps = {
   siteName: string
   email?: string | null
@@ -40,19 +44,34 @@ export function Footer({
               </Link>
             ) : null}
             {showAdminLink && adminHref ? (
-              <Link
-                aria-label="Accès admin — backoffice Payload CMS"
-                className={cn(
-                  'inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] backdrop-blur-sm transition',
-                  'hover:border-[color:var(--accent)]/35 hover:bg-[var(--glass)] hover:text-[var(--accent-soft)]',
-                  !adminConfigured && 'opacity-80',
-                )}
-                href={adminHref}
-                prefetch={false}
-                title={adminLinkTitle}
-              >
-                <Lock aria-hidden className="h-4 w-4" />
-              </Link>
+              isAdminGatewayHref(adminHref) ? (
+                <a
+                  aria-label="Accès admin — backoffice Payload CMS"
+                  className={cn(
+                    'inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] backdrop-blur-sm transition',
+                    'hover:border-[color:var(--accent)]/35 hover:bg-[var(--glass)] hover:text-[var(--accent-soft)]',
+                    !adminConfigured && 'opacity-80',
+                  )}
+                  href={adminHref}
+                  title={adminLinkTitle}
+                >
+                  <Lock aria-hidden className="h-4 w-4" />
+                </a>
+              ) : (
+                <Link
+                  aria-label="Accès admin — backoffice Payload CMS"
+                  className={cn(
+                    'inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] backdrop-blur-sm transition',
+                    'hover:border-[color:var(--accent)]/35 hover:bg-[var(--glass)] hover:text-[var(--accent-soft)]',
+                    !adminConfigured && 'opacity-80',
+                  )}
+                  href={adminHref}
+                  prefetch={false}
+                  title={adminLinkTitle}
+                >
+                  <Lock aria-hidden className="h-4 w-4" />
+                </Link>
+              )
             ) : null}
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
