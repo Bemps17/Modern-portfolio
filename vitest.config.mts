@@ -25,6 +25,7 @@ export default defineConfig({
             'tests/int/slugify.int.spec.ts',
             'tests/int/contactSchema.int.spec.ts',
             'tests/int/cv-format-date.int.spec.ts',
+            'tests/int/cv-build-data.int.spec.ts',
           ],
         },
       },
