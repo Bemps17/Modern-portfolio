@@ -33,7 +33,7 @@ const SLICE_BOUNDS = [
   { y: 380, h: 130 },
 ] as const
 
-const MOBILE_STAGE_HEIGHTS = [14, 18, 20, 20, 24] as const
+const MOBILE_STEP_SHORT_LABELS = ['Brief', 'UX', 'UI', 'Code', 'Ship'] as const
 
 type RocketSliceProps = {
   index: number
@@ -212,8 +212,8 @@ function StarshipSvg({
   )
 }
 
-/** Mini-fusée verticale pour mobile — repère visuel des 5 étapes. */
-function MobileRocketTrack({
+/** Barre d’étapes horizontale — navigation unique sur mobile (sans doublon liste + fusée). */
+function MobileStepProgress({
   activeStage,
   onSelect,
 }: {
@@ -221,52 +221,56 @@ function MobileRocketTrack({
   onSelect: (index: number) => void
 }) {
   return (
-    <div
-      aria-label="Étapes de la méthode en forme de fusée"
-      className="flex shrink-0 flex-col items-center gap-0.5"
-      role="tablist"
-    >
-      {PROJECT_CUTAWAY_STEPS.map((step, index) => {
-        const isActive = activeStage === index
-        const isPast = index < activeStage
+    <div aria-label="Étapes de la méthode" className="space-y-3" role="tablist">
+      <div className="flex gap-1">
+        {PROJECT_CUTAWAY_STEPS.map((step, index) => {
+          const isActive = activeStage === index
+          const isPast = index < activeStage
 
-        return (
-          <button
-            aria-label={`Étape ${index + 1} : ${step.title}`}
-            aria-selected={isActive}
-            className="group relative flex w-11 flex-col items-center"
-            key={step.id}
-            onClick={() => onSelect(index)}
-            role="tab"
-            type="button"
-          >
-            <span
+          return (
+            <button
+              aria-label={`Étape ${index + 1} : ${step.title}`}
+              aria-selected={isActive}
               className={cn(
-                'block w-full rounded-sm border transition',
-                index === 0 && 'rounded-t-full',
-                index === PROJECT_CUTAWAY_STEPS.length - 1 && 'rounded-b-md',
+                'group relative min-w-0 flex-1 border px-1 py-2 text-center transition',
+                index === 0 && 'rounded-l-full',
+                index === PROJECT_CUTAWAY_STEPS.length - 1 && 'rounded-r-lg',
                 isActive
-                  ? 'border-[color:var(--accent)] bg-[var(--accent)]/25 shadow-[0_0_16px_var(--accent-glow)]'
+                  ? 'border-[color:var(--accent)] bg-[var(--accent)]/20 shadow-[0_0_12px_var(--accent-glow)]'
                   : isPast
-                    ? 'border-[color:var(--accent)]/35 bg-[var(--accent)]/10'
-                    : 'border-[color:var(--border)] bg-white/5 group-hover:border-[color:var(--accent)]/30',
+                    ? 'border-[color:var(--accent)]/30 bg-[var(--accent)]/8'
+                    : 'border-[color:var(--border-subtle)] bg-black/10 hover:border-[color:var(--border)]',
               )}
-              style={{ height: MOBILE_STAGE_HEIGHTS[index] }}
-            />
-            <span
-              className={cn(
-                'absolute -right-1 top-1/2 flex size-4 -translate-y-1/2 translate-x-full items-center justify-center rounded-full text-[9px] font-semibold tabular-nums',
-                isActive
-                  ? 'bg-[var(--accent)] text-black'
-                  : 'border border-[color:var(--border)] bg-[var(--background-elevated)] text-[var(--muted)]',
-              )}
+              key={step.id}
+              onClick={() => onSelect(index)}
+              role="tab"
+              type="button"
             >
-              {index + 1}
-            </span>
-          </button>
-        )
-      })}
-      <Rocket aria-hidden className="mt-1 size-3.5 text-[var(--accent-soft)]" />
+              <span
+                className={cn(
+                  'mx-auto mb-1 flex size-5 items-center justify-center rounded-full text-[10px] font-semibold tabular-nums',
+                  isActive
+                    ? 'bg-[var(--accent)] text-black'
+                    : 'border border-[color:var(--border)] text-[var(--muted)]',
+                )}
+              >
+                {index + 1}
+              </span>
+              <span
+                className={cn(
+                  'block truncate font-[family-name:var(--font-space-grotesk)] text-[9px] tracking-[0.08em] uppercase',
+                  isActive ? 'text-[var(--accent-soft)]' : 'text-[var(--muted)]',
+                )}
+              >
+                {MOBILE_STEP_SHORT_LABELS[index]}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+      <p className="text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.14em] text-[var(--muted)]">
+        Chaque segment = une phase du projet
+      </p>
     </div>
   )
 }
@@ -281,51 +285,6 @@ function StageDetailCard({ step, className }: { step: CutawayStep; className?: s
         {step.title}
       </p>
       <p className="mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
-    </div>
-  )
-}
-
-function MobileStepList({
-  activeStage,
-  onSelect,
-}: {
-  activeStage: number
-  onSelect: (index: number) => void
-}) {
-  return (
-    <div className="space-y-2">
-      {PROJECT_CUTAWAY_STEPS.map((step, index) => {
-        const isActive = activeStage === index
-
-        return (
-          <button
-            className={cn(
-              'flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition',
-              isActive
-                ? 'border-[color:var(--accent)]/45 bg-[var(--accent)]/10'
-                : 'border-[color:var(--border-subtle)] bg-black/10 hover:border-[color:var(--border)]',
-            )}
-            key={step.id}
-            onClick={() => onSelect(index)}
-            type="button"
-          >
-            <span
-              className={cn(
-                'flex size-7 shrink-0 items-center justify-center rounded-full font-[family-name:var(--font-space-grotesk)] text-[11px] font-semibold tabular-nums',
-                isActive ? 'bg-[var(--accent)] text-black' : 'border border-[color:var(--border)] text-[var(--muted)]',
-              )}
-            >
-              {String(index + 1).padStart(2, '0')}
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block font-[family-name:var(--font-syne)] text-sm font-semibold text-[var(--foreground)]">
-                {step.title}
-              </span>
-              <span className="mt-0.5 block text-xs leading-snug text-[var(--muted)]">{step.blueprintTag}</span>
-            </span>
-          </button>
-        )
-      })}
     </div>
   )
 }
@@ -368,30 +327,29 @@ function MobileMethodPanel({
         </div>
 
         <div className="rounded-2xl border border-[color:var(--border-subtle)] bg-black/15 p-4">
-          <div className="mb-4 flex items-center justify-between gap-3">
+          <MobileStepProgress activeStage={activeStage} onSelect={onSelect} />
+
+          <div className="mt-5 flex items-center justify-between gap-3">
             <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
-              Étape en cours
+              Étape {String(activeStage + 1).padStart(2, '0')} · {step.title}
             </p>
             <p className="font-[family-name:var(--font-space-grotesk)] text-xs tabular-nums text-[var(--accent-soft)]">
               {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
             </p>
           </div>
 
-          <div className="flex gap-4">
-            <MobileRocketTrack activeStage={activeStage} onSelect={onSelect} />
-            <AnimatePresence mode="wait">
-              <motion.div
-                animate={{ opacity: 1, y: 0 }}
-                className="min-w-0 flex-1"
-                exit={{ opacity: 0, y: 8 }}
-                initial={{ opacity: 0, y: 8 }}
-                key={step.id}
-                transition={{ duration: 0.22, ease: 'easeOut' }}
-              >
-                <StageDetailCard step={step} className="h-full border-[color:var(--accent)]/40" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-3"
+              exit={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 8 }}
+              key={step.id}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
+              <StageDetailCard step={step} className="border-[color:var(--accent)]/40" />
+            </motion.div>
+          </AnimatePresence>
 
           <div className="mt-4 flex items-center justify-between gap-2">
             <button
@@ -403,7 +361,7 @@ function MobileMethodPanel({
             >
               <ChevronLeft aria-hidden className="size-5" />
             </button>
-            <p className="text-center text-xs text-[var(--muted)]">Balayez les étapes ou touchez la fusée</p>
+            <p className="text-center text-xs text-[var(--muted)]">Touchez une étape ou utilisez les flèches</p>
             <button
               aria-label="Étape suivante"
               className="inline-flex size-10 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
@@ -414,13 +372,6 @@ function MobileMethodPanel({
               <ChevronRight aria-hidden className="size-5" />
             </button>
           </div>
-        </div>
-
-        <div>
-          <p className="mb-3 font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
-            Parcours complet
-          </p>
-          <MobileStepList activeStage={activeStage} onSelect={onSelect} />
         </div>
 
         <div className="flex justify-center pt-1">
