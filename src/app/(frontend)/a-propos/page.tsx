@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 
 import { AboutHighlightsAccordion } from '@/components/sections/AboutHighlightsAccordion'
+import { CvDownloadButton } from '@/components/sections/CvDownloadButton'
 import { EarlyCareerAccordion } from '@/components/sections/EarlyCareerAccordion'
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { PersonalProjectsList } from '@/components/sections/PersonalProjectsList'
@@ -118,6 +119,9 @@ export default async function AboutPage() {
                 {settings.aboutBody}
               </p>
             ) : null}
+            <div className="mt-6 flex flex-wrap gap-3">
+              <CvDownloadButton />
+            </div>
           </div>
         </ReadableSurface>
         {portraitSrc ? (
