@@ -32,11 +32,9 @@ function getChipMotion(id: Skill['id'], index: number) {
   const pulse = seededUnit(base + 89)
 
   return {
-    delay: spread * 0.72 + index * 0.045,
-    rotate: (drift - 0.5) * 12,
-    y: (pulse - 0.5) * 14,
-    popDelay: 1.4 + spread * 2.8,
-    popDuration: 2.4 + drift * 2.2,
+    delay: spread * 0.55 + index * 0.04,
+    rotate: (drift - 0.5) * 8,
+    y: (pulse - 0.5) * 10,
   }
 }
 
@@ -87,32 +85,27 @@ export function SoftSkillsStrip({ skills, className }: SoftSkillsStripProps) {
             <motion.div
               animate={{
                 opacity: isVisible ? 1 : 0,
-                scale: isVisible ? 1 : 0.2,
-                y: motionConfig.y,
+                scale: isVisible ? 1 : 0.85,
+                y: isVisible ? 0 : motionConfig.y + 12,
+                rotate: isVisible ? 0 : motionConfig.rotate,
+              }}
+              initial={{
+                opacity: 0,
+                scale: 0.85,
+                y: motionConfig.y + 12,
                 rotate: motionConfig.rotate,
               }}
-              initial={{ opacity: 0, scale: 0.2, y: motionConfig.y + 18, rotate: motionConfig.rotate }}
               key={skill.id}
               transition={{
                 type: 'spring',
-                stiffness: 460,
-                damping: 14,
-                mass: 0.65,
+                stiffness: 380,
+                damping: 22,
+                mass: 0.7,
                 delay: motionConfig.delay,
               }}
+              whileHover={{ scale: 1.06 }}
             >
-              <motion.div
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{
-                  duration: motionConfig.popDuration,
-                  repeat: Infinity,
-                  delay: motionConfig.popDelay,
-                  ease: 'easeInOut',
-                }}
-                whileHover={{ scale: 1.1, rotate: 0 }}
-              >
-                <Badge className={chipClassName}>{skill.name}</Badge>
-              </motion.div>
+              <Badge className={chipClassName}>{skill.name}</Badge>
             </motion.div>
           )
         })}
