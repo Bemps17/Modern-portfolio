@@ -452,30 +452,18 @@ export const portfolioFallback = {
     },
     {
       id: 2,
-      title: 'Assistant logistique',
-      company: 'PAPREC — La Rochelle',
-      dateStart: '2023-10-01',
-      dateEnd: '2024-06-01',
+      title: 'Agent de planning & Assistant d’exploitation',
+      company: 'Sonotra / PAPREC La Rochelle — Groupe Hautier',
+      dateStart: '2023-06-01',
+      dateEnd: '2024-10-01',
       current: false,
       description:
-        'Gestion des flux entrants et sortants, coordination avec les équipes terrain et suivi des indicateurs opérationnels. Rigoureux sur la traçabilité et la qualité de service.',
+        'Deux missions proches au sein de l’écosystème collecte / recyclage (Groupe Hautier) : agent de planning chez PAPREC et assistant d’exploitation chez Sonotra. Organisation et optimisation des circuits de collecte et des plannings chauffeurs, prise en charge des commandes et de la relation client/exploitation, saisie et suivi des données opérationnelles, coordination avec les équipes terrain et suivi des indicateurs (qualité de service, délais, traçabilité des flux).',
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     },
     {
       id: 3,
-      title: 'Assistant Logistique & Planification',
-      company: 'Sonotra / Paprec CRV 17 / Groupe Hautier',
-      dateStart: '2023-06-01',
-      dateEnd: '2024-10-01',
-      current: false,
-      description:
-        'Optimisation et planification de circuits de collecte et des plannings chauffeurs. Saisie de données, gestion de la relation client/exploitation et traitement des flux.',
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 4,
       title: 'Chargé de projet informatique embarquée',
       company: 'Transports Hautier',
       dateStart: '2023-06-01',
@@ -487,7 +475,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 5,
+      id: 4,
       title: 'Alternance Infographiste Designer Web',
       company: 'La Casquette Digital',
       dateStart: '2023-02-01',
@@ -499,7 +487,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 6,
+      id: 5,
       title: 'Responsable de tournée marchés',
       company: 'Couleur Marché',
       dateStart: '2017-01-01',
@@ -511,7 +499,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 7,
+      id: 6,
       title: 'Freelance Infographiste multimédia',
       company: 'Auto-entrepreneur',
       dateStart: '2016-01-01',
@@ -523,7 +511,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 8,
+      id: 7,
       title: 'Attaché commercial / VRP B2B',
       company: 'Telenet, DJM, Paritel, Berner…',
       dateStart: '2006-01-01',
@@ -535,7 +523,7 @@ export const portfolioFallback = {
       createdAt: new Date().toISOString(),
     },
     {
-      id: 9,
+      id: 8,
       title: 'Opérations terrain (intérim & saisonnier)',
       company: 'Logistique & événementiel',
       dateStart: '2001-01-01',
