@@ -411,9 +411,9 @@ export const portfolioFallback = {
           'Exploration continue des stacks modernes (Next.js, Payload, IA assistée) via side projects et contributions open source.',
       },
     ],
-    location: 'La Rochelle · ouvert au remote',
+    location: '17138 Puilboreau · ouvert au remote',
     availability: 'available' as const,
-    availabilityLabel: 'Disponible pour CDI / Freelance',
+    availabilityLabel: 'Disponible immédiatement',
     approachSteps: [
       {
         id: '1',
@@ -437,7 +437,7 @@ export const portfolioFallback = {
     avatar: null,
     logo: null,
     favicon: null,
-    email: 'bertrandwebdesigner@proton.me',
+    email: 'bertrandfouquet@gmail.com',
     socialLinks: [
       { platform: 'github' as const, url: 'https://github.com/Bemps17', label: 'GitHub' },
       {
@@ -446,16 +446,63 @@ export const portfolioFallback = {
         label: 'LinkedIn',
       },
     ],
-    phone: null,
-    cvPitch: null,
-    recommendationQuote: null,
-    recommendationAuthor: null,
-    mobility: null,
-    interests: null,
-    rqthNote: null,
-    showRqthOnCv: false,
-    languages: [],
-    cvCompetencies: [],
+    phone: '06 66 93 82 35',
+    cvPitch:
+      'Professionnel expérimenté avec plus de 10 ans d’expérience dans la relation client, la vente terrain, la logistique et la gestion de projet. Titulaire d’un titre professionnel d’attaché commercial et d’une formation récente en infographie/web, je recherche un poste polyvalent où mes compétences commerciales, logistiques et créatives seront pleinement mobilisées.',
+    recommendationQuote:
+      'Bertrand a su redynamiser notre prospection commerciale avec des méthodes innovantes, entraînant une augmentation de 30% des leads qualifiés en 3 mois.',
+    recommendationAuthor: 'Directeur Commercial, Entreprise X',
+    mobility: 'Permis B — véhicule personnel, déplacements régionaux',
+    interests: 'Création visuelle, Technologie, Art',
+    rqthNote:
+      'RQTH (Reconnaissance de la qualité de travailleur handicapé) — problèmes de dos. Adaptations possibles du poste de travail.',
+    showRqthOnCv: true,
+    languages: [
+      { name: 'Anglais', level: 'Conversationnel' },
+      { name: 'Espagnol', level: 'Scolaire' },
+    ],
+    cvCompetencies: [
+      {
+        name: 'Prospection B2B/B2C',
+        level: 85,
+        description: 'Techniques de prospection, qualification de leads et conversion',
+      },
+      {
+        name: 'Logistique & Exploitation',
+        level: 75,
+        description: 'Planification de tournées, gestion des flux, optimisation des processus',
+      },
+      {
+        name: 'Gestion de Projet',
+        level: 80,
+        description: 'Coordination d’équipes, suivi d’objectifs, optimisation des délais',
+      },
+      {
+        name: 'Infographie & Web Design',
+        level: 70,
+        description: 'Maquettes, identité visuelle, interfaces utilisateur',
+      },
+      {
+        name: 'Relation Client',
+        level: 90,
+        description: 'Écoute active, résolution de problèmes, fidélisation',
+      },
+      {
+        name: 'CRM & Outils Digitaux',
+        level: 80,
+        description: 'Logiciels CRM, tableaux de bord, reporting',
+      },
+      {
+        name: 'Organisation & Autonomie',
+        level: 85,
+        description: 'Priorités, autonomie, respect des délais',
+      },
+      {
+        name: 'Suite Adobe & Office',
+        level: 75,
+        description: 'Photoshop, Illustrator, InDesign, Excel, Word, PowerPoint',
+      },
+    ],
   },
   seoDefaults: {
     defaultTitle: 'Bertrand Fouquet | Développeur Web & Designer Junior',
