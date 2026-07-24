@@ -2,8 +2,9 @@ function trimTrailingSlash(url: string): string {
   return url.replace(/\/$/, '')
 }
 
+/** Lien partageable ATS : page HTML sémantique `/cv`. */
 export function buildCvShareUrl(siteUrl: string): string {
-  return `${trimTrailingSlash(siteUrl)}/api/cv`
+  return `${trimTrailingSlash(siteUrl)}/cv`
 }
 
 export function buildMailtoShareUrl(cvUrl: string, fullName: string): string {

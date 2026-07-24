@@ -115,23 +115,34 @@ const styles = StyleSheet.create({
     color: colors.sidebarText,
     marginBottom: 2,
   },
-  sideCompetencyRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 2,
+  competencyBlock: {
+    marginBottom: 4,
   },
-  sideCompetencyName: {
-    flex: 1,
+  competencyCategory: {
     fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.sidebarText,
-    paddingRight: 4,
+    marginBottom: 1,
   },
-  sideCompetencyLevel: {
-    fontSize: 7.5,
+  competencyItems: {
+    fontSize: 7,
+    lineHeight: 1.25,
+    color: colors.sidebarMuted,
+  },
+  sideQualBlock: {
+    marginBottom: 4,
+  },
+  sideQualTitle: {
+    fontSize: 7,
     fontFamily: 'Helvetica-Bold',
-    color: colors.accentSoft,
+    color: colors.sidebarText,
+    lineHeight: 1.25,
+    marginBottom: 1,
+  },
+  sideQualMeta: {
+    fontSize: 6.5,
+    color: colors.sidebarMuted,
+    lineHeight: 1.25,
   },
   headerName: {
     fontSize: L.headerNameFontSize,
@@ -139,13 +150,19 @@ const styles = StyleSheet.create({
     color: colors.ink,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
-    marginBottom: 4,
+    marginBottom: 3,
+  },
+  headerJobTitle: {
+    fontSize: 10,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.ink,
+    marginBottom: 3,
   },
   headerTagline: {
-    fontSize: 9,
+    fontSize: 8.5,
     color: colors.accent,
     textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 0.8,
     marginBottom: 8,
   },
   sectionTitle: {
@@ -164,10 +181,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: L.timelineItemMarginBottom,
   },
-  timelineMeta: {
-    width: 72,
-    paddingRight: 4,
-  },
   timelineRail: {
     width: 8,
     alignItems: 'center',
@@ -177,7 +190,7 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 2.5,
     backgroundColor: colors.accent,
-    marginTop: 1,
+    marginTop: 2,
   },
   timelineLine: {
     width: 1,
@@ -187,18 +200,7 @@ const styles = StyleSheet.create({
   },
   timelineContent: {
     flex: 1,
-    paddingLeft: 4,
-  },
-  company: {
-    fontSize: L.bodyFontSize,
-    fontFamily: 'Helvetica-Bold',
-    color: colors.ink,
-    marginBottom: 1,
-  },
-  dateLabel: {
-    fontSize: 7.5,
-    color: colors.muted,
-    lineHeight: 1.25,
+    paddingLeft: 6,
   },
   jobTitle: {
     fontSize: 9,
@@ -206,40 +208,34 @@ const styles = StyleSheet.create({
     color: colors.ink,
     marginBottom: 1,
   },
+  companyLine: {
+    fontSize: L.bodyFontSize,
+    color: colors.ink,
+    marginBottom: 1,
+  },
+  companyName: {
+    fontFamily: 'Helvetica-Bold',
+  },
+  dateLabel: {
+    fontSize: 7.5,
+    color: colors.muted,
+  },
   jobBody: {
     fontSize: L.bodyFontSize,
     lineHeight: 1.25,
     color: colors.muted,
   },
   earlyRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     marginBottom: 4,
   },
-  earlyLeft: {
-    flex: 1,
-    fontSize: L.bodyFontSize,
-    color: colors.ink,
-    paddingRight: 6,
-  },
-  earlyDate: {
-    fontSize: 7.5,
-    color: colors.muted,
-  },
-  qualRow: {
-    flexDirection: 'row',
-    marginBottom: 2,
-  },
-  qualYear: {
-    width: 28,
+  earlyTitle: {
     fontSize: L.bodyFontSize,
     fontFamily: 'Helvetica-Bold',
-    color: colors.accent,
-  },
-  qualBody: {
-    flex: 1,
-    fontSize: L.bodyFontSize,
     color: colors.ink,
+  },
+  earlyMeta: {
+    fontSize: 7.5,
+    color: colors.muted,
   },
 })
 
@@ -250,6 +246,10 @@ function compactText(text: string, max = 110): string {
   return `${oneLine.slice(0, max - 1).trimEnd()}…`
 }
 
+/**
+ * Ordre ATS : intitulé → entreprise → dates → description.
+ * Le rail reste purement décoratif.
+ */
 function TimelineExperience({
   experience,
   isLast,
@@ -261,16 +261,17 @@ function TimelineExperience({
 }) {
   return (
     <View style={styles.timelineItem} wrap={false}>
-      <View style={styles.timelineMeta}>
-        <Text style={styles.company}>{experience.company}</Text>
-        <Text style={styles.dateLabel}>{experience.dateLabel}</Text>
-      </View>
       <View style={styles.timelineRail}>
         <View style={styles.timelineDot} />
         {isLast ? null : <View style={styles.timelineLine} />}
       </View>
       <View style={styles.timelineContent}>
         <Text style={styles.jobTitle}>{experience.title}</Text>
+        <Text style={styles.companyLine}>
+          <Text style={styles.companyName}>{experience.company}</Text>
+          {'  ·  '}
+          <Text style={styles.dateLabel}>{experience.dateLabel}</Text>
+        </Text>
         {compact ? null : (
           <Text style={styles.jobBody}>
             {compactText(experience.description, L.recentDescriptionMaxChars)}
@@ -292,10 +293,14 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
   const recent = data.experiences.filter((item) => !item.earlyCareer)
   const early = data.experiences.filter((item) => item.earlyCareer)
   const interestItems = data.interests ? splitInterests(data.interests) : []
+  const documentTitle = data.jobTitle
+    ? `CV — ${data.fullName} — ${data.jobTitle}`
+    : `CV — ${data.fullName}`
 
   return (
-    <Document author={data.fullName} subject={data.tagline} title={`CV — ${data.fullName}`}>
+    <Document author={data.fullName} subject={data.jobTitle || data.tagline} title={documentTitle}>
       <Page size="A4" style={styles.page}>
+        {/* Fond sidebar (décoratif) — le texte contact suit ensuite dans le flux. */}
         <View fixed style={styles.sidebar} />
 
         <View style={styles.sidebarContent}>
@@ -346,10 +351,24 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           {data.competencies.length > 0 ? (
             <>
               <Text style={styles.sideSectionTitle}>Compétences</Text>
-              {data.competencies.map((item, index) => (
-                <View key={`comp-${index}`} style={styles.sideCompetencyRow}>
-                  <Text style={styles.sideCompetencyName}>{item.name}</Text>
-                  <Text style={styles.sideCompetencyLevel}>{item.level}%</Text>
+              {data.competencies.map((category, index) => (
+                <View key={`comp-${index}`} style={styles.competencyBlock} wrap={false}>
+                  <Text style={styles.competencyCategory}>{category.name}</Text>
+                  <Text style={styles.competencyItems}>{category.items.join(' · ')}</Text>
+                </View>
+              ))}
+            </>
+          ) : null}
+
+          {data.qualifications.length > 0 ? (
+            <>
+              <Text style={styles.sideSectionTitle}>Formations</Text>
+              {data.qualifications.map((item, index) => (
+                <View key={`qual-${index}`} style={styles.sideQualBlock} wrap={false}>
+                  <Text style={styles.sideQualTitle}>{item.title}</Text>
+                  <Text style={styles.sideQualMeta}>
+                    {[item.organization, item.yearLabel].filter(Boolean).join(' · ')}
+                  </Text>
                 </View>
               ))}
             </>
@@ -367,7 +386,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
               {data.showRqthOnCv && data.rqthNote ? (
                 <View style={styles.sideBlock}>
                   <Text style={styles.sideLabel}>Statut</Text>
-                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 160)}</Text>
+                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 140)}</Text>
                 </View>
               ) : null}
               {interestItems.length > 0 ? (
@@ -386,6 +405,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
 
         <View style={styles.main}>
           <Text style={styles.headerName}>{data.fullName}</Text>
+          {data.jobTitle ? <Text style={styles.headerJobTitle}>{data.jobTitle}</Text> : null}
           <Text style={styles.headerTagline}>{data.tagline}</Text>
 
           <Text style={styles.sectionTitle}>Expériences professionnelles</Text>
@@ -402,24 +422,9 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
               <Text style={styles.sectionTitle}>Premières expériences</Text>
               {early.map((experience, index) => (
                 <View key={`early-${index}`} style={styles.earlyRow} wrap={false}>
-                  <Text style={styles.earlyLeft}>
-                    {experience.title} — {experience.company}
-                  </Text>
-                  <Text style={styles.earlyDate}>{experience.dateLabel}</Text>
-                </View>
-              ))}
-            </>
-          ) : null}
-
-          {data.qualifications.length > 0 ? (
-            <>
-              <Text style={styles.sectionTitle}>Formations</Text>
-              {data.qualifications.map((item, index) => (
-                <View key={`qual-${index}`} style={styles.qualRow} wrap={false}>
-                  <Text style={styles.qualYear}>{item.yearLabel || '—'}</Text>
-                  <Text style={styles.qualBody}>
-                    {item.title}
-                    {item.organization ? ` — ${item.organization}` : ''}
+                  <Text style={styles.earlyTitle}>{experience.title}</Text>
+                  <Text style={styles.earlyMeta}>
+                    {experience.company} · {experience.dateLabel}
                   </Text>
                 </View>
               ))}

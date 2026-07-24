@@ -2,7 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useSyncExternalStore, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 import { cn } from '@/lib/utils'
 
@@ -10,8 +11,20 @@ type ModalProps = {
   open: boolean
   onClose: () => void
   title: string
-  children: React.ReactNode
+  children: ReactNode
   className?: string
+}
+
+function subscribeNoop() {
+  return () => {}
+}
+
+function getClientSnapshot() {
+  return true
+}
+
+function getServerSnapshot() {
+  return false
 }
 
 export function Modal({ open, onClose, title, children, className }: ModalProps) {
@@ -19,6 +32,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
   const dialogRef = useRef<HTMLDivElement>(null)
   const lastFocusedRef = useRef<HTMLElement | null>(null)
   const reduceMotion = useReducedMotion()
+  const mounted = useSyncExternalStore(subscribeNoop, getClientSnapshot, getServerSnapshot)
 
   useEffect(() => {
     if (!open) return
@@ -37,10 +51,18 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
     }
   }, [open, onClose])
 
-  return (
+  if (!mounted) return null
+
+  return createPortal(
     <AnimatePresence>
       {open ? (
-        <div className="fixed inset-0 z-[80] flex items-end justify-center p-3 sm:items-center sm:p-6">
+        <div
+          className={cn(
+            'fixed inset-0 z-[80] flex items-end justify-center sm:items-center sm:p-6',
+            // Espace au-dessus de la bottom tab bar (~4.5rem) + safe-area iOS
+            'p-3 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] sm:pb-6',
+          )}
+        >
           <motion.button
             aria-label="Fermer"
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -55,7 +77,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             aria-labelledby={titleId}
             aria-modal="true"
             className={cn(
-              'relative z-[1] flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[var(--background-elevated)] shadow-2xl',
+              'relative z-[1] flex max-h-[min(90vh,calc(100dvh-6.5rem))] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[var(--background-elevated)] shadow-2xl sm:max-h-[90vh]',
               className,
             )}
             initial={reduceMotion ? false : { opacity: 0, y: 24 }}
@@ -64,7 +86,10 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             role="dialog"
           >
             <div className="flex items-center justify-between gap-3 border-b border-[color:var(--border-subtle)] px-4 py-3">
-              <h2 className="font-[family-name:var(--font-syne)] text-base font-semibold text-[var(--foreground)]" id={titleId}>
+              <h2
+                className="font-[family-name:var(--font-syne)] text-base font-semibold text-[var(--foreground)]"
+                id={titleId}
+              >
                 {title}
               </h2>
               <button
@@ -80,6 +105,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
           </motion.div>
         </div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }

@@ -317,6 +317,7 @@ async function seed() {
       personalProjects: siteSettings.personalProjects,
       email: siteSettings.email,
       phone: siteSettings.phone,
+      cvJobTitle: siteSettings.cvJobTitle,
       cvPitch: siteSettings.cvPitch,
       mobility: siteSettings.mobility,
       interests: siteSettings.interests,

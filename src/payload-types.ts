@@ -651,6 +651,10 @@ export interface SiteSetting {
    */
   phone?: string | null;
   /**
+   * Intitulé de poste sous le nom sur le CV (ATS). Ex. « Chargé de Clientèle & Projets Digitaux | Commercial B2B ».
+   */
+  cvJobTitle?: string | null;
+  /**
    * Projet professionnel / pitch long pour le CV PDF (sinon aboutIntro).
    */
   cvPitch?: string | null;
@@ -678,12 +682,14 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * Compétences à niveau % pour le CV PDF (distinct des badges Skills).
+   * Catégories de compétences textuelles pour le CV (ATS) — sans pourcentages ni jauges.
    */
   cvCompetencies?:
     | {
         name: string;
-        level: number;
+        /**
+         * Séparer par virgules ou retours à la ligne (ex. Prospection B2B/B2C, CRM, Relation Client).
+         */
         description: string;
         id?: string | null;
       }[]
@@ -799,6 +805,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
       };
   cv?: T;
   phone?: T;
+  cvJobTitle?: T;
   cvPitch?: T;
   mobility?: T;
   interests?: T;
@@ -815,7 +822,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         name?: T;
-        level?: T;
         description?: T;
         id?: T;
       };

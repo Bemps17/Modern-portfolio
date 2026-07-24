@@ -3,16 +3,21 @@ export type CvLanguageItem = {
   level: string
 }
 
+/** Catégorie de compétences textuelles (ATS) — pas de pourcentages. */
 export type CvCompetencyItem = {
   name: string
-  level: number
-  description: string
+  items: string[]
 }
 
 export type CvExperienceItem = {
   title: string
   company: string
+  /** Libellé ATS : MM/AAAA - MM/AAAA ou MM/AAAA - Présent */
   dateLabel: string
+  /** ISO dateStart pour attribut datetime HTML */
+  dateStart: string
+  dateEnd: string | null
+  current: boolean
   description: string
   earlyCareer: boolean
 }
@@ -26,6 +31,9 @@ export type CvQualificationItem = {
 
 export type CvDocumentData = {
   fullName: string
+  /** Intitulé de poste sous le nom (ATS). */
+  jobTitle: string
+  /** Phrase d'accroche / sous-titre. */
   tagline: string
   email: string
   phone: string | null
