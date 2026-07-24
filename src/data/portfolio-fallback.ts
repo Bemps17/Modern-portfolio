@@ -538,13 +538,13 @@ export const portfolioFallback = {
     {
       id: 3,
       title: 'Agent de planning & Assistant d’exploitation',
-      company: 'Sonotra / PAPREC La Rochelle — Groupe Hautier',
+      company: 'Sonotra / PAPREC La Rochelle',
       dateStart: '2023-10-01',
       dateEnd: '2024-10-01',
       current: false,
       earlyCareer: false,
       description:
-        'Deux missions proches au sein de l’écosystème collecte / recyclage (Groupe Hautier) : agent de planning chez PAPREC et assistant d’exploitation chez Sonotra. Organisation et optimisation des circuits de collecte et des plannings chauffeurs, prise en charge des commandes et de la relation client/exploitation, saisie et suivi des données opérationnelles, coordination avec les équipes terrain et suivi des indicateurs (qualité de service, délais, traçabilité des flux).',
+        'Deux missions proches au sein de la collecte / recyclage : agent de planning chez PAPREC et assistant d’exploitation chez Sonotra. Organisation et optimisation des circuits de collecte et des plannings chauffeurs, prise en charge des commandes et de la relation client/exploitation, saisie et suivi des données opérationnelles, coordination avec les équipes terrain et suivi des indicateurs (qualité de service, délais, traçabilité des flux).',
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     },

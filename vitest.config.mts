@@ -31,6 +31,7 @@ export default defineConfig({
             'tests/int/cv-resolve-override-url.int.spec.ts',
             'tests/int/cv-share-links.int.spec.ts',
             'tests/int/cv-pdf-layout.int.spec.ts',
+            'tests/int/portfolio-fallback-experiences.int.spec.ts',
           ],
         },
       },
