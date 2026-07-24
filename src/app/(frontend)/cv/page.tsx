@@ -4,27 +4,26 @@ import Link from 'next/link'
 import { CvHtmlDocument } from '@/components/cv/CvHtmlDocument'
 import { Container } from '@/components/ui/Container'
 import { getCvDocumentData } from '@/lib/cv/get-cv-document-data'
-import { getSiteUrl } from '@/lib/site-url'
+import { getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await getCvDocumentData()
+  const [data, settings, seo] = await Promise.all([
+    getCvDocumentData(),
+    getSiteSettingsContent(),
+    getSeoDefaultsContent(),
+  ])
   const title = data.jobTitle ? `${data.fullName} — ${data.jobTitle}` : `CV — ${data.fullName}`
   const description = data.pitch.slice(0, 160)
-  const url = `${getSiteUrl()}/cv`
 
-  return {
+  return buildPageMetadata(seo, settings, {
     title,
     description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: 'profile',
-    },
-  }
+    path: '/cv',
+    type: 'website',
+  })
 }
 
 export default async function CvPage() {

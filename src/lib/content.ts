@@ -3,6 +3,9 @@ import type { Experience, Media, Project, Qualification, SiteSetting, Skill } fr
 
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
+import type { SeoDefaultsContent } from './seo-metadata'
+
+export { type SeoDefaultsContent } from './seo-metadata'
 
 export function isDemoContentMode(): boolean {
   return !isPayloadConfigured()
@@ -43,6 +46,15 @@ export type SiteSettingsContent = {
     | NonNullable<SiteSetting['cvCompetencies']>
     | typeof portfolioFallback.siteSettings.cvCompetencies
   cv?: SiteSetting['cv']
+  themeColor?: string | null
+  contactPageSubtitle?: string | null
+  enableContactForm?: boolean | null
+  legalPublisher?: string | null
+  legalDirector?: string | null
+  legalHostingProvider?: string | null
+  footerExtraLine?: string | null
+  maintenanceMode?: boolean | null
+  maintenanceMessage?: string | null
 }
 
 /** Complète les champs éditoriaux absents du CMS sans écraser avatar / identité. */
@@ -175,7 +187,7 @@ export async function getSiteSettingsContent(): Promise<SiteSettingsContent> {
   return portfolioFallback.siteSettings
 }
 
-export async function getSeoDefaultsContent() {
+export async function getSeoDefaultsContent(): Promise<SeoDefaultsContent> {
   const payload = await getPayloadClientSafe()
   if (payload) {
     return payload

@@ -635,7 +635,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Identité (logo, favicon, avatar), réseaux sociaux et coordonnées.
+ * Identité, contact, contenu éditorial, CV, mentions légales et options avancées — organisés par onglets.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -645,10 +645,6 @@ export interface SiteSetting {
   siteName: string;
   tagline: string;
   /**
-   * Portrait affiché dans le Hero et la page À propos.
-   */
-  avatar?: (number | null) | Media;
-  /**
    * Logo du site (sidebar / header). PNG ou SVG carré recommandé.
    */
   logo?: (number | null) | Media;
@@ -656,7 +652,31 @@ export interface SiteSetting {
    * Favicon navigateur (PNG 32×32 ou SVG).
    */
   favicon?: (number | null) | Media;
+  /**
+   * Portrait affiché dans le Hero et la page À propos.
+   */
+  avatar?: (number | null) | Media;
+  /**
+   * Couleur barre navigateur (hex). Ex. #0a0a0a
+   */
+  themeColor?: string | null;
   email: string;
+  /**
+   * Téléphone affiché sur le CV PDF et les pages légales.
+   */
+  phone?: string | null;
+  /**
+   * Ex. « La Rochelle · ouvert au remote ».
+   */
+  location?: string | null;
+  /**
+   * Badge de statut dans le Hero et le bandeau contact.
+   */
+  availability?: ('available' | 'limited' | 'unavailable') | null;
+  /**
+   * Libellé custom du badge (sinon libellé selon le statut).
+   */
+  availabilityLabel?: string | null;
   socialLinks?:
     | {
         platform: 'github' | 'linkedin' | 'x' | 'dribbble' | 'other';
@@ -666,13 +686,77 @@ export interface SiteSetting {
       }[]
     | null;
   /**
+   * Sous-titre de la page Contact (sinon email affiché).
+   */
+  contactPageSubtitle?: string | null;
+  enableContactForm?: boolean | null;
+  /**
+   * Résumé court (Hero + intro À propos).
+   */
+  aboutIntro?: string | null;
+  /**
+   * Titre fort sous le profil (ex. « Profil Unique : La Polyvalence… »).
+   */
+  aboutHeadline?: string | null;
+  /**
+   * Texte long de la page À propos (CMS-first, pas de copy en dur).
+   */
+  aboutBody?: string | null;
+  /**
+   * Titre de la section Compétences (À propos).
+   */
+  skillsTitle?: string | null;
+  /**
+   * Sous-titre de la section Compétences (À propos).
+   */
+  skillsSubtitle?: string | null;
+  /**
+   * Section « Approche » sur l’accueil (3 étapes recommandées).
+   */
+  approachSteps?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Arguments différenciants (accordéon À propos).
+   */
+  whyMePoints?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Blocs compétences (accordéon À propos).
+   */
+  skillGroups?:
+    | {
+        title: string;
+        /**
+         * Une ligne par sous-compétence (ex. « Suite Adobe CC : Photoshop… »).
+         */
+        items: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Initiatives perso sur la page À propos.
+   */
+  personalProjects?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * Override optionnel : PDF statique. Si vide, /api/cv génère le PDF dynamiquement.
    */
   cv?: (number | null) | Media;
-  /**
-   * Téléphone affiché sur le CV PDF.
-   */
-  phone?: string | null;
   /**
    * Intitulé de poste sous le nom sur le CV (ATS). Ex. « Chargé de Clientèle & Projets Digitaux | Commercial B2B ».
    */
@@ -718,92 +802,94 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * Résumé court (Hero + intro À propos).
+   * Éditeur du site (mentions légales). Par défaut : nom du site.
    */
-  aboutIntro?: string | null;
+  legalPublisher?: string | null;
   /**
-   * Titre fort sous le profil (ex. « Profil Unique : La Polyvalence… »).
+   * Directeur de la publication (mentions légales).
    */
-  aboutHeadline?: string | null;
+  legalDirector?: string | null;
   /**
-   * Texte long de la page À propos (CMS-first, pas de copy en dur).
+   * Bloc hébergeur (une ligne par prestataire). Ex. « Vercel Inc. — vercel.com ».
    */
-  aboutBody?: string | null;
+  legalHostingProvider?: string | null;
   /**
-   * Titre de la section Compétences (À propos).
+   * Ligne optionnelle sous le copyright du footer.
    */
-  skillsTitle?: string | null;
+  footerExtraLine?: string | null;
+  maintenanceMode?: boolean | null;
   /**
-   * Sous-titre de la section Compétences (À propos).
+   * Message affiché dans le bandeau maintenance.
    */
-  skillsSubtitle?: string | null;
-  /**
-   * Ex. « La Rochelle · ouvert au remote ».
-   */
-  location?: string | null;
-  /**
-   * Badge de statut dans le Hero et le bandeau contact.
-   */
-  availability?: ('available' | 'limited' | 'unavailable') | null;
-  /**
-   * Libellé custom du badge (sinon libellé selon le statut).
-   */
-  availabilityLabel?: string | null;
-  /**
-   * Section « Approche » sur l’accueil (3 étapes recommandées).
-   */
-  approachSteps?:
-    | {
-        title: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Arguments différenciants (accordéon À propos).
-   */
-  whyMePoints?:
-    | {
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Blocs compétences (accordéon À propos).
-   */
-  skillGroups?:
-    | {
-        title: string;
-        /**
-         * Une ligne par sous-compétence (ex. « Suite Adobe CC : Photoshop… »).
-         */
-        items: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Initiatives perso sur la page À propos.
-   */
-  personalProjects?:
-    | {
-        title: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
+  maintenanceMessage?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
+ * Balises meta, Open Graph, Twitter, indexation et JSON-LD — organisés par onglets.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "seo-defaults".
  */
 export interface SeoDefault {
   id: number;
+  /**
+   * Titre par défaut (accueil et fallback des pages).
+   */
   defaultTitle: string;
+  /**
+   * Meta description par défaut (160 caractères max).
+   */
   defaultDescription: string;
+  /**
+   * Modèle pour les pages internes. Utilisez %s pour le titre de page.
+   */
+  titleTemplate?: string | null;
+  /**
+   * Mots-clés séparés par des virgules (meta keywords).
+   */
+  keywords?: string | null;
+  /**
+   * Image Open Graph par défaut (1200×630 recommandé).
+   */
   ogImage?: (number | null) | Media;
+  /**
+   * Locale Open Graph (ex. fr_FR).
+   */
+  ogLocale?: string | null;
+  /**
+   * Nom du site pour Open Graph (sinon nom du site).
+   */
+  ogSiteName?: string | null;
+  twitterCard?: ('summary_large_image' | 'summary') | null;
+  /**
+   * Compte du site (@handle).
+   */
+  twitterSite?: string | null;
+  /**
+   * Créateur / auteur (@handle).
+   */
+  twitterCreator?: string | null;
+  /**
+   * Utile pour les previews ou environnements de staging.
+   */
+  noindexSite?: boolean | null;
+  robotsIndex?: boolean | null;
+  robotsFollow?: boolean | null;
+  /**
+   * Code de vérification Google Search Console (meta tag).
+   */
+  googleSiteVerification?: string | null;
+  /**
+   * URL canonique de base (override). Laissez vide pour NEXT_PUBLIC_SITE_URL / domaine courant.
+   */
+  canonicalBaseUrl?: string | null;
+  enablePersonJsonLd?: boolean | null;
+  enableWebsiteJsonLd?: boolean | null;
+  /**
+   * Nom de l’auteur pour les données structurées (sinon nom du site).
+   */
+  schemaAuthorName?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -814,10 +900,15 @@ export interface SeoDefault {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   tagline?: T;
-  avatar?: T;
   logo?: T;
   favicon?: T;
+  avatar?: T;
+  themeColor?: T;
   email?: T;
+  phone?: T;
+  location?: T;
+  availability?: T;
+  availabilityLabel?: T;
   socialLinks?:
     | T
     | {
@@ -826,36 +917,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
-  cv?: T;
-  phone?: T;
-  cvJobTitle?: T;
-  cvPitch?: T;
-  mobility?: T;
-  interests?: T;
-  rqthNote?: T;
-  showRqthOnCv?: T;
-  languages?:
-    | T
-    | {
-        name?: T;
-        level?: T;
-        id?: T;
-      };
-  cvCompetencies?:
-    | T
-    | {
-        name?: T;
-        description?: T;
-        id?: T;
-      };
+  contactPageSubtitle?: T;
+  enableContactForm?: T;
   aboutIntro?: T;
   aboutHeadline?: T;
   aboutBody?: T;
   skillsTitle?: T;
   skillsSubtitle?: T;
-  location?: T;
-  availability?: T;
-  availabilityLabel?: T;
   approachSteps?:
     | T
     | {
@@ -884,6 +952,33 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  cv?: T;
+  cvJobTitle?: T;
+  cvPitch?: T;
+  mobility?: T;
+  interests?: T;
+  rqthNote?: T;
+  showRqthOnCv?: T;
+  languages?:
+    | T
+    | {
+        name?: T;
+        level?: T;
+        id?: T;
+      };
+  cvCompetencies?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        id?: T;
+      };
+  legalPublisher?: T;
+  legalDirector?: T;
+  legalHostingProvider?: T;
+  footerExtraLine?: T;
+  maintenanceMode?: T;
+  maintenanceMessage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -895,7 +990,22 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 export interface SeoDefaultsSelect<T extends boolean = true> {
   defaultTitle?: T;
   defaultDescription?: T;
+  titleTemplate?: T;
+  keywords?: T;
   ogImage?: T;
+  ogLocale?: T;
+  ogSiteName?: T;
+  twitterCard?: T;
+  twitterSite?: T;
+  twitterCreator?: T;
+  noindexSite?: T;
+  robotsIndex?: T;
+  robotsFollow?: T;
+  googleSiteVerification?: T;
+  canonicalBaseUrl?: T;
+  enablePersonJsonLd?: T;
+  enableWebsiteJsonLd?: T;
+  schemaAuthorName?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

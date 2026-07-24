@@ -619,3 +619,248 @@ body {
   background-clip: padding-box;
   border: 2px solid transparent;
 }
+
+/* -------------------------------------------------------------------------- */
+/* 16. Dashboard hero — accès rapide                                           */
+/* -------------------------------------------------------------------------- */
+
+.admin-dashboard-hero {
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+  border-radius: var(--style-radius-l);
+  border: 1px solid var(--brand-border-subtle);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgb(255 133 10 / 0.16), transparent 55%),
+    linear-gradient(160deg, var(--brand-surface) 0%, var(--brand-surface-2) 100%);
+  box-shadow: var(--brand-shadow-sm);
+}
+
+.admin-dashboard-hero__eyebrow {
+  margin: 0;
+  color: var(--brand-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-dashboard-hero__title {
+  margin: 0.35rem 0 0;
+  color: var(--brand-text);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.admin-dashboard-hero__text {
+  margin: 0.55rem 0 0;
+  max-width: 42rem;
+  color: var(--brand-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.admin-dashboard-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-dashboard-hero__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-height: 44px;
+  padding: 0.85rem 1rem;
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border-subtle);
+  background: color-mix(in srgb, var(--brand-bg) 55%, transparent);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.admin-dashboard-hero__card:hover {
+  border-color: color-mix(in srgb, var(--brand-accent) 45%, var(--brand-border));
+  background: var(--brand-surface-3);
+  box-shadow: 0 0 0 1px rgb(255 133 10 / 0.12);
+  transform: translateY(-1px);
+}
+
+.admin-dashboard-hero__card-label {
+  color: var(--brand-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.admin-dashboard-hero__card-hint {
+  color: var(--brand-text-muted);
+  font-size: 0.78rem;
+}
+
+@media (min-width: 640px) {
+  .admin-dashboard-hero__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-dashboard-hero {
+    padding: 1.5rem 1.65rem;
+  }
+
+  .admin-dashboard-hero__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 17. Mobile-first — navigation, éditeur, onglets                             */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  :root {
+    --nav-width: min(100vw - 1rem, 280px);
+    --app-header-height: calc(var(--base) * 3);
+    --base-px: 16;
+  }
+
+  .nav,
+  .template-default__nav {
+    box-shadow: var(--brand-shadow-md);
+  }
+
+  .nav__link,
+  .nav a {
+    min-height: 44px;
+    padding-block: 0.65rem;
+  }
+
+  .app-header,
+  .doc-header,
+  .document-header {
+    padding-inline: 0.75rem;
+  }
+
+  .dashboard .card,
+  .card {
+    border-radius: var(--style-radius-l);
+  }
+
+  .collection-list__wrap,
+  .document-fields__edit,
+  .render-fields {
+    padding-inline: 0.75rem;
+  }
+
+  .tabs-field__tabs-wrap,
+  .tabs-field__tabs {
+    gap: 0.35rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .tabs-field__tabs-wrap::-webkit-scrollbar,
+  .tabs-field__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs-field__tab-button {
+    min-height: 44px;
+    white-space: nowrap;
+    border-radius: 999px;
+    border: 1px solid var(--brand-border-subtle);
+    background: var(--brand-surface-2);
+    padding-inline: 0.9rem;
+  }
+
+  .tabs-field__tab-button[aria-selected='true'] {
+    border-color: color-mix(in srgb, var(--brand-accent) 50%, var(--brand-border));
+    background: var(--brand-accent-muted);
+    color: var(--brand-text);
+  }
+
+  .form-submit,
+  .doc-controls__wrapper,
+  .gutter--left.gutter--right {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    padding-block: 0.75rem;
+    background: linear-gradient(to top, var(--brand-bg) 70%, transparent);
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+
+  .table,
+  .collection-list table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .login__wrap,
+  .template-minimal .wrap {
+    margin-inline: 0.75rem;
+    width: calc(100% - 1.5rem);
+    max-width: 26rem;
+  }
+}
+
+/* Login — fond mesh premium */
+.template-minimal,
+.login {
+  background:
+    radial-gradient(80% 60% at 15% 10%, rgb(255 133 10 / 0.12), transparent 55%),
+    radial-gradient(70% 50% at 90% 85%, rgb(255 133 10 / 0.08), transparent 50%),
+    var(--brand-bg);
+}
+
+/* Onglets globals — style pill cohérent desktop */
+.tabs-field__tab-button {
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.tabs-field__tab-button:hover {
+  border-color: var(--brand-border);
+  background: var(--brand-surface-3);
+}
+
+/* Group labels plus aérés */
+.group-field__header,
+.render-fields > .field-type.group-field > .group-field__wrap > .group-field__header {
+  border-radius: var(--style-radius-m);
+  background: var(--brand-surface-2);
+  border: 1px solid var(--brand-border-subtle);
+}
+
+/* Upload fields — preview plus nette */
+.file-field__thumbnail,
+.upload__thumbnail {
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border-subtle);
+  overflow: hidden;
+}
+
+/* Step nav document (mobile) */
+@media (max-width: 768px) {
+  .doc-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+}

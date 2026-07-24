@@ -3,8 +3,15 @@ import { notFound } from 'next/navigation'
 
 import { ProjectDetailView } from '@/components/sections/ProjectDetailView'
 import { breadcrumbJsonLd, creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
-import { getProjectBySlug, getProjectSlugs, getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
+import {
+  getProjectBySlug,
+  getProjectSlugs,
+  getPublishedProjects,
+  getSeoDefaultsContent,
+  getSiteSettingsContent,
+} from '@/lib/content'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
 import type { Project } from '@/payload-types'
 
@@ -21,29 +28,22 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const project = await getProjectBySlug(slug)
+  const [project, settings, seo] = await Promise.all([
+    getProjectBySlug(slug),
+    getSiteSettingsContent(),
+    getSeoDefaultsContent(),
+  ])
   if (!project) return { title: 'Projet' }
 
   const coverUrl = resolveProjectCoverUrl(project)
-  const canonical = `${getSiteUrl()}/projets/${project.slug}`
 
-  return {
+  return buildPageMetadata(seo, settings, {
     title: project.title,
     description: project.excerpt,
-    alternates: { canonical },
-    openGraph: {
-      title: project.title,
-      description: project.excerpt,
-      url: canonical,
-      images: coverUrl ? [{ url: coverUrl }] : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: project.title,
-      description: project.excerpt,
-      images: coverUrl ? [coverUrl] : undefined,
-    },
-  }
+    path: `/projets/${project.slug}`,
+    image: coverUrl,
+    type: 'article',
+  })
 }
 
 function toAdjacent(project: Project | undefined) {

@@ -12,6 +12,7 @@ function isAdminGatewayHref(href: string): boolean {
 type FooterProps = {
   siteName: string
   email?: string | null
+  footerExtraLine?: string | null
   adminHref?: string | null
   adminLinkTitle?: string
   showAdminLink?: boolean
@@ -21,6 +22,7 @@ type FooterProps = {
 export function Footer({
   siteName,
   email,
+  footerExtraLine,
   adminHref = '/admin/login',
   adminLinkTitle = 'Backoffice Payload CMS',
   showAdminLink = true,
@@ -76,6 +78,14 @@ export function Footer({
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
             <span>© {new Date().getFullYear()}</span>
+            {footerExtraLine ? (
+              <>
+                <span aria-hidden className="text-[var(--muted-subtle)]">
+                  ·
+                </span>
+                <span>{footerExtraLine}</span>
+              </>
+            ) : null}
             <span aria-hidden className="text-[var(--muted-subtle)]">
               ·
             </span>

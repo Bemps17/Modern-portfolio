@@ -2,10 +2,37 @@ import { describe, expect, it } from 'vitest'
 
 import { SiteSettings } from '../../src/globals/SiteSettings'
 
+function fieldNames(
+  fields: {
+    name?: string
+    type?: string
+    fields?: { name?: string }[]
+    tabs?: { fields?: { name?: string }[] }[]
+  }[],
+): string[] {
+  const names: string[] = []
+  for (const field of fields) {
+    if ('name' in field && field.name) names.push(field.name)
+    if (field.type === 'tabs' && field.tabs) {
+      for (const tab of field.tabs) {
+        if (tab.fields) names.push(...fieldNames(tab.fields as typeof fields))
+      }
+    }
+    if (field.fields) names.push(...fieldNames(field.fields as typeof fields))
+  }
+  return names
+}
+
+function findField(fieldName: string) {
+  return SiteSettings.fields
+    .flatMap((field) =>
+      'tabs' in field && field.tabs ? field.tabs.flatMap((tab) => tab.fields || []) : [field],
+    )
+    .find((field) => 'name' in field && field.name === fieldName)
+}
+
 describe('SiteSettings CV profile fields', () => {
-  const names = SiteSettings.fields
-    .map((field) => ('name' in field ? field.name : null))
-    .filter(Boolean)
+  const names = fieldNames(SiteSettings.fields as Parameters<typeof fieldNames>[0])
 
   it('declares CV profile fields', () => {
     expect(names).toEqual(
@@ -26,18 +53,16 @@ describe('SiteSettings CV profile fields', () => {
   })
 
   it('defines textual competency categories without percentage level', () => {
-    const competencies = SiteSettings.fields.find(
-      (field) => 'name' in field && field.name === 'cvCompetencies',
-    )
+    const competencies = findField('cvCompetencies')
     expect(competencies && 'fields' in competencies).toBe(true)
     if (!competencies || !('fields' in competencies) || !competencies.fields) {
       throw new Error('cvCompetencies fields missing')
     }
-    const fieldNames = competencies.fields
+    const competencyFieldNames = competencies.fields
       .map((field) => ('name' in field ? field.name : null))
       .filter(Boolean)
-    expect(fieldNames).toEqual(expect.arrayContaining(['name', 'description']))
-    expect(fieldNames).not.toContain('level')
-    expect(fieldNames).not.toContain('items')
+    expect(competencyFieldNames).toEqual(expect.arrayContaining(['name', 'description']))
+    expect(competencyFieldNames).not.toContain('level')
+    expect(competencyFieldNames).not.toContain('items')
   })
 })

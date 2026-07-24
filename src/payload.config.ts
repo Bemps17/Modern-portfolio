@@ -49,6 +49,7 @@ export default buildConfig({
       /** Bouton header : force la revalidation du front + toast. */
       actions: ['/components/admin/RevalidateSiteButton'],
       beforeDashboard: [
+        '/components/admin/AdminDashboardHero',
         '/components/admin/CmsSyncBanner',
         '/components/admin/TrustedDevicePanel',
       ],

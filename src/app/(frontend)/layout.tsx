@@ -6,6 +6,7 @@ import { Toaster } from 'sonner'
 
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
 import { Footer } from '@/components/layout/Footer'
+import { MaintenanceBanner } from '@/components/layout/MaintenanceBanner'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
@@ -38,10 +39,6 @@ const spaceGrotesk = Space_Grotesk({
 
 export const revalidate = 3600
 
-export const viewport: Viewport = {
-  themeColor: '#0a0a0a',
-}
-
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettingsContent()
   const favicon =
@@ -53,6 +50,19 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: [{ url: favicon }],
       apple: favicon,
     },
+  }
+}
+
+function resolveThemeColor(settings: Awaited<ReturnType<typeof getSiteSettingsContent>>): string {
+  const color = settings?.themeColor?.trim()
+  if (color && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(color)) return color
+  return '#0a0a0a'
+}
+
+export async function generateViewport(): Promise<Viewport> {
+  const settings = await getSiteSettingsContent()
+  return {
+    themeColor: resolveThemeColor(settings),
   }
 }
 
@@ -68,6 +78,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const adminHref = getAdminHref()
   const adminLinkTitle = getAdminLinkTitle()
   const adminConfigured = isPayloadConfigured()
+  const footerExtraLine = settings?.footerExtraLine?.trim() || null
+  const showMaintenance = Boolean(settings?.maintenanceMode)
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
@@ -80,6 +92,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </a>
         <FunEffects />
         <CommandPalette projects={paletteProjects} />
+        {showMaintenance ? (
+          <MaintenanceBanner message={settings?.maintenanceMessage} />
+        ) : null}
         <Sidebar logoUrl={logoUrl} siteName={siteName} socialLinks={socialLinks} />
         <div className="relative z-10 min-h-screen lg:pl-[72px]">
           <main className="min-h-screen pb-20 lg:pb-0" id="main">
@@ -90,6 +105,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             adminHref={adminHref}
             adminLinkTitle={adminLinkTitle}
             email={email}
+            footerExtraLine={footerExtraLine}
             showAdminLink={showAdminLink}
             siteName={siteName}
           />

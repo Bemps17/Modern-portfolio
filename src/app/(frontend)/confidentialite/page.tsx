@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { LegalList, LegalPageShell, LegalSection } from '@/components/legal/LegalPageShell'
-import { getSiteSettingsContent } from '@/lib/content'
+import { getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
@@ -10,15 +11,14 @@ export const revalidate = 3600
 const PRIVACY_LAST_UPDATED = '24 juillet 2026'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettingsContent()
+  const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
   const siteName = settings?.siteName || 'Portfolio'
 
-  return {
+  return buildPageMetadata(seo, settings, {
     title: 'Politique de confidentialité',
     description: `Politique de confidentialité du site ${siteName} — données collectées, mesure d’audience Vercel, formulaire de contact et droits RGPD.`,
-    alternates: { canonical: `${getSiteUrl()}/confidentialite` },
-    robots: { index: true, follow: true },
-  }
+    path: '/confidentialite',
+  })
 }
 
 export default async function PrivacyPolicyPage() {

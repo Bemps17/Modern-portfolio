@@ -18,11 +18,13 @@ import {
   getExperiences,
   getPublishedProjects,
   getQualifications,
+  getSeoDefaultsContent,
   getSiteSettingsContent,
   getSkills,
 } from '@/lib/content'
 import { JsonLd, personJsonLd } from '@/lib/json-ld'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 import { buildCvShareUrl } from '@/lib/cv/share-links'
 import { getSiteUrl } from '@/lib/site-url'
 import { getTechnicalSkills, resolveSoftSkills } from '@/lib/skills'
@@ -41,12 +43,13 @@ function yearsFromExperiences(experiences: Experience[]): number {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettingsContent()
-  return {
+  const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
+
+  return buildPageMetadata(seo, settings, {
     title: 'À propos',
     description: settings?.aboutIntro || settings?.tagline || 'À propos',
-    alternates: { canonical: `${getSiteUrl()}/a-propos` },
-  }
+    path: '/a-propos',
+  })
 }
 
 export default async function AboutPage() {

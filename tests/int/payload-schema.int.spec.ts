@@ -11,8 +11,18 @@ import { Users } from '@/collections/Users'
 import { SEODefaults } from '@/globals/SEODefaults'
 import { SiteSettings } from '@/globals/SiteSettings'
 
-function fieldNames(fields: { name?: string }[]): string[] {
-  return fields.map((field) => ('name' in field ? field.name : undefined)).filter(Boolean) as string[]
+function fieldNames(fields: { name?: string; type?: string; fields?: { name?: string }[]; tabs?: { fields?: { name?: string }[] }[] }[]): string[] {
+  const names: string[] = []
+  for (const field of fields) {
+    if ('name' in field && field.name) names.push(field.name)
+    if (field.type === 'tabs' && field.tabs) {
+      for (const tab of field.tabs) {
+        if (tab.fields) names.push(...fieldNames(tab.fields as typeof fields))
+      }
+    }
+    if (field.fields) names.push(...fieldNames(field.fields as typeof fields))
+  }
+  return names
 }
 
 describe('Payload schema — collections & globals', () => {
@@ -54,18 +64,43 @@ describe('Payload schema — collections & globals', () => {
         'aboutHeadline',
         'skillsTitle',
         'skillsSubtitle',
+        'themeColor',
+        'legalPublisher',
+        'maintenanceMode',
       ]),
     )
-    const avatar = SiteSettings.fields.find((field) => 'name' in field && field.name === 'avatar')
+    const findField = (fieldName: string) =>
+      names.includes(fieldName)
+        ? SiteSettings.fields
+            .flatMap((field) =>
+              'tabs' in field && field.tabs ? field.tabs.flatMap((tab) => tab.fields || []) : [field],
+            )
+            .find((field) => 'name' in field && field.name === fieldName)
+        : undefined
+    const avatar = findField('avatar')
     expect(avatar).toMatchObject({ type: 'upload', relationTo: 'media' })
-    const logo = SiteSettings.fields.find((field) => 'name' in field && field.name === 'logo')
+    const logo = findField('logo')
     expect(logo).toMatchObject({ type: 'upload', relationTo: 'media' })
-    const favicon = SiteSettings.fields.find((field) => 'name' in field && field.name === 'favicon')
+    const favicon = findField('favicon')
     expect(favicon).toMatchObject({ type: 'upload', relationTo: 'media' })
   })
 
-  it('SEO defaults expose ogImage (upload → media)', () => {
-    const og = SEODefaults.fields.find((field) => 'name' in field && field.name === 'ogImage')
+  it('SEO defaults expose ogImage et champs avancés', () => {
+    const names = fieldNames(SEODefaults.fields as { name?: string }[])
+    expect(names).toEqual(
+      expect.arrayContaining([
+        'defaultTitle',
+        'defaultDescription',
+        'ogImage',
+        'titleTemplate',
+        'twitterCard',
+        'noindexSite',
+        'enablePersonJsonLd',
+      ]),
+    )
+    const og = SEODefaults.fields
+      .flatMap((field) => ('tabs' in field && field.tabs ? field.tabs.flatMap((tab) => tab.fields || []) : [field]))
+      .find((field) => 'name' in field && field.name === 'ogImage')
     expect(og).toMatchObject({ type: 'upload', relationTo: 'media' })
   })
 

@@ -6,6 +6,7 @@ import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { getPublishedProjects, getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
 import { itemListJsonLd, JsonLd } from '@/lib/json-ld'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
@@ -13,17 +14,11 @@ export const revalidate = 3600
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
 
-  return {
+  return buildPageMetadata(seo, settings, {
     title: 'Projets',
     description: seo?.defaultDescription || `Projets de ${settings?.siteName || 'portfolio'}.`,
-    alternates: { canonical: `${getSiteUrl()}/projets` },
-    openGraph: {
-      title: `Projets — ${settings?.siteName || 'Portfolio'}`,
-      description: seo?.defaultDescription || settings?.tagline || undefined,
-      url: `${getSiteUrl()}/projets`,
-      type: 'website',
-    },
-  }
+    path: '/projets',
+  })
 }
 
 export default async function ProjetsPage() {

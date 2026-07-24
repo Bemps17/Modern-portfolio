@@ -2,31 +2,41 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { LegalList, LegalPageShell, LegalSection } from '@/components/legal/LegalPageShell'
-import { getSiteSettingsContent } from '@/lib/content'
+import { getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
 import { SITE_VERSION } from '@/lib/site-version'
 
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettingsContent()
+  const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
   const siteName = settings?.siteName || 'Portfolio'
 
-  return {
+  return buildPageMetadata(seo, settings, {
     title: 'Mentions légales',
     description: `Mentions légales du site ${siteName} — éditeur, hébergement et propriété intellectuelle.`,
-    alternates: { canonical: `${getSiteUrl()}/mentions-legales` },
-    robots: { index: true, follow: true },
-  }
+    path: '/mentions-legales',
+  })
 }
 
 export default async function LegalNoticePage() {
   const settings = await getSiteSettingsContent()
   const siteName = settings?.siteName || 'Portfolio'
+  const publisher = settings?.legalPublisher?.trim() || siteName
+  const director = settings?.legalDirector?.trim() || siteName
   const email = settings?.email
   const phone = settings?.phone
   const location = settings?.location
   const siteUrl = getSiteUrl()
+  const hostingLines =
+    settings?.legalHostingProvider
+      ?.split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean) ?? [
+      'Vercel Inc. — 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com',
+      'Neon (base de données PostgreSQL) — neon.tech',
+    ]
 
   return (
     <LegalPageShell
@@ -41,7 +51,7 @@ export default async function LegalNoticePage() {
     >
       <LegalSection title="Éditeur du site">
         <p>
-          Le présent site est édité par <strong className="text-[var(--foreground)]">{siteName}</strong>
+          Le présent site est édité par <strong className="text-[var(--foreground)]">{publisher}</strong>
           {location ? (
             <>
               , domicilié à <strong className="text-[var(--foreground)]">{location}</strong>
@@ -62,18 +72,13 @@ export default async function LegalNoticePage() {
 
       <LegalSection title="Directeur de la publication">
         <p>
-          Le directeur de la publication est <strong className="text-[var(--foreground)]">{siteName}</strong>.
+          Le directeur de la publication est <strong className="text-[var(--foreground)]">{director}</strong>.
         </p>
       </LegalSection>
 
       <LegalSection title="Hébergement">
         <p>Ce site est hébergé par :</p>
-        <LegalList
-          items={[
-            'Vercel Inc. — 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com',
-            'Neon (base de données PostgreSQL) — neon.tech',
-          ]}
-        />
+        <LegalList items={hostingLines} />
       </LegalSection>
 
       <LegalSection title="Propriété intellectuelle">

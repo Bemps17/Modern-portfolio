@@ -19,6 +19,7 @@ import {
 } from '@/lib/content'
 import { JsonLd, personJsonLd, websiteJsonLd } from '@/lib/json-ld'
 import { resolveMediaUrl, isMedia } from '@/lib/media'
+import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
 import { getTechnicalSkills } from '@/lib/skills'
 
@@ -27,26 +28,7 @@ export const revalidate = 3600
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
 
-  const og = resolveMediaUrl(seo?.ogImage) || undefined
-
-  return {
-    title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
-    description: seo?.defaultDescription || settings?.tagline || undefined,
-    alternates: { canonical: getSiteUrl() + '/' },
-    openGraph: {
-      title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
-      description: seo?.defaultDescription || settings?.tagline || undefined,
-      url: getSiteUrl(),
-      images: og ? [{ url: og }] : undefined,
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: seo?.defaultTitle || settings?.siteName || 'Portfolio',
-      description: seo?.defaultDescription || settings?.tagline || undefined,
-      images: og ? [og] : undefined,
-    },
-  }
+  return buildPageMetadata(seo, settings, { path: '/' })
 }
 
 export default async function HomePage() {
@@ -67,6 +49,9 @@ export default async function HomePage() {
   const sameAs = (settings?.socialLinks || [])
     .map((link) => link.url)
     .filter((url): url is string => Boolean(url))
+  const schemaName = seo?.schemaAuthorName?.trim() || siteName
+  const showWebsiteSchema = seo?.enableWebsiteJsonLd !== false
+  const showPersonSchema = seo?.enablePersonJsonLd !== false
 
   const availability = (settings?.availability ?? 'available') as AvailabilityStatus
 
@@ -74,27 +59,31 @@ export default async function HomePage() {
 
   return (
     <BootSequence>
-      <JsonLd
-        data={websiteJsonLd({
-          name: siteName,
-          url: siteUrl,
-          description: seo?.defaultDescription || tagline,
-        })}
-      />
-      <JsonLd
-        data={personJsonLd({
-          name: siteName,
-          email: settings?.email,
-          description: aboutIntro || tagline,
-          url: siteUrl,
-          sameAs,
-          image: avatarUrl
-            ? avatarUrl.startsWith('http')
-              ? avatarUrl
-              : `${siteUrl}${avatarUrl}`
-            : undefined,
-        })}
-      />
+      {showWebsiteSchema ? (
+        <JsonLd
+          data={websiteJsonLd({
+            name: siteName,
+            url: siteUrl,
+            description: seo?.defaultDescription || tagline,
+          })}
+        />
+      ) : null}
+      {showPersonSchema ? (
+        <JsonLd
+          data={personJsonLd({
+            name: schemaName,
+            email: settings?.email,
+            description: aboutIntro || tagline,
+            url: siteUrl,
+            sameAs,
+            image: avatarUrl
+              ? avatarUrl.startsWith('http')
+                ? avatarUrl
+                : `${siteUrl}${avatarUrl}`
+              : undefined,
+          })}
+        />
+      ) : null}
       <Hero
         aboutIntro={aboutIntro}
         availability={availability}
