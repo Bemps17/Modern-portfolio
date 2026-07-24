@@ -220,14 +220,10 @@ async function upsertExperience(
   payload: Awaited<ReturnType<typeof getPayload>>,
   experience: (typeof portfolioFallback.experiences)[number],
 ) {
+  // Match by title so company renames (ex. PAPREC → Sonotra/PAPREC) update in place.
   const existing = await payload.find({
     collection: 'experiences',
-    where: {
-      and: [
-        { title: { equals: experience.title } },
-        { company: { equals: experience.company } },
-      ],
-    },
+    where: { title: { equals: experience.title } },
     limit: 1,
   })
 
@@ -352,18 +348,66 @@ async function seed() {
     await upsertExperience(payload, experience)
   }
 
-  // Retire les entrées agrégées remplacées par le détail « premières expériences »
-  const obsoleteCompanies = ['Telenet, DJM, Paritel, Berner…', 'Logistique & événementiel']
+  // Retire les entrées agrégées / legacy remplacées par le fallback curaté
+  const obsoleteCompanies = [
+    'Telenet, DJM, Paritel, Berner…',
+    'Logistique & événementiel',
+    'PAPREC — La Rochelle',
+    'Transports Hautié',
+    'Sonotra / PAPREC La Rochelle — Groupe Hautier',
+  ]
   for (const company of obsoleteCompanies) {
     const obsolete = await payload.find({
       collection: 'experiences',
       where: { company: { equals: company } },
-      limit: 10,
+      limit: 20,
     })
     for (const doc of obsolete.docs) {
       await payload.delete({ collection: 'experiences', id: doc.id })
       console.log(`Removed obsolete experience: ${doc.title} @ ${company}`)
     }
+  }
+
+  // Titres legacy hors canon (ex. « Assistant logistique » seul → fusion Sonotra/PAPREC)
+  const obsoleteTitles = ['Assistant logistique']
+  for (const title of obsoleteTitles) {
+    const obsolete = await payload.find({
+      collection: 'experiences',
+      where: { title: { equals: title } },
+      limit: 10,
+    })
+    for (const doc of obsolete.docs) {
+      await payload.delete({ collection: 'experiences', id: doc.id })
+      console.log(`Removed obsolete experience title: ${title}`)
+    }
+  }
+
+  // Sécurité : toute expérience Sonotra/PAPREC encore taguée « Groupe Hautier »
+  const mislabeled = await payload.find({
+    collection: 'experiences',
+    where: {
+      and: [
+        { company: { contains: 'Groupe Hautier' } },
+        {
+          or: [{ company: { contains: 'Sonotra' } }, { company: { contains: 'PAPREC' } }],
+        },
+      ],
+    },
+    limit: 20,
+  })
+  for (const doc of mislabeled.docs) {
+    await payload.update({
+      collection: 'experiences',
+      id: doc.id,
+      data: {
+        company: 'Sonotra / PAPREC La Rochelle',
+        description:
+          typeof doc.description === 'string'
+            ? doc.description.replace(/\s*\(?Groupe Hautier\)?/g, '').replace(/\s{2,}/g, ' ').trim()
+            : doc.description,
+      },
+    })
+    console.log(`Stripped Groupe Hautier from: ${doc.title}`)
   }
 
   console.log('Syncing qualifications…')
