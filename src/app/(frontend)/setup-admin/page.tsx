@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SetupAdminPage() {
   if (isPayloadConfigured()) {
-    redirect('/admin')
+    redirect('/api/admin/gateway')
   }
 
   return (

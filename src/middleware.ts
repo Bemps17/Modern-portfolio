@@ -8,6 +8,8 @@ const buckets = new Map<string, Bucket>()
 const WINDOW_MS = 60_000
 const MAX_LOGIN_ATTEMPTS = 10
 const MAX_CONTACT_ATTEMPTS = 8
+const MAX_GATEWAY_ATTEMPTS = 30
+const MAX_TRUSTED_DEVICE_ATTEMPTS = 20
 
 function clientIp(req: NextRequest): string {
   return (
@@ -45,9 +47,31 @@ export function middleware(req: NextRequest) {
     }
   }
 
+  if (pathname === '/api/admin/gateway' && req.method === 'GET') {
+    if (!take(`gateway:${ip}`, MAX_GATEWAY_ATTEMPTS)) {
+      return NextResponse.redirect(new URL('/admin/login', req.url))
+    }
+  }
+
+  if (pathname === '/api/admin/trusted-device') {
+    if (!take(`trusted-device:${ip}`, MAX_TRUSTED_DEVICE_ATTEMPTS)) {
+      return NextResponse.json({ ok: false, error: 'Too many requests' }, { status: 429 })
+    }
+  }
+
+  if (pathname === '/api/admin/test-login' && process.env.NODE_ENV === 'production') {
+    return NextResponse.redirect(new URL('/', req.url))
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/api/users/login', '/api/contact'],
+  matcher: [
+    '/api/users/login',
+    '/api/contact',
+    '/api/admin/gateway',
+    '/api/admin/trusted-device',
+    '/api/admin/test-login',
+  ],
 }

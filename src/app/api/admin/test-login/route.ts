@@ -10,9 +10,18 @@ import { isPayloadConfigured } from '@/lib/payload-env'
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Bypass historique — désactivé en production.
+ * Préférer /api/admin/gateway + appareils de confiance.
+ */
 export async function GET(request: Request) {
   const origin = new URL(request.url).origin
   const loginUrl = new URL('/admin/login', origin)
+  const homeUrl = new URL('/', origin)
+
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.redirect(homeUrl)
+  }
 
   if (!isPayloadConfigured() || !isAdminTestLoginEnabled()) {
     return NextResponse.redirect(loginUrl)

@@ -27,7 +27,7 @@ export function AdminSetupForm() {
   const [siteUrl, setSiteUrl] = useState('https://modern-portfolio-two-orcin.vercel.app')
   const [seedAdminEmail, setSeedAdminEmail] = useState('bertrandwebdesigner@proton.me')
   const [seedAdminPassword, setSeedAdminPassword] = useState('')
-  const [enableAdminTestLogin, setEnableAdminTestLogin] = useState(true)
+  const [enableAdminTestLogin, setEnableAdminTestLogin] = useState(false)
   const [result, setResult] = useState<SetupResult | null>(null)
   const [pending, startTransition] = useTransition()
 
@@ -135,37 +135,37 @@ export function AdminSetupForm() {
         />
       </label>
 
-      <label className="flex items-center gap-2 text-sm text-white">
+      <label className="flex flex-col gap-2 text-sm">
+        <span className="font-medium text-white">Email admin (seed)</span>
+        <input
+          className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-white outline-none focus:border-[var(--accent)]"
+          onChange={(event) => setSeedAdminEmail(event.target.value)}
+          type="email"
+          value={seedAdminEmail}
+        />
+      </label>
+      <label className="flex flex-col gap-2 text-sm">
+        <span className="font-medium text-white">Mot de passe admin (seed)</span>
+        <input
+          className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-white outline-none focus:border-[var(--accent)]"
+          onChange={(event) => setSeedAdminPassword(event.target.value)}
+          type="password"
+          value={seedAdminPassword}
+        />
+      </label>
+
+      <label className="flex items-start gap-2 text-sm text-white">
         <input
           checked={enableAdminTestLogin}
+          className="mt-1"
           onChange={(event) => setEnableAdminTestLogin(event.target.checked)}
           type="checkbox"
         />
-        Connexion admin 1 clic (footer)
+        <span>
+          Bypass login 1 clic (dev local uniquement — <strong>ignoré en production</strong>). En
+          prod : mot de passe + appareil de confiance.
+        </span>
       </label>
-
-      {enableAdminTestLogin ? (
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-2 text-sm">
-            <span className="font-medium text-white">Email admin</span>
-            <input
-              className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-white outline-none focus:border-[var(--accent)]"
-              onChange={(event) => setSeedAdminEmail(event.target.value)}
-              type="email"
-              value={seedAdminEmail}
-            />
-          </label>
-          <label className="flex flex-col gap-2 text-sm">
-            <span className="font-medium text-white">Mot de passe admin</span>
-            <input
-              className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-white outline-none focus:border-[var(--accent)]"
-              onChange={(event) => setSeedAdminPassword(event.target.value)}
-              type="password"
-              value={seedAdminPassword}
-            />
-          </label>
-        </div>
-      ) : null}
 
       <button
         className="rounded-lg bg-[var(--accent)] px-4 py-3 text-sm font-semibold text-black disabled:cursor-not-allowed disabled:opacity-50"
