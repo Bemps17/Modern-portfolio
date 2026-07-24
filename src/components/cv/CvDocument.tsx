@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   competencyBlock: {
-    marginBottom: 5,
+    marginBottom: 4,
   },
   competencyCategory: {
     fontSize: 7.5,
@@ -126,8 +126,23 @@ const styles = StyleSheet.create({
   },
   competencyItems: {
     fontSize: 7,
-    lineHeight: 1.3,
+    lineHeight: 1.25,
     color: colors.sidebarMuted,
+  },
+  sideQualBlock: {
+    marginBottom: 4,
+  },
+  sideQualTitle: {
+    fontSize: 7,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.sidebarText,
+    lineHeight: 1.25,
+    marginBottom: 1,
+  },
+  sideQualMeta: {
+    fontSize: 6.5,
+    color: colors.sidebarMuted,
+    lineHeight: 1.25,
   },
   headerName: {
     fontSize: L.headerNameFontSize,
@@ -211,7 +226,7 @@ const styles = StyleSheet.create({
     color: colors.muted,
   },
   earlyRow: {
-    marginBottom: 5,
+    marginBottom: 4,
   },
   earlyTitle: {
     fontSize: L.bodyFontSize,
@@ -219,18 +234,6 @@ const styles = StyleSheet.create({
     color: colors.ink,
   },
   earlyMeta: {
-    fontSize: 7.5,
-    color: colors.muted,
-  },
-  qualRow: {
-    marginBottom: 3,
-  },
-  qualTitle: {
-    fontSize: L.bodyFontSize,
-    fontFamily: 'Helvetica-Bold',
-    color: colors.ink,
-  },
-  qualMeta: {
     fontSize: 7.5,
     color: colors.muted,
   },
@@ -357,6 +360,20 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
             </>
           ) : null}
 
+          {data.qualifications.length > 0 ? (
+            <>
+              <Text style={styles.sideSectionTitle}>Formations</Text>
+              {data.qualifications.map((item, index) => (
+                <View key={`qual-${index}`} style={styles.sideQualBlock} wrap={false}>
+                  <Text style={styles.sideQualTitle}>{item.title}</Text>
+                  <Text style={styles.sideQualMeta}>
+                    {[item.organization, item.yearLabel].filter(Boolean).join(' · ')}
+                  </Text>
+                </View>
+              ))}
+            </>
+          ) : null}
+
           {data.mobility || (data.showRqthOnCv && data.rqthNote) || interestItems.length > 0 ? (
             <>
               <Text style={styles.sideSectionTitle}>Infos</Text>
@@ -369,7 +386,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
               {data.showRqthOnCv && data.rqthNote ? (
                 <View style={styles.sideBlock}>
                   <Text style={styles.sideLabel}>Statut</Text>
-                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 160)}</Text>
+                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 140)}</Text>
                 </View>
               ) : null}
               {interestItems.length > 0 ? (
@@ -408,20 +425,6 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
                   <Text style={styles.earlyTitle}>{experience.title}</Text>
                   <Text style={styles.earlyMeta}>
                     {experience.company} · {experience.dateLabel}
-                  </Text>
-                </View>
-              ))}
-            </>
-          ) : null}
-
-          {data.qualifications.length > 0 ? (
-            <>
-              <Text style={styles.sectionTitle}>Formations</Text>
-              {data.qualifications.map((item, index) => (
-                <View key={`qual-${index}`} style={styles.qualRow} wrap={false}>
-                  <Text style={styles.qualTitle}>{item.title}</Text>
-                  <Text style={styles.qualMeta}>
-                    {[item.organization, item.yearLabel].filter(Boolean).join(' · ')}
                   </Text>
                 </View>
               ))}

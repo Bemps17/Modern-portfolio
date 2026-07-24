@@ -10,6 +10,6 @@ export const CV_PDF_LAYOUT = {
   bodyFontSize: 8.5,
   sideBodyFontSize: 7.5,
   timelineItemMarginBottom: 6,
-  recentDescriptionMaxChars: 190,
-  pitchMaxChars: 360,
+  recentDescriptionMaxChars: 180,
+  pitchMaxChars: 280,
 } as const
