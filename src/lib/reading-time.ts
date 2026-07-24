@@ -1,6 +1,6 @@
 import type { Project } from '@/payload-types'
 
-function lexicalToPlainText(value: unknown): string {
+export function lexicalToPlainText(value: unknown): string {
   if (!value || typeof value !== 'object') return ''
   const root = (value as { root?: { children?: Array<{ children?: Array<{ text?: string }> }> } }).root
   if (!root?.children) return ''

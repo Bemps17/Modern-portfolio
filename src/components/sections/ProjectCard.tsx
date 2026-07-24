@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/Badge'
 import { GlassCard } from '@/components/ui/GlassCard'
 import type { Project } from '@/payload-types'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
+import { isDuplicateCopy } from '@/lib/text-dedupe'
 import { cn } from '@/lib/utils'
 
 type ProjectCardProps = {
@@ -60,7 +61,10 @@ export function ProjectCard({
   const coverAlt =
     typeof project.cover === 'object' && project.cover?.alt ? project.cover.alt : project.title
   const stack = (project.stack ?? []).slice(0, maxStack)
-  const impact = typeof project.impact === 'string' ? project.impact : null
+  const excerpt = typeof project.excerpt === 'string' ? project.excerpt.trim() : ''
+  const impactRaw = typeof project.impact === 'string' ? project.impact.trim() : ''
+  // Évite d'afficher deux fois le même texte (impact souvent = excerpt côté CMS)
+  const impact = impactRaw && !isDuplicateCopy(impactRaw, excerpt) ? impactRaw : null
 
   const onMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!tiltActive || !ref.current) return
@@ -140,7 +144,9 @@ export function ProjectCard({
               ) : null}
               {project.title}
             </h3>
-            <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">{project.excerpt}</p>
+            {excerpt ? (
+              <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">{excerpt}</p>
+            ) : null}
             {impact ? (
               <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--accent-soft)]">
                 {impact}

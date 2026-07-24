@@ -10,9 +10,10 @@ import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
-import { estimateReadingTime } from '@/lib/reading-time'
+import { estimateReadingTime, lexicalToPlainText } from '@/lib/reading-time'
 import { isMedia } from '@/lib/media'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
+import { isDuplicateCopy } from '@/lib/text-dedupe'
 import type { Project } from '@/payload-types'
 
 const STACK_LABELS: Record<string, string> = {
@@ -46,6 +47,9 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
     (isMedia(project.cover) ? project.cover.alt : null) || project.title
   const stackItems = (project.stack || []) as NonNullable<Project['stack']>
   const readingMinutes = estimateReadingTime(project)
+  const excerpt = project.excerpt?.trim() || ''
+  const contentPlain = lexicalToPlainText(project.content)
+  const showBody = Boolean(project.content) && !isDuplicateCopy(excerpt, contentPlain)
 
   return (
     <>
@@ -78,7 +82,9 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
 
           <div className="mt-10 lg:mt-0">
             <EditorialTitle as="h1" bleed className="mb-4" text={project.title} />
-            <p className="text-lg text-[var(--foreground-secondary)]">{project.excerpt}</p>
+            {excerpt ? (
+              <p className="text-lg text-[var(--foreground-secondary)]">{excerpt}</p>
+            ) : null}
 
             {stackItems.length ? (
               <div className="mt-5 flex flex-wrap gap-2">
@@ -97,7 +103,7 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
               ) : null}
             </div>
 
-            {project.content ? (
+            {showBody ? (
               <div className="prose prose-invert mt-10 max-w-none">
                 <RichTextRenderer data={project.content} />
               </div>
