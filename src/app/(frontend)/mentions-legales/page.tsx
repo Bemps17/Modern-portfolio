@@ -100,7 +100,8 @@ export default async function LegalNoticePage() {
 
       <LegalSection title="Données personnelles">
         <p>
-          Les modalités de collecte et de traitement des données personnelles sont décrites dans la{' '}
+          Les modalités de collecte et de traitement des données personnelles — y compris la mesure d’audience Vercel
+          Web Analytics et Speed Insights — sont décrites dans la{' '}
           <Link className="text-[var(--accent-soft)] underline-offset-2 hover:underline" href="/confidentialite">
             politique de confidentialité
           </Link>
