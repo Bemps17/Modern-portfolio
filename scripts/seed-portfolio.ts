@@ -157,11 +157,19 @@ async function upsertProject(
   const cover = coverMedia.id
 
   const excerpt = project.excerpt || project.title
+  const existingDoc = existing.docs[0]
   const data = {
     title: project.title,
     slug: project.slug,
     excerpt,
-    content: textToLexical(excerpt),
+    // Ne pas écraser un contenu CMS déjà distinct ; sinon body = excerpt (doublon UI)
+    ...(existingDoc?.content
+      ? {}
+      : {
+          content: textToLexical(
+            `${excerpt}\n\nStack : ${mapStack((project.stack as string[] | null | undefined) || []).join(', ') || 'web'}.`,
+          ),
+        }),
     cover,
     stack: mapStack((project.stack as string[] | null | undefined) || []),
     liveUrl: project.liveUrl || undefined,
@@ -171,10 +179,10 @@ async function upsertProject(
     status: 'published' as const,
   }
 
-  if (existing.docs[0]) {
+  if (existingDoc) {
     await payload.update({
       collection: 'projects',
-      id: existing.docs[0].id,
+      id: existingDoc.id,
       data,
     })
     return
@@ -182,7 +190,12 @@ async function upsertProject(
 
   await payload.create({
     collection: 'projects',
-    data,
+    data: {
+      ...data,
+      content: textToLexical(
+        `${excerpt}\n\nStack : ${mapStack((project.stack as string[] | null | undefined) || []).join(', ') || 'web'}.`,
+      ),
+    },
   })
 }
 
