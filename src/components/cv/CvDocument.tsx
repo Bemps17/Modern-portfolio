@@ -1,6 +1,5 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
-import { splitCvPages } from '@/lib/cv/split-cv-pages'
 import type { CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
 
 /** Palette alignée sur le design system du site (styles.css). */
@@ -14,27 +13,20 @@ const colors = {
   ink: '#1a1a1a',
   muted: '#4a4a4a',
   line: '#ddd8d2',
-  soft: '#efeae3',
   timeline: '#c4bfb8',
 }
 
-const SIDEBAR_WIDTH = 185
+const SIDEBAR_WIDTH = 168
 
 const styles = StyleSheet.create({
   page: {
     paddingLeft: SIDEBAR_WIDTH,
-    fontSize: 9.5,
+    paddingTop: 20,
+    paddingBottom: 32,
+    fontSize: 8,
     fontFamily: 'Helvetica',
     color: colors.ink,
     backgroundColor: colors.page,
-  },
-  page1: {
-    paddingTop: 28,
-    paddingBottom: 40,
-  },
-  page2: {
-    paddingTop: 40,
-    paddingBottom: 36,
   },
   sidebar: {
     position: 'absolute',
@@ -43,212 +35,228 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: SIDEBAR_WIDTH,
     backgroundColor: colors.sidebar,
-    paddingTop: 28,
-    paddingBottom: 24,
-    paddingHorizontal: 16,
   },
   sidebarContent: {
     position: 'absolute',
     left: 0,
     top: 0,
     width: SIDEBAR_WIDTH,
-    paddingTop: 28,
-    paddingBottom: 24,
-    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingHorizontal: 12,
   },
   main: {
-    paddingHorizontal: 22,
+    paddingHorizontal: 16,
   },
   brandMark: {
-    width: 28,
-    height: 4,
+    width: 22,
+    height: 3,
     backgroundColor: colors.accent,
-    marginBottom: 14,
+    marginBottom: 10,
   },
   sideSectionTitle: {
-    fontSize: 9,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.accentSoft,
     textTransform: 'uppercase',
-    letterSpacing: 1.2,
-    marginTop: 14,
-    marginBottom: 6,
-    paddingBottom: 4,
+    letterSpacing: 1,
+    marginTop: 9,
+    marginBottom: 4,
+    paddingBottom: 2,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,107,26,0.35)',
   },
   sideBody: {
-    fontSize: 8,
-    lineHeight: 1.4,
+    fontSize: 6.5,
+    lineHeight: 1.3,
     color: colors.sidebarMuted,
   },
   sideContact: {
-    fontSize: 8,
-    lineHeight: 1.45,
+    fontSize: 6.5,
+    lineHeight: 1.35,
     color: colors.sidebarText,
-    marginBottom: 3,
+    marginBottom: 2,
   },
   sideLabel: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.accent,
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
     marginBottom: 1,
   },
   sideBlock: {
-    marginBottom: 6,
+    marginBottom: 4,
   },
   langRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 5,
+    marginBottom: 3,
   },
   bullet: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
     backgroundColor: colors.accent,
-    marginRight: 6,
-    marginTop: 2,
+    marginRight: 5,
+    marginTop: 1,
   },
   langName: {
-    fontSize: 8,
+    fontSize: 6.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.sidebarText,
   },
   langLevel: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.sidebarMuted,
   },
   interestChip: {
-    fontSize: 7.5,
+    fontSize: 6.5,
     color: colors.sidebarText,
-    marginBottom: 3,
+    marginBottom: 2,
   },
   sideCompetencyRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   sideCompetencyName: {
     flex: 1,
-    fontSize: 7.5,
+    fontSize: 6.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.sidebarText,
-    paddingRight: 6,
+    paddingRight: 4,
   },
   sideCompetencyLevel: {
-    fontSize: 7.5,
+    fontSize: 6.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.accentSoft,
   },
   headerName: {
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 3,
+    letterSpacing: 0.8,
+    marginBottom: 2,
   },
   headerTagline: {
-    fontSize: 9.5,
+    fontSize: 7.5,
     color: colors.accent,
     textTransform: 'uppercase',
-    letterSpacing: 1.2,
-    marginBottom: 12,
+    letterSpacing: 1,
+    marginBottom: 8,
   },
   sectionTitle: {
-    fontSize: 9.5,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginTop: 10,
-    marginBottom: 7,
-    paddingBottom: 3,
+    letterSpacing: 0.8,
+    marginTop: 7,
+    marginBottom: 4,
+    paddingBottom: 2,
     borderBottomWidth: 1,
     borderBottomColor: colors.line,
   },
   timelineItem: {
     flexDirection: 'row',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   timelineMeta: {
-    width: 82,
-    paddingRight: 6,
+    width: 72,
+    paddingRight: 4,
   },
   timelineRail: {
-    width: 10,
+    width: 8,
     alignItems: 'center',
   },
   timelineDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
     backgroundColor: colors.accent,
-    marginTop: 2,
+    marginTop: 1,
   },
   timelineLine: {
-    width: 1.5,
+    width: 1,
     flexGrow: 1,
     backgroundColor: colors.timeline,
-    marginTop: 2,
-    marginBottom: 1,
+    marginTop: 1,
   },
   timelineContent: {
     flex: 1,
-    paddingLeft: 5,
-    paddingBottom: 2,
+    paddingLeft: 4,
   },
   company: {
-    fontSize: 7.5,
+    fontSize: 6.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   dateLabel: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.muted,
-    lineHeight: 1.3,
+    lineHeight: 1.25,
   },
   jobTitle: {
-    fontSize: 9,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   jobBody: {
-    fontSize: 8,
-    lineHeight: 1.35,
+    fontSize: 6.5,
+    lineHeight: 1.25,
     color: colors.muted,
   },
-  quote: {
-    marginTop: 2,
-    padding: 8,
-    backgroundColor: colors.soft,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.accent,
+  earlyRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 2,
   },
-  quoteText: {
-    fontSize: 8,
-    fontStyle: 'italic',
+  earlyLeft: {
+    flex: 1,
+    fontSize: 6.5,
+    color: colors.ink,
+    paddingRight: 6,
+  },
+  earlyDate: {
+    fontSize: 6,
     color: colors.muted,
-    lineHeight: 1.4,
   },
-  quoteAuthor: {
-    marginTop: 4,
-    fontSize: 7.5,
+  qualRow: {
+    flexDirection: 'row',
+    marginBottom: 2,
+  },
+  qualYear: {
+    width: 28,
+    fontSize: 6.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.accent,
+  },
+  qualBody: {
+    flex: 1,
+    fontSize: 6.5,
     color: colors.ink,
   },
 })
 
+/** Compresse une description pour tenir sur une page A4. */
+function compactText(text: string, max = 110): string {
+  const oneLine = text.replace(/\s+/g, ' ').trim()
+  if (oneLine.length <= max) return oneLine
+  return `${oneLine.slice(0, max - 1).trimEnd()}…`
+}
+
 function TimelineExperience({
   experience,
   isLast,
+  compact = false,
 }: {
   experience: CvExperienceItem
   isLast: boolean
+  compact?: boolean
 }) {
   return (
     <View style={styles.timelineItem} wrap={false}>
@@ -262,7 +270,9 @@ function TimelineExperience({
       </View>
       <View style={styles.timelineContent}>
         <Text style={styles.jobTitle}>{experience.title}</Text>
-        <Text style={styles.jobBody}>{experience.description}</Text>
+        {compact ? null : (
+          <Text style={styles.jobBody}>{compactText(experience.description)}</Text>
+        )}
       </View>
     </View>
   )
@@ -276,15 +286,16 @@ function splitInterests(interests: string): string[] {
 }
 
 export function CvDocument({ data }: { data: CvDocumentData }) {
-  const plan = splitCvPages(data)
+  const recent = data.experiences.filter((item) => !item.earlyCareer)
+  const early = data.experiences.filter((item) => item.earlyCareer)
   const interestItems = data.interests ? splitInterests(data.interests) : []
 
   return (
     <Document author={data.fullName} subject={data.tagline} title={`CV — ${data.fullName}`}>
-      <Page size="A4" style={[styles.page, styles.page1]}>
+      <Page size="A4" style={styles.page}>
         <View fixed style={styles.sidebar} />
 
-        <View style={styles.sidebarContent} wrap={false}>
+        <View style={styles.sidebarContent}>
           <View style={styles.brandMark} />
 
           <Text style={styles.sideSectionTitle}>Contact</Text>
@@ -312,7 +323,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           ) : null}
 
           <Text style={styles.sideSectionTitle}>Profil</Text>
-          <Text style={styles.sideBody}>{data.pitch}</Text>
+          <Text style={styles.sideBody}>{compactText(data.pitch, 280)}</Text>
 
           {data.languages.length > 0 ? (
             <>
@@ -333,7 +344,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
             <>
               <Text style={styles.sideSectionTitle}>Compétences</Text>
               {data.competencies.map((item, index) => (
-                <View key={`comp-${index}`} style={styles.sideCompetencyRow} wrap={false}>
+                <View key={`comp-${index}`} style={styles.sideCompetencyRow}>
                   <Text style={styles.sideCompetencyName}>{item.name}</Text>
                   <Text style={styles.sideCompetencyLevel}>{item.level}%</Text>
                 </View>
@@ -353,7 +364,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
               {data.showRqthOnCv && data.rqthNote ? (
                 <View style={styles.sideBlock}>
                   <Text style={styles.sideLabel}>Statut</Text>
-                  <Text style={styles.sideBody}>{data.rqthNote}</Text>
+                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 120)}</Text>
                 </View>
               ) : null}
               {interestItems.length > 0 ? (
@@ -375,78 +386,44 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           <Text style={styles.headerTagline}>{data.tagline}</Text>
 
           <Text style={styles.sectionTitle}>Expériences professionnelles</Text>
-          {plan.page1.recentExperiences.map((experience, index) => (
+          {recent.map((experience, index) => (
             <TimelineExperience
               key={`exp-${index}`}
               experience={experience}
-              isLast={index === plan.page1.recentExperiences.length - 1}
+              isLast={index === recent.length - 1}
             />
           ))}
+
+          {early.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle}>Premières expériences</Text>
+              {early.map((experience, index) => (
+                <View key={`early-${index}`} style={styles.earlyRow} wrap={false}>
+                  <Text style={styles.earlyLeft}>
+                    {experience.title} — {experience.company}
+                  </Text>
+                  <Text style={styles.earlyDate}>{experience.dateLabel}</Text>
+                </View>
+              ))}
+            </>
+          ) : null}
+
+          {data.qualifications.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle}>Formations</Text>
+              {data.qualifications.map((item, index) => (
+                <View key={`qual-${index}`} style={styles.qualRow} wrap={false}>
+                  <Text style={styles.qualYear}>{item.yearLabel || '—'}</Text>
+                  <Text style={styles.qualBody}>
+                    {item.title}
+                    {item.organization ? ` — ${item.organization}` : ''}
+                  </Text>
+                </View>
+              ))}
+            </>
+          ) : null}
         </View>
       </Page>
-
-      {plan.page2 ? (
-        <Page size="A4" style={[styles.page, styles.page2]}>
-          <View fixed style={styles.sidebar} />
-
-          <View style={styles.main}>
-            {plan.page2.earlyExperiences.length > 0 ? (
-              <>
-                <Text style={styles.sectionTitle}>Premières expériences</Text>
-                {plan.page2.earlyExperiences.map((experience, index) => (
-                  <TimelineExperience
-                    key={`early-${index}`}
-                    experience={experience}
-                    isLast={index === plan.page2!.earlyExperiences.length - 1}
-                  />
-                ))}
-              </>
-            ) : null}
-
-            {plan.page2.qualifications.length > 0 ? (
-              <>
-                <Text style={styles.sectionTitle}>Formations</Text>
-                {plan.page2.qualifications.map((item, index) => (
-                  <View key={`qual-${index}`} style={styles.timelineItem} wrap={false}>
-                    <View style={styles.timelineMeta}>
-                      {item.organization ? (
-                        <Text style={styles.company}>{item.organization}</Text>
-                      ) : null}
-                      {item.yearLabel ? (
-                        <Text style={styles.dateLabel}>{item.yearLabel}</Text>
-                      ) : null}
-                    </View>
-                    <View style={styles.timelineRail}>
-                      <View style={styles.timelineDot} />
-                      {index === plan.page2!.qualifications.length - 1 ? null : (
-                        <View style={styles.timelineLine} />
-                      )}
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.jobTitle}>{item.title}</Text>
-                      {item.description ? (
-                        <Text style={styles.jobBody}>{item.description}</Text>
-                      ) : null}
-                    </View>
-                  </View>
-                ))}
-              </>
-            ) : null}
-
-            {plan.page2.recommendationQuote ? (
-              <>
-                <Text style={styles.sectionTitle}>Recommandation</Text>
-                <View style={styles.quote} wrap={false}>
-                  <Text style={styles.quoteText}>« {plan.page2.recommendationQuote} »</Text>
-                  {plan.page2.recommendationAuthor ? (
-                    <Text style={styles.quoteAuthor}>— {plan.page2.recommendationAuthor}</Text>
-                  ) : null}
-                </View>
-              </>
-            ) : null}
-          </View>
-        </Page>
-      ) : null}
     </Document>
   )
 }

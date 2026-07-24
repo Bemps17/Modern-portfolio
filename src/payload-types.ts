@@ -655,14 +655,6 @@ export interface SiteSetting {
    */
   cvPitch?: string | null;
   /**
-   * Citation de recommandation (CV PDF).
-   */
-  recommendationQuote?: string | null;
-  /**
-   * Auteur de la recommandation (ex. « Directeur Commercial, Entreprise X »).
-   */
-  recommendationAuthor?: string | null;
-  /**
    * Ex. « Permis B — véhicule personnel, déplacements régionaux ».
    */
   mobility?: string | null;
@@ -808,8 +800,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   cv?: T;
   phone?: T;
   cvPitch?: T;
-  recommendationQuote?: T;
-  recommendationAuthor?: T;
   mobility?: T;
   interests?: T;
   rqthNote?: T;

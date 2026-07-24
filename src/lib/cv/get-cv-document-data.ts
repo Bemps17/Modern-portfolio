@@ -19,8 +19,6 @@ export async function getCvDocumentData(): Promise<CvDocumentData> {
       location: settings.location,
       cvPitch: settings.cvPitch,
       aboutIntro: settings.aboutIntro,
-      recommendationQuote: settings.recommendationQuote,
-      recommendationAuthor: settings.recommendationAuthor,
       availabilityLabel: settings.availabilityLabel,
       mobility: settings.mobility,
       interests: settings.interests,

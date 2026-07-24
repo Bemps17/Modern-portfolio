@@ -449,9 +449,6 @@ export const portfolioFallback = {
     phone: '06 66 93 82 35',
     cvPitch:
       'Professionnel expérimenté avec plus de 10 ans d’expérience dans la relation client, la vente terrain, la logistique et la gestion de projet. Titulaire d’un titre professionnel d’attaché commercial et d’une formation récente en infographie/web, je recherche un poste polyvalent où mes compétences commerciales, logistiques et créatives seront pleinement mobilisées.',
-    recommendationQuote:
-      'Bertrand a su redynamiser notre prospection commerciale avec des méthodes innovantes, entraînant une augmentation de 30% des leads qualifiés en 3 mois.',
-    recommendationAuthor: 'Directeur Commercial, Entreprise X',
     mobility: 'Permis B — véhicule personnel, déplacements régionaux',
     interests: 'Création visuelle, Technologie, Art',
     rqthNote:

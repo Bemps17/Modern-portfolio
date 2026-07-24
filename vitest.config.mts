@@ -29,7 +29,6 @@ export default defineConfig({
             'tests/int/cv-schema.int.spec.ts',
             'tests/int/cv-api.int.spec.ts',
             'tests/int/cv-resolve-override-url.int.spec.ts',
-            'tests/int/cv-split-pages.int.spec.ts',
           ],
         },
       },

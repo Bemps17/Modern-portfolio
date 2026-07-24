@@ -31,8 +31,6 @@ export type CvDocumentData = {
   phone: string | null
   location: string | null
   pitch: string
-  recommendationQuote: string | null
-  recommendationAuthor: string | null
   availabilityLabel: string | null
   mobility: string | null
   interests: string | null

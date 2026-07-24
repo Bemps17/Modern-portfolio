@@ -322,8 +322,6 @@ async function seed() {
       email: siteSettings.email,
       phone: siteSettings.phone,
       cvPitch: siteSettings.cvPitch,
-      recommendationQuote: siteSettings.recommendationQuote,
-      recommendationAuthor: siteSettings.recommendationAuthor,
       mobility: siteSettings.mobility,
       interests: siteSettings.interests,
       rqthNote: siteSettings.rqthNote,

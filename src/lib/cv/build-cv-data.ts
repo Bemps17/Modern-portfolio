@@ -9,8 +9,6 @@ export type BuildCvSettingsInput = {
   location?: string | null
   cvPitch?: string | null
   aboutIntro?: string | null
-  recommendationQuote?: string | null
-  recommendationAuthor?: string | null
   availabilityLabel?: string | null
   mobility?: string | null
   interests?: string | null
@@ -59,8 +57,6 @@ export function buildCvDocumentData(input: BuildCvDocumentInput): CvDocumentData
     phone: settings.phone?.trim() || null,
     location: settings.location?.trim() || null,
     pitch,
-    recommendationQuote: settings.recommendationQuote?.trim() || null,
-    recommendationAuthor: settings.recommendationAuthor?.trim() || null,
     availabilityLabel: settings.availabilityLabel?.trim() || null,
     mobility: settings.mobility?.trim() || null,
     interests: settings.interests?.trim() || null,

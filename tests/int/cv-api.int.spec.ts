@@ -18,7 +18,6 @@ describe('GET /api/cv', () => {
 
     const text = buffer.toString('latin1')
     const pageCount = (text.match(/\/Type\s*\/Page\b/g) || []).length
-    expect(pageCount).toBeGreaterThanOrEqual(1)
-    expect(pageCount).toBe(2)
+    expect(pageCount).toBe(1)
   })
 })

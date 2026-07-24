@@ -12,8 +12,6 @@ describe('SiteSettings CV profile fields', () => {
       expect.arrayContaining([
         'phone',
         'cvPitch',
-        'recommendationQuote',
-        'recommendationAuthor',
         'mobility',
         'interests',
         'rqthNote',
@@ -22,5 +20,7 @@ describe('SiteSettings CV profile fields', () => {
         'cvCompetencies',
       ]),
     )
+    expect(names).not.toContain('recommendationQuote')
+    expect(names).not.toContain('recommendationAuthor')
   })
 })

@@ -33,8 +33,6 @@ export type SiteSettingsContent = {
     | typeof portfolioFallback.siteSettings.personalProjects
   phone?: string | null
   cvPitch?: string | null
-  recommendationQuote?: string | null
-  recommendationAuthor?: string | null
   mobility?: string | null
   interests?: string | null
   rqthNote?: string | null
@@ -67,12 +65,6 @@ function withEditorialFallback(
       : fb.personalProjects,
     phone: ('phone' in settings && settings.phone?.trim()) || fb.phone,
     cvPitch: ('cvPitch' in settings && settings.cvPitch?.trim()) || fb.cvPitch,
-    recommendationQuote:
-      ('recommendationQuote' in settings && settings.recommendationQuote?.trim()) ||
-      fb.recommendationQuote,
-    recommendationAuthor:
-      ('recommendationAuthor' in settings && settings.recommendationAuthor?.trim()) ||
-      fb.recommendationAuthor,
     mobility: ('mobility' in settings && settings.mobility?.trim()) || fb.mobility,
     interests: ('interests' in settings && settings.interests?.trim()) || fb.interests,
     rqthNote: ('rqthNote' in settings && settings.rqthNote?.trim()) || fb.rqthNote,

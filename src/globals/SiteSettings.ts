@@ -106,20 +106,6 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
-      name: 'recommendationQuote',
-      type: 'textarea',
-      admin: {
-        description: 'Citation de recommandation (CV PDF).',
-      },
-    },
-    {
-      name: 'recommendationAuthor',
-      type: 'text',
-      admin: {
-        description: 'Auteur de la recommandation (ex. « Directeur Commercial, Entreprise X »).',
-      },
-    },
-    {
       name: 'mobility',
       type: 'text',
       admin: {
