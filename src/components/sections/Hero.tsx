@@ -13,6 +13,16 @@ import { Button } from '@/components/ui/Button'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { cn } from '@/lib/utils'
 
+/**
+ * Masque progressif du portrait : invisible à gauche, pleinement visible à droite.
+ * Crée l’effet "entremêlé" avec le bloc texte plutôt qu’une coupure verticale nette.
+ */
+const PORTRAIT_MASK = {
+  maskImage: 'linear-gradient(to right, transparent 0%, transparent 25%, black 50%, black 100%)',
+  WebkitMaskImage:
+    'linear-gradient(to right, transparent 0%, transparent 25%, black 50%, black 100%)',
+}
+
 type HeroProps = {
   siteName: string
   tagline: string
@@ -53,114 +63,97 @@ export function Hero({
         />
       ) : null}
 
+      {/* Portrait backdrop — desktop only, masked to blend into the text column */}
       <div
         className={cn(
-          'absolute inset-y-0 right-0 hidden w-[58%] lg:block',
+          'absolute inset-y-0 right-0 hidden lg:block lg:w-[30%] xl:w-[28%]',
           !portraitSrc && 'hidden',
         )}
-        style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 100%, 0% 100%)' }}
+        style={PORTRAIT_MASK}
       >
         {portraitSrc ? (
-          <Breathing className="relative h-full w-full">
+          <Breathing className="relative h-full w-full opacity-90">
             <Image
               alt={portraitAlt}
               className="object-cover object-top"
               data-cursor="view"
               fill
               priority
-              sizes="58vw"
+              sizes="(max-width: 1280px) 30vw, 28vw"
               src={portraitSrc}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[var(--background)]/80"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-[var(--background)]/30 to-[var(--background)]/70"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[var(--accent)]/5 mix-blend-overlay"
             />
           </Breathing>
         ) : null}
       </div>
 
-      <div
-        className={cn(
-          'relative z-10 flex w-full flex-col justify-center py-20 lg:min-h-[100dvh]',
-          portraitSrc ? 'lg:w-[42%]' : 'lg:w-full',
-        )}
-      >
+      <div className="relative z-10 flex w-full flex-col justify-center py-20 lg:min-h-[100dvh]">
         <Container>
-          <ReadableSurface strong>
-            <motion.div
-              className="mb-6 flex flex-wrap items-center gap-3"
-              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {/* Unique badge disponibilité du site — uniquement ici. */}
-              <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
-              {location?.trim() ? (
-                <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
-                  {location}
-                </span>
-              ) : null}
-            </motion.div>
+          <div className="lg:max-w-[70%] xl:max-w-[72%]">
+            <ReadableSurface strong className="hero-readable-surface overflow-hidden p-4 sm:p-6 lg:p-10">
+              <motion.div
+                className="mb-5 flex flex-wrap items-center gap-3 sm:mb-6"
+                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* Unique badge disponibilité du site — uniquement ici. */}
+                <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
+                {location?.trim() ? (
+                  <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+                    {location}
+                  </span>
+                ) : null}
+              </motion.div>
 
-            <EditorialTitle as="h1" bleed className="mb-5" text={siteName} when="mount" />
-            <RevealText
-              as="p"
-              className="max-w-xl text-xl text-balance text-[var(--foreground)] sm:text-2xl"
-              delay={0.15}
-              text={tagline}
-              when="mount"
-            />
-            {aboutIntro ? (
-              <RevealText
-                as="p"
-                className="mt-5 max-w-lg text-base text-[var(--foreground-secondary)] sm:text-lg"
-                delay={0.28}
-                text={aboutIntro}
+              <EditorialTitle
+                as="h1"
+                bleed={false}
+                className="mb-5 text-[clamp(1.75rem,6vw,2.5rem)] sm:text-[clamp(2.25rem,5.5vw,3.5rem)] lg:text-[clamp(2.25rem,4vw,3.5rem)] xl:text-[clamp(2.5rem,4vw,4rem)]"
+                text={siteName}
                 when="mount"
               />
-            ) : null}
-            <motion.div
-              className="mt-10 flex flex-wrap gap-3"
-              initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Magnetic>
-                <Button href="#projets-une">Voir mes projets</Button>
-              </Magnetic>
-              <Magnetic strength={12}>
-                <Button href="/contact" variant="glass">
-                  Me contacter
-                </Button>
-              </Magnetic>
-            </motion.div>
-          </ReadableSurface>
-        </Container>
+              <RevealText
+                as="p"
+                className="max-w-xl text-xl text-balance text-[var(--foreground)] sm:text-2xl"
+                delay={0.15}
+                text={tagline}
+                when="mount"
+              />
+              {aboutIntro ? (
+                <RevealText
+                  as="p"
+                  className="mt-5 max-w-lg text-base text-[var(--foreground-secondary)] sm:text-lg"
+                  delay={0.28}
+                  text={aboutIntro}
+                  when="mount"
+                />
+              ) : null}
+              <motion.div
+                className="mt-10 flex flex-wrap gap-3"
+                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Magnetic>
+                  <Button href="#projets-une">Voir mes projets</Button>
+                </Magnetic>
+                <Magnetic strength={12}>
+                  <Button href="/contact" variant="glass">
+                    Me contacter
+                  </Button>
+                </Magnetic>
+              </motion.div>
 
-        <Container className="mt-8 lg:hidden">
-          {portraitSrc ? (
-            <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: 40, rotate: -1.5 }}
-              animate={{ opacity: 1, y: 0, rotate: 0 }}
-              transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <ReadableSurface className="overflow-hidden p-0">
-                <div className="relative aspect-[3/4] w-full">
-                  <Image
-                    alt={portraitAlt}
-                    className="object-cover object-top"
-                    fill
-                    sizes="90vw"
-                    src={portraitSrc}
-                  />
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
-                  />
-                </div>
-              </ReadableSurface>
-            </motion.div>
-          ) : null}
+            </ReadableSurface>
+          </div>
         </Container>
       </div>
     </section>
