@@ -46,7 +46,6 @@ const primaryAction = cn(
 )
 
 export function CvActions({ shareUrl, fullName }: CvActionsProps) {
-  const [previewOpen, setPreviewOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const canNativeShare = useSyncExternalStore(
@@ -92,16 +91,16 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
   return (
     <>
       <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
-        <button
+        <a
           aria-label="Visualiser le CV"
-          aria-pressed={previewOpen}
           className={glassAction}
-          onClick={() => setPreviewOpen(true)}
-          type="button"
+          href="/api/cv?preview=1"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           <Eye aria-hidden className="size-4 shrink-0" />
           <span className="hidden sm:inline">Visualiser</span>
-        </button>
+        </a>
 
         <button
           aria-label="Partager le CV"
@@ -125,21 +124,6 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
           <span className="hidden sm:inline">{downloading ? 'Téléchargement…' : 'Télécharger'}</span>
         </button>
       </div>
-
-      <Modal
-        className="max-w-4xl"
-        onClose={() => setPreviewOpen(false)}
-        open={previewOpen}
-        title="Aperçu du CV"
-      >
-        <div className="h-[70vh] overflow-hidden rounded-xl border border-[color:var(--border-subtle)] bg-black/40">
-          <iframe
-            className="h-full w-full"
-            src="/api/cv?preview=1"
-            title={`Aperçu CV — ${fullName}`}
-          />
-        </div>
-      </Modal>
 
       <Modal onClose={() => setShareOpen(false)} open={shareOpen} title="Partager le CV">
         <div className="grid gap-2">
