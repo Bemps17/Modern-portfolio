@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 
 import { AboutHighlightsAccordion } from '@/components/sections/AboutHighlightsAccordion'
-import { CvDownloadButton } from '@/components/sections/CvDownloadButton'
+import { CvActions } from '@/components/sections/CvActions'
 import { EarlyCareerAccordion } from '@/components/sections/EarlyCareerAccordion'
 import { ExperienceTimeline } from '@/components/sections/ExperienceTimeline'
 import { PersonalProjectsList } from '@/components/sections/PersonalProjectsList'
@@ -23,6 +23,7 @@ import {
 } from '@/lib/content'
 import { JsonLd, personJsonLd } from '@/lib/json-ld'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
+import { buildCvShareUrl } from '@/lib/cv/share-links'
 import { getSiteUrl } from '@/lib/site-url'
 import { getTechnicalSkills, resolveSoftSkills } from '@/lib/skills'
 import type { Experience } from '@/payload-types'
@@ -119,9 +120,10 @@ export default async function AboutPage() {
                 {settings.aboutBody}
               </p>
             ) : null}
-            <div className="mt-6 flex flex-wrap gap-3">
-              <CvDownloadButton />
-            </div>
+            <CvActions
+              fullName={settings?.siteName || 'Portfolio'}
+              shareUrl={buildCvShareUrl(getSiteUrl())}
+            />
           </div>
         </ReadableSurface>
         {portraitSrc ? (
