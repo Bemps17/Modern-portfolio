@@ -1,0 +1,15 @@
+export const CV_PDF_LAYOUT = {
+  sidebarWidth: 190,
+  pagePaddingTop: 28,
+  pagePaddingBottom: 40,
+  mainPaddingHorizontal: 22,
+  sidebarPaddingHorizontal: 16,
+  sidebarPaddingTop: 28,
+  headerNameFontSize: 18,
+  sectionTitleFontSize: 10,
+  bodyFontSize: 8.5,
+  sideBodyFontSize: 8,
+  timelineItemMarginBottom: 7,
+  recentDescriptionMaxChars: 220,
+  pitchMaxChars: 420,
+} as const

@@ -1,5 +1,6 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
+import { CV_PDF_LAYOUT as L } from '@/lib/cv/pdf-layout'
 import type { CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
 
 /** Palette alignée sur le design system du site (styles.css). */
@@ -16,14 +17,14 @@ const colors = {
   timeline: '#c4bfb8',
 }
 
-const SIDEBAR_WIDTH = 168
+const SIDEBAR_WIDTH = L.sidebarWidth
 
 const styles = StyleSheet.create({
   page: {
     paddingLeft: SIDEBAR_WIDTH,
-    paddingTop: 20,
-    paddingBottom: 32,
-    fontSize: 8,
+    paddingTop: L.pagePaddingTop,
+    paddingBottom: L.pagePaddingBottom,
+    fontSize: L.bodyFontSize,
     fontFamily: 'Helvetica',
     color: colors.ink,
     backgroundColor: colors.page,
@@ -41,12 +42,12 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     width: SIDEBAR_WIDTH,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingHorizontal: 12,
+    paddingTop: L.sidebarPaddingTop,
+    paddingBottom: 24,
+    paddingHorizontal: L.sidebarPaddingHorizontal,
   },
   main: {
-    paddingHorizontal: 16,
+    paddingHorizontal: L.mainPaddingHorizontal,
   },
   brandMark: {
     width: 22,
@@ -60,25 +61,25 @@ const styles = StyleSheet.create({
     color: colors.accentSoft,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginTop: 9,
+    marginTop: 12,
     marginBottom: 4,
     paddingBottom: 2,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,107,26,0.35)',
   },
   sideBody: {
-    fontSize: 6.5,
-    lineHeight: 1.3,
+    fontSize: L.sideBodyFontSize,
+    lineHeight: 1.4,
     color: colors.sidebarMuted,
   },
   sideContact: {
-    fontSize: 6.5,
+    fontSize: 7.5,
     lineHeight: 1.35,
     color: colors.sidebarText,
     marginBottom: 2,
   },
   sideLabel: {
-    fontSize: 6,
+    fontSize: 7,
     color: colors.accent,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
@@ -101,16 +102,16 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   langName: {
-    fontSize: 6.5,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.sidebarText,
   },
   langLevel: {
-    fontSize: 6,
+    fontSize: 7,
     color: colors.sidebarMuted,
   },
   interestChip: {
-    fontSize: 6.5,
+    fontSize: 7.5,
     color: colors.sidebarText,
     marginBottom: 2,
   },
@@ -122,46 +123,46 @@ const styles = StyleSheet.create({
   },
   sideCompetencyName: {
     flex: 1,
-    fontSize: 6.5,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.sidebarText,
     paddingRight: 4,
   },
   sideCompetencyLevel: {
-    fontSize: 6.5,
+    fontSize: 7.5,
     fontFamily: 'Helvetica-Bold',
     color: colors.accentSoft,
   },
   headerName: {
-    fontSize: 15,
+    fontSize: L.headerNameFontSize,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   headerTagline: {
-    fontSize: 7.5,
+    fontSize: 9,
     color: colors.accent,
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 8,
   },
   sectionTitle: {
-    fontSize: 8,
+    fontSize: L.sectionTitleFontSize,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
-    marginTop: 7,
-    marginBottom: 4,
-    paddingBottom: 2,
+    marginTop: 10,
+    marginBottom: 6,
+    paddingBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: colors.line,
   },
   timelineItem: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: L.timelineItemMarginBottom,
   },
   timelineMeta: {
     width: 72,
@@ -189,40 +190,40 @@ const styles = StyleSheet.create({
     paddingLeft: 4,
   },
   company: {
-    fontSize: 6.5,
+    fontSize: L.bodyFontSize,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     marginBottom: 1,
   },
   dateLabel: {
-    fontSize: 6,
+    fontSize: 7.5,
     color: colors.muted,
     lineHeight: 1.25,
   },
   jobTitle: {
-    fontSize: 7.5,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     color: colors.ink,
     marginBottom: 1,
   },
   jobBody: {
-    fontSize: 6.5,
+    fontSize: L.bodyFontSize,
     lineHeight: 1.25,
     color: colors.muted,
   },
   earlyRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   earlyLeft: {
     flex: 1,
-    fontSize: 6.5,
+    fontSize: L.bodyFontSize,
     color: colors.ink,
     paddingRight: 6,
   },
   earlyDate: {
-    fontSize: 6,
+    fontSize: 7.5,
     color: colors.muted,
   },
   qualRow: {
@@ -231,13 +232,13 @@ const styles = StyleSheet.create({
   },
   qualYear: {
     width: 28,
-    fontSize: 6.5,
+    fontSize: L.bodyFontSize,
     fontFamily: 'Helvetica-Bold',
     color: colors.accent,
   },
   qualBody: {
     flex: 1,
-    fontSize: 6.5,
+    fontSize: L.bodyFontSize,
     color: colors.ink,
   },
 })
@@ -271,7 +272,9 @@ function TimelineExperience({
       <View style={styles.timelineContent}>
         <Text style={styles.jobTitle}>{experience.title}</Text>
         {compact ? null : (
-          <Text style={styles.jobBody}>{compactText(experience.description)}</Text>
+          <Text style={styles.jobBody}>
+            {compactText(experience.description, L.recentDescriptionMaxChars)}
+          </Text>
         )}
       </View>
     </View>
@@ -323,7 +326,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           ) : null}
 
           <Text style={styles.sideSectionTitle}>Profil</Text>
-          <Text style={styles.sideBody}>{compactText(data.pitch, 280)}</Text>
+          <Text style={styles.sideBody}>{compactText(data.pitch, L.pitchMaxChars)}</Text>
 
           {data.languages.length > 0 ? (
             <>
@@ -364,7 +367,7 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
               {data.showRqthOnCv && data.rqthNote ? (
                 <View style={styles.sideBlock}>
                   <Text style={styles.sideLabel}>Statut</Text>
-                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 120)}</Text>
+                  <Text style={styles.sideBody}>{compactText(data.rqthNote, 160)}</Text>
                 </View>
               ) : null}
               {interestItems.length > 0 ? (
