@@ -29,6 +29,19 @@ function getCanNativeShareServerSnapshot() {
   return false
 }
 
+function cvFileName(fullName: string): string {
+  const slug = fullName
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+  return `CV-${slug || 'Portfolio'}.pdf`
+}
+
+function isShareAbort(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError'
+}
+
 const actionBase =
   'inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/50 active:scale-95 sm:px-4'
 
@@ -53,51 +66,78 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
     getCanNativeShareSnapshot,
     getCanNativeShareServerSnapshot,
   )
+  const liveShareUrl = useSyncExternalStore(
+    subscribeNoop,
+    () => `${window.location.origin}/cv`,
+    () => shareUrl,
+  )
 
   const onDownload = useCallback(() => {
     setDownloading(true)
     const anchor = document.createElement('a')
-    anchor.href = '/api/cv'
-    anchor.download = ''
+    anchor.href = '/api/cv?download=1'
+    anchor.download = cvFileName(fullName)
     anchor.rel = 'noopener'
     document.body.appendChild(anchor)
     anchor.click()
     anchor.remove()
     window.setTimeout(() => setDownloading(false), 400)
-  }, [])
+  }, [fullName])
 
   const onCopy = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl)
+      await navigator.clipboard.writeText(liveShareUrl)
       toast.success('Lien du CV copié')
     } catch {
       toast.error('Impossible de copier le lien')
     }
-  }, [shareUrl])
+  }, [liveShareUrl])
 
   const onNativeShare = useCallback(async () => {
     if (!navigator.share) return
+
     try {
+      const response = await fetch('/api/cv')
+      if (!response.ok) throw new Error(`CV HTTP ${response.status}`)
+      const blob = await response.blob()
+      const file = new File([blob], cvFileName(fullName), { type: 'application/pdf' })
+
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: `CV — ${fullName}`,
+          text: `CV de ${fullName}`,
+        })
+        setShareOpen(false)
+        return
+      }
+
       await navigator.share({
         title: `CV — ${fullName}`,
         text: `CV de ${fullName}`,
-        url: shareUrl,
+        url: liveShareUrl,
       })
-    } catch {
-      // annulé par l'utilisateur — ignorer
+      setShareOpen(false)
+    } catch (error) {
+      if (isShareAbort(error)) return
+      try {
+        await navigator.share({
+          title: `CV — ${fullName}`,
+          text: `CV de ${fullName}`,
+          url: liveShareUrl,
+        })
+        setShareOpen(false)
+      } catch (fallbackError) {
+        if (isShareAbort(fallbackError)) return
+        toast.error('Impossible de partager le CV')
+      }
     }
-  }, [fullName, shareUrl])
+  }, [fullName, liveShareUrl])
 
   return (
     <>
       <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
-        <a
-          aria-label="Visualiser le CV"
-          className={glassAction}
-          href="/api/cv?preview=1"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
+        <a aria-label="Visualiser le CV" className={glassAction} href="/cv">
           <Eye aria-hidden className="size-4 shrink-0" />
           <span className="hidden sm:inline">Visualiser</span>
         </a>
@@ -128,13 +168,13 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
       <Modal onClose={() => setShareOpen(false)} open={shareOpen} title="Partager le CV">
         <div className="grid gap-2">
           <ShareOption icon={Link2} label="Copier le lien" onClick={onCopy} />
-          <ShareOption href={buildMailtoShareUrl(shareUrl, fullName)} icon={Mail} label="E-mail" />
+          <ShareOption href={buildMailtoShareUrl(liveShareUrl, fullName)} icon={Mail} label="E-mail" />
           <ShareOption
-            href={buildWhatsAppShareUrl(shareUrl, fullName)}
+            href={buildWhatsAppShareUrl(liveShareUrl, fullName)}
             icon={Share2}
             label="WhatsApp"
           />
-          <ShareOption href={buildLinkedInShareUrl(shareUrl)} icon={Linkedin} label="LinkedIn" />
+          <ShareOption href={buildLinkedInShareUrl(liveShareUrl)} icon={Linkedin} label="LinkedIn" />
           {canNativeShare ? (
             <ShareOption icon={Share2} label="Plus d'options…" onClick={onNativeShare} />
           ) : null}

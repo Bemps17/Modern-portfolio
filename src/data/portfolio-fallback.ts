@@ -447,6 +447,7 @@ export const portfolioFallback = {
       },
     ],
     phone: '06 66 93 82 35',
+    cvJobTitle: 'Chargé de Clientèle & Projets Digitaux | Commercial B2B',
     cvPitch:
       'Professionnel expérimenté avec plus de 10 ans d’expérience dans la relation client, la vente terrain, la logistique et la gestion de projet. Titulaire d’un titre professionnel d’attaché commercial et d’une formation récente en infographie/web, je recherche un poste polyvalent où mes compétences commerciales, logistiques et créatives seront pleinement mobilisées.',
     mobility: 'Permis B — véhicule personnel, déplacements régionaux',
@@ -460,44 +461,16 @@ export const portfolioFallback = {
     ],
     cvCompetencies: [
       {
-        name: 'Prospection B2B/B2C',
-        level: 85,
-        description: 'Techniques de prospection, qualification de leads et conversion',
+        name: 'Commercial & Relation Client',
+        description: 'Prospection B2B/B2C, Négociation, CRM, Relation Client',
       },
       {
-        name: 'Logistique & Exploitation',
-        level: 75,
-        description: 'Planification de tournées, gestion des flux, optimisation des processus',
+        name: 'Web Design & Digital',
+        description: 'Figma, HTML/CSS/JS, WordPress, Suite Adobe, Prototypage PWA / IA',
       },
       {
-        name: 'Gestion de Projet',
-        level: 80,
-        description: 'Coordination d’équipes, suivi d’objectifs, optimisation des délais',
-      },
-      {
-        name: 'Infographie & Web Design',
-        level: 70,
-        description: 'Maquettes, identité visuelle, interfaces utilisateur',
-      },
-      {
-        name: 'Relation Client',
-        level: 90,
-        description: 'Écoute active, résolution de problèmes, fidélisation',
-      },
-      {
-        name: 'CRM & Outils Digitaux',
-        level: 80,
-        description: 'Logiciels CRM, tableaux de bord, reporting',
-      },
-      {
-        name: 'Organisation & Autonomie',
-        level: 85,
-        description: 'Priorités, autonomie, respect des délais',
-      },
-      {
-        name: 'Suite Adobe & Office',
-        level: 75,
-        description: 'Photoshop, Illustrator, InDesign, Excel, Word, PowerPoint',
+        name: 'Gestion & Logistique',
+        description: 'Management de projet, Planning & Exploitation, Logistique',
       },
     ],
   },

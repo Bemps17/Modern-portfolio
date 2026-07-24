@@ -25,6 +25,7 @@ function pdfFileName(fullName: string): string {
 
 function shouldInline(request: Request): boolean {
   const url = new URL(request.url)
+  if (url.searchParams.get('download') === '1') return false
   if (url.searchParams.get('preview') === '1') return true
 
   const accept = request.headers.get('accept') ?? ''

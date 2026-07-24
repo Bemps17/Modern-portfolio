@@ -99,6 +99,14 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'cvJobTitle',
+      type: 'text',
+      admin: {
+        description:
+          'Intitulé de poste sous le nom sur le CV (ATS). Ex. « Chargé de Clientèle & Projets Digitaux | Commercial B2B ».',
+      },
+    },
+    {
       name: 'cvPitch',
       type: 'textarea',
       admin: {
@@ -147,25 +155,22 @@ export const SiteSettings: GlobalConfig = {
     {
       name: 'cvCompetencies',
       type: 'array',
-      labels: { singular: 'Compétence CV', plural: 'Compétences CV' },
+      labels: { singular: 'Catégorie CV', plural: 'Compétences CV' },
       admin: {
-        description: 'Compétences à niveau % pour le CV PDF (distinct des badges Skills).',
+        description:
+          'Catégories de compétences textuelles pour le CV (ATS) — sans pourcentages ni jauges.',
       },
       fields: [
-        { name: 'name', type: 'text', required: true, label: 'Compétence' },
-        {
-          name: 'level',
-          type: 'number',
-          required: true,
-          min: 0,
-          max: 100,
-          label: 'Niveau (%)',
-        },
+        { name: 'name', type: 'text', required: true, label: 'Catégorie' },
         {
           name: 'description',
-          type: 'text',
+          type: 'textarea',
           required: true,
-          label: 'Description courte',
+          label: 'Compétences (liste)',
+          admin: {
+            description:
+              'Séparer par virgules ou retours à la ligne (ex. Prospection B2B/B2C, CRM, Relation Client).',
+          },
         },
       ],
     },

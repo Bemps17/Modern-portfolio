@@ -18,7 +18,9 @@ describe('GET /api/cv', () => {
 
     const text = buffer.toString('latin1')
     const pageCount = (text.match(/\/Type\s*\/Page\b/g) || []).length
-    expect(pageCount).toBe(1)
+    // ATS : 1–2 pages acceptable (contenu textuel complet > compression agressive)
+    expect(pageCount).toBeGreaterThanOrEqual(1)
+    expect(pageCount).toBeLessThanOrEqual(2)
   })
 
   it('serves inline disposition when preview=1', async () => {

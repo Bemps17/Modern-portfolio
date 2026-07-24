@@ -1,16 +1,17 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildCvDocumentData } from '../../src/lib/cv/build-cv-data'
+import { buildCvDocumentData, parseCompetencyItems } from '../../src/lib/cv/build-cv-data'
 
 describe('buildCvDocumentData', () => {
   it('maps settings, experiences and qualifications into CvDocumentData', () => {
     const data = buildCvDocumentData({
       settings: {
         siteName: 'Bertrand Fouquet',
-        tagline: 'Profil polyvalent',
+        tagline: 'Je transforme les défis complexes en solutions élégantes.',
         email: 'bertrandfouquet@gmail.com',
         phone: '06 66 93 82 35',
         location: '17138 Puilboreau',
+        cvJobTitle: 'Chargé de Clientèle & Projets Digitaux | Commercial B2B',
         cvPitch:
           'Professionnel expérimenté avec plus de 10 ans d’expérience dans la relation client.',
         aboutIntro: 'Intro courte Hero',
@@ -25,9 +26,8 @@ describe('buildCvDocumentData', () => {
         ],
         cvCompetencies: [
           {
-            name: 'Prospection B2B/B2C',
-            level: 85,
-            description: 'Qualification de leads et conversion',
+            name: 'Commercial & Relation Client',
+            description: 'Prospection B2B/B2C, Négociation, CRM, Relation Client',
           },
         ],
       },
@@ -62,14 +62,22 @@ describe('buildCvDocumentData', () => {
     })
 
     expect(data.fullName).toBe('Bertrand Fouquet')
+    expect(data.jobTitle).toBe('Chargé de Clientèle & Projets Digitaux | Commercial B2B')
+    expect(data.tagline).toContain('transforme')
     expect(data.pitch).toContain('10 ans')
     expect(data.phone).toBe('06 66 93 82 35')
     expect(data.experiences).toHaveLength(2)
-    expect(data.experiences[0].dateLabel).toBe('nov. 2025 – Présent')
+    expect(data.experiences[0].dateLabel).toBe('11/2025 - Présent')
     expect(data.experiences[0].earlyCareer).toBe(false)
     expect(data.experiences[1].earlyCareer).toBe(true)
     expect(data.qualifications[0].yearLabel).toBe('2023')
-    expect(data.competencies[0].level).toBe(85)
+    expect(data.competencies[0].name).toBe('Commercial & Relation Client')
+    expect(data.competencies[0].items).toEqual([
+      'Prospection B2B/B2C',
+      'Négociation',
+      'CRM',
+      'Relation Client',
+    ])
     expect(data.showRqthOnCv).toBe(true)
     expect(data.languages).toHaveLength(2)
   })
@@ -96,10 +104,11 @@ describe('buildCvDocumentData', () => {
       qualifications: [],
     })
     expect(data.pitch).toBe('Pitch de secours')
+    expect(data.jobTitle).toContain('Chargé de Clientèle')
     expect(data.showRqthOnCv).toBe(false)
   })
 
-  it('clamps competency level between 0 and 100', () => {
+  it('accepts legacy description field for competency items', () => {
     const data = buildCvDocumentData({
       settings: {
         siteName: 'Bertrand Fouquet',
@@ -115,11 +124,19 @@ describe('buildCvDocumentData', () => {
         rqthNote: null,
         showRqthOnCv: false,
         languages: [],
-        cvCompetencies: [{ name: 'X', level: 140, description: 'Y' }],
+        cvCompetencies: [
+          { name: 'Web Design & Digital', description: 'Figma, HTML/CSS/JS, WordPress' },
+        ],
       },
       experiences: [],
       qualifications: [],
     })
-    expect(data.competencies[0].level).toBe(100)
+    expect(data.competencies[0].items).toEqual(['Figma', 'HTML/CSS/JS', 'WordPress'])
+  })
+})
+
+describe('parseCompetencyItems', () => {
+  it('splits comma and newline lists', () => {
+    expect(parseCompetencyItems('A, B\nC')).toEqual(['A', 'B', 'C'])
   })
 })

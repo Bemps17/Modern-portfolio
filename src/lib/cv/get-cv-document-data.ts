@@ -17,6 +17,7 @@ export async function getCvDocumentData(): Promise<CvDocumentData> {
       email: settings.email || 'contact@example.com',
       phone: settings.phone,
       location: settings.location,
+      cvJobTitle: settings.cvJobTitle,
       cvPitch: settings.cvPitch,
       aboutIntro: settings.aboutIntro,
       availabilityLabel: settings.availabilityLabel,
