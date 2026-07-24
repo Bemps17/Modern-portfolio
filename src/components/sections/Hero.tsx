@@ -13,6 +13,12 @@ import { Button } from '@/components/ui/Button'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { cn } from '@/lib/utils'
 
+/** Fondus doux — évite la coupure diagonale dure qui tronquait texte et visage. */
+const PORTRAIT_FADE = {
+  maskImage: 'linear-gradient(to right, transparent 0%, black 18%, black 100%)',
+  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 18%, black 100%)',
+}
+
 type HeroProps = {
   siteName: string
   tagline: string
@@ -53,27 +59,28 @@ export function Hero({
         />
       ) : null}
 
+      {/* Portrait desktop — visible, fondu doux, face cadrée */}
       <div
         className={cn(
-          'absolute inset-y-0 right-0 hidden w-[58%] lg:block',
+          'absolute inset-y-0 right-0 hidden w-[52%] lg:block',
           !portraitSrc && 'hidden',
         )}
-        style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 100%, 0% 100%)' }}
+        style={PORTRAIT_FADE}
       >
         {portraitSrc ? (
           <Breathing className="relative h-full w-full">
             <Image
               alt={portraitAlt}
-              className="object-cover object-top"
+              className="object-cover object-[center_12%]"
               data-cursor="view"
               fill
               priority
-              sizes="58vw"
+              sizes="52vw"
               src={portraitSrc}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[var(--background)]/80"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[var(--background)]/70"
             />
           </Breathing>
         ) : null}
@@ -81,8 +88,8 @@ export function Hero({
 
       <div
         className={cn(
-          'relative z-10 flex w-full flex-col justify-center py-20 lg:min-h-[100dvh]',
-          portraitSrc ? 'lg:w-[42%]' : 'lg:w-full',
+          'relative z-10 flex w-full flex-col justify-center py-16 sm:py-20 lg:min-h-[100dvh]',
+          portraitSrc ? 'lg:w-[55%]' : 'lg:w-full',
         )}
       >
         <Container>
@@ -102,7 +109,13 @@ export function Hero({
               ) : null}
             </motion.div>
 
-            <EditorialTitle as="h1" bleed className="mb-5" text={siteName} when="mount" />
+            <EditorialTitle
+              as="h1"
+              bleed
+              className="mb-5 text-[clamp(2.25rem,7vw,3.75rem)] lg:text-[clamp(2.5rem,4.8vw,4.5rem)] xl:text-[clamp(2.75rem,5.5vw,5.5rem)]"
+              text={siteName}
+              when="mount"
+            />
             <RevealText
               as="p"
               className="max-w-xl text-xl text-balance text-[var(--foreground)] sm:text-2xl"
@@ -137,6 +150,7 @@ export function Hero({
           </ReadableSurface>
         </Container>
 
+        {/* Portrait mobile / tablette — toujours affiché sous le texte */}
         <Container className="mt-8 lg:hidden">
           {portraitSrc ? (
             <motion.div
@@ -145,10 +159,10 @@ export function Hero({
               transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <ReadableSurface className="overflow-hidden p-0">
-                <div className="relative aspect-[3/4] w-full">
+                <div className="relative aspect-[4/5] w-full max-h-[55vh] sm:aspect-[3/4] sm:max-h-none">
                   <Image
                     alt={portraitAlt}
-                    className="object-cover object-top"
+                    className="object-cover object-[center_15%]"
                     fill
                     sizes="90vw"
                     src={portraitSrc}
