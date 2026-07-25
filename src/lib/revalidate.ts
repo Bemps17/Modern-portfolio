@@ -6,7 +6,7 @@ import type {
 } from 'payload'
 
 /** Pages publiques à invalider après une action CMS. */
-export const PUBLIC_PATHS = ['/', '/projets', '/a-propos', '/contact'] as const
+export const PUBLIC_PATHS = ['/', '/projets', '/a-propos', '/contact', '/carnet'] as const
 
 function safeRevalidate(path: string, type: 'page' | 'layout' = 'page') {
   try {
@@ -43,6 +43,21 @@ export const revalidateProjects: CollectionAfterChangeHook = ({ doc, previousDoc
 export const revalidateProjectsDelete: CollectionAfterDeleteHook = ({ doc }) => {
   revalidatePublicSite()
   if (doc?.slug) safeRevalidate(`/projets/${doc.slug}`)
+}
+
+export const revalidateJournalPosts: CollectionAfterChangeHook = ({ doc, previousDoc }) => {
+  revalidatePublicSite()
+  if (doc?.slug) safeRevalidate(`/carnet/${doc.slug}`)
+  const previousSlug = previousDoc?.slug
+  if (previousSlug && previousSlug !== doc?.slug) {
+    safeRevalidate(`/carnet/${previousSlug}`)
+  }
+  return doc
+}
+
+export const revalidateJournalPostsDelete: CollectionAfterDeleteHook = ({ doc }) => {
+  revalidatePublicSite()
+  if (doc?.slug) safeRevalidate(`/carnet/${doc.slug}`)
 }
 
 export const revalidateContentPages: CollectionAfterChangeHook = ({ doc }) => {

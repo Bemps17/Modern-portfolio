@@ -1,0 +1,47 @@
+// @vitest-environment node
+import { beforeAll, describe, expect, it } from 'vitest'
+import type { Payload } from 'payload'
+
+import { createTestMedia, getTestPayload, lexicalParagraph } from './helpers/payload'
+
+describe('journal-posts collection', () => {
+  let payload: Payload
+
+  beforeAll(async () => {
+    payload = await getTestPayload()
+  }, 60_000)
+
+  it('crée, lit et supprime un post publié', async () => {
+    const media = await createTestMedia(payload, 'Journal cover')
+    const slug = `journal-crud-${Date.now()}`
+    try {
+      const post = await payload.create({
+        collection: 'journal-posts',
+        data: {
+          title: 'Test Carnet',
+          slug,
+          excerpt: 'Excerpt test carnet.',
+          content: lexicalParagraph('Contenu carnet CRUD.'),
+          cover: media.id,
+          status: 'published',
+          publishedAt: new Date().toISOString(),
+          category: 'ia',
+        },
+      })
+      expect(post.slug).toBe(slug)
+      const found = await payload.findByID({ collection: 'journal-posts', id: post.id, depth: 1 })
+      expect(found.title).toBe('Test Carnet')
+      expect(typeof found.cover).toBe('object')
+    } finally {
+      const existing = await payload.find({
+        collection: 'journal-posts',
+        where: { slug: { equals: slug } },
+        limit: 1,
+      })
+      if (existing.docs[0]) {
+        await payload.delete({ collection: 'journal-posts', id: existing.docs[0].id })
+      }
+      await payload.delete({ collection: 'media', id: media.id }).catch(() => undefined)
+    }
+  })
+})

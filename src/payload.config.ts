@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Experiences } from './collections/Experiences'
+import { JournalPosts } from './collections/JournalPosts'
 import { FormSubmissions } from './collections/FormSubmissions'
 import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
@@ -83,7 +84,7 @@ export default buildConfig({
     fallbackLanguage: 'fr',
     supportedLanguages: { fr },
   },
-  collections: [Users, Media, Projects, Skills, Experiences, Qualifications, FormSubmissions],
+  collections: [Users, Media, Projects, JournalPosts, Skills, Experiences, Qualifications, FormSubmissions],
   globals: [SiteSettings, SEODefaults],
   editor: lexicalEditor(),
   secret: getPayloadSecret(),

@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     projects: Project;
+    'journal-posts': JournalPost;
     skills: Skill;
     experiences: Experience;
     qualifications: Qualification;
@@ -84,6 +85,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'journal-posts': JournalPostsSelect<false> | JournalPostsSelect<true>;
     skills: SkillsSelect<false> | SkillsSelect<true>;
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     qualifications: QualificationsSelect<false> | QualificationsSelect<true>;
@@ -286,6 +288,49 @@ export interface Project {
   createdAt: string;
 }
 /**
+ * Articles du carnet créatif (publics uniquement si published).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "journal-posts".
+ */
+export interface JournalPost {
+  id: number;
+  title: string;
+  /**
+   * Généré automatiquement depuis le titre si laissé vide.
+   */
+  slug: string;
+  excerpt: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  cover: number | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  category: 'ia' | 'design' | 'veille' | 'perso' | 'autre';
+  publishedAt: string;
+  status: 'draft' | 'published';
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "skills".
  */
@@ -377,6 +422,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'journal-posts';
+        value: number | JournalPost;
       } | null)
     | ({
         relationTo: 'skills';
@@ -544,6 +593,29 @@ export interface ProjectsSelect<T extends boolean = true> {
   featured?: T;
   order?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "journal-posts_select".
+ */
+export interface JournalPostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  cover?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  category?: T;
+  publishedAt?: T;
+  status?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }
