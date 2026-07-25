@@ -41,6 +41,28 @@ async function uploadCoverFile(
   })
 }
 
+async function findOrUploadCover(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  absPath: string,
+  alt: string,
+) {
+  const filename = path.basename(absPath)
+  const baseName = filename.replace(/-\d+\.webp$/, '').replace(/\.webp$/, '')
+
+  const existing = await payload.find({
+    collection: 'media',
+    where: { filename: { contains: baseName } },
+    limit: 1,
+    sort: '-createdAt',
+  })
+
+  if (existing.docs[0]) {
+    return existing.docs[0]
+  }
+
+  return uploadCoverFile(payload, absPath, alt)
+}
+
 async function upsertJournalPost(
   payload: Awaited<ReturnType<typeof getPayload>>,
   article: (typeof LABLOG_ARTICLES)[number],
@@ -113,7 +135,7 @@ async function main() {
       process.exit(1)
     }
 
-    const media = await uploadCoverFile(payload, coverPath, `Cover — ${article.title}`)
+    const media = await findOrUploadCover(payload, coverPath, `Cover — ${article.title}`)
     await upsertJournalPost(payload, article, media.id)
     console.log(`✓ ${article.slug}`)
   }

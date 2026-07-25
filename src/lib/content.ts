@@ -11,7 +11,7 @@ import type {
 
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
-import { resolveJournalCopy, resolvePublishedJournalPosts } from './journal-content'
+import { resolveJournalCopy, resolveJournalPostBySlug, resolvePublishedJournalPosts } from './journal-content'
 import type { SeoDefaultsContent } from './seo-metadata'
 
 export { type SeoDefaultsContent } from './seo-metadata'
@@ -363,7 +363,7 @@ export async function getJournalPostBySlug(slug: string): Promise<JournalPost | 
         depth: 2,
         limit: 1,
       })
-      return result.docs[0] ?? null
+      return resolveJournalPostBySlug(result.docs[0], slug, portfolioFallback.journalPosts)
     } catch (error) {
       console.warn('[content] journal-posts indisponible — fallback démo', error)
       return portfolioFallback.journalPosts.find((post) => post.slug === slug) ?? null

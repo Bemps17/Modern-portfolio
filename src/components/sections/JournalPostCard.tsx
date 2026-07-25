@@ -15,6 +15,7 @@ import {
   resolveJournalGalleryItems,
   resolveJournalPreviewImages,
 } from '@/lib/journal-gallery'
+import { resolveJournalCoverUrl } from '@/lib/journal-cover'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
 import type { JournalPost } from '@/payload-types'
 import { cn } from '@/lib/utils'
@@ -24,7 +25,7 @@ type JournalPostCardProps = {
 }
 
 function ArticleCardPreview({ post }: JournalPostCardProps) {
-  const coverUrl = resolveMediaUrl(post.cover)
+  const coverUrl = resolveJournalCoverUrl(post.cover, post.slug)
   const coverAlt = (isMedia(post.cover) ? post.cover.alt : null) || post.title
   const excerpt = post.excerpt?.trim() || ''
 

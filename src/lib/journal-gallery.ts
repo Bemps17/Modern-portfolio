@@ -1,3 +1,4 @@
+import { resolveJournalCoverUrl } from '@/lib/journal-cover'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
 import type { JournalPost } from '@/payload-types'
 
@@ -27,7 +28,7 @@ export function resolveJournalGalleryItems(post: JournalPost): JournalGalleryIte
 /** Vignettes pour preview card (cover + galerie, max 4). */
 export function resolveJournalPreviewImages(post: JournalPost, limit = 4): JournalGalleryItem[] {
   const items: JournalGalleryItem[] = []
-  const coverUrl = resolveMediaUrl(post.cover)
+  const coverUrl = resolveJournalCoverUrl(post.cover, post.slug)
 
   if (coverUrl) {
     items.push({

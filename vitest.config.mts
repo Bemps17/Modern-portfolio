@@ -24,6 +24,7 @@ export default defineConfig({
             'tests/int/journal-posts.int.spec.ts',
             'tests/int/journal-content.int.spec.ts',
             'tests/int/journal-content-resolver.int.spec.ts',
+            'tests/int/journal-cover.int.spec.ts',
             'tests/int/lablog-articles.int.spec.ts',
             'tests/int/project-cover.int.spec.ts',
             'tests/int/slugify.int.spec.ts',

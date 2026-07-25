@@ -8,7 +8,7 @@ import {
   getSeoDefaultsContent,
   getSiteSettingsContent,
 } from '@/lib/content'
-import { resolveMediaUrl } from '@/lib/media'
+import { resolveJournalCoverUrl } from '@/lib/journal-cover'
 import { buildPageMetadata } from '@/lib/seo-metadata'
 
 export const revalidate = 3600
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ])
   if (!post) return { title: 'Le Lablog' }
 
-  const coverUrl = resolveMediaUrl(post.cover)
+  const coverUrl = resolveJournalCoverUrl(post.cover, post.slug)
 
   return buildPageMetadata(seo, settings, {
     title: post.title,

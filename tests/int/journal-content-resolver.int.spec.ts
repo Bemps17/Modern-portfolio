@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { portfolioFallback } from '@/data/portfolio-fallback'
-import { resolveJournalCopy, resolvePublishedJournalPosts } from '@/lib/journal-content'
+import { resolveJournalCopy, resolveJournalPostBySlug, resolvePublishedJournalPosts } from '@/lib/journal-content'
 
 describe('journal-content resolver', () => {
   it('resolveJournalCopy migre le legacy Carnet vers Le Lablog', () => {
@@ -23,6 +23,17 @@ describe('journal-content resolver', () => {
         ['Créations IA, expérimentations visuelles et notes du moment — un skyblog 2026.'],
       ),
     ).toBe('Nouveau sous-titre')
+  })
+
+  it('resolveJournalPostBySlug retourne le fallback si CMS absent', () => {
+    const fallback = portfolioFallback.journalPosts[0]
+    expect(resolveJournalPostBySlug(undefined, fallback.slug, portfolioFallback.journalPosts)).toEqual(
+      fallback,
+    )
+  })
+
+  it('resolveJournalCopy conserve une valeur CMS personnalisée', () => {
+    expect(resolveJournalCopy('Mon journal', 'Le Lablog')).toBe('Mon journal')
   })
 
   it('resolvePublishedJournalPosts retourne le fallback si CMS vide', () => {

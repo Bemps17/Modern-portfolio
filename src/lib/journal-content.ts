@@ -12,6 +12,16 @@ export function resolveJournalCopy(
   return trimmed
 }
 
+/** Post par slug : CMS prioritaire, fallback démo si absent. */
+export function resolveJournalPostBySlug(
+  cmsPost: JournalPost | undefined,
+  slug: string,
+  fallbackPosts: JournalPost[],
+): JournalPost | null {
+  if (cmsPost) return cmsPost
+  return fallbackPosts.find((post) => post.slug === slug) ?? null
+}
+
 /** Posts publiés : CMS prioritaire, fallback démo si liste vide. */
 export function resolvePublishedJournalPosts(
   cmsDocs: JournalPost[],

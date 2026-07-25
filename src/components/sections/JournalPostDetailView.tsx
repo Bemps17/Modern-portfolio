@@ -19,6 +19,7 @@ import {
   JOURNAL_POST_TYPE_LABELS,
 } from '@/lib/journal-category'
 import { resolveJournalGalleryItems } from '@/lib/journal-gallery'
+import { resolveJournalCoverUrl } from '@/lib/journal-cover'
 import { isMedia, resolveMediaUrl } from '@/lib/media'
 import type { JournalPost } from '@/payload-types'
 
@@ -30,7 +31,7 @@ type JournalPostDetailViewProps = {
 export function JournalPostDetailView({ post, backLabel = 'Le Lablog' }: JournalPostDetailViewProps) {
   const isGallery = post.postType === 'gallery'
   const galleryItems = resolveJournalGalleryItems(post)
-  const coverUrl = resolveMediaUrl(post.cover)
+  const coverUrl = resolveJournalCoverUrl(post.cover, post.slug)
   const coverAlt = (isMedia(post.cover) ? post.cover.alt : null) || post.title
   const excerpt = post.excerpt?.trim() || ''
   const layout = post.galleryLayout ?? 'grid'
