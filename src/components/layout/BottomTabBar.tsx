@@ -1,21 +1,36 @@
 'use client'
 
-import { FolderKanban, Home, Mail, UserRound } from 'lucide-react'
+import { FolderKanban, Home, Mail, NotebookPen, UserRound } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 
-const tabs = [
-  { href: '/', label: 'Accueil', icon: Home },
-  { href: '/projets', label: 'Projets', icon: FolderKanban },
-  { href: '/a-propos', label: 'À propos', icon: UserRound },
-  { href: '/contact', label: 'Contact', icon: Mail },
-]
+type TabItem = {
+  href: string
+  label: string
+  icon: typeof Home
+  external?: boolean
+}
 
-export function BottomTabBar() {
+function buildTabs(journalNavLabel: string): TabItem[] {
+  return [
+    { href: '/', label: 'Accueil', icon: Home },
+    { href: '/projets', label: 'Projets', icon: FolderKanban },
+    { href: '/a-propos', label: 'À propos', icon: UserRound },
+    { href: '/contact', label: 'Contact', icon: Mail },
+    { href: '/carnet', label: journalNavLabel, icon: NotebookPen, external: true },
+  ]
+}
+
+type BottomTabBarProps = {
+  journalNavLabel?: string
+}
+
+export function BottomTabBar({ journalNavLabel = 'Carnet' }: BottomTabBarProps) {
   const pathname = usePathname()
+  const tabs = buildTabs(journalNavLabel)
 
   return (
     <nav
@@ -31,8 +46,8 @@ export function BottomTabBar() {
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white/[0.05] to-transparent"
         />
-        <ul className="relative grid grid-cols-4 px-2 py-2">
-          {tabs.map(({ href, label, icon: Icon }) => {
+        <ul className="relative grid grid-cols-5 px-2 py-2">
+          {tabs.map(({ href, label, icon: Icon, external }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
             return (
               <li className="relative" key={href}>
@@ -49,8 +64,10 @@ export function BottomTabBar() {
                     'relative z-[1] flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition',
                     active ? 'text-[var(--accent)]' : 'text-[var(--foreground-secondary)]',
                   )}
-                  data-cursor="link"
+                  data-cursor={external ? 'open' : 'link'}
                   href={href}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                  target={external ? '_blank' : undefined}
                 >
                   <motion.span animate={active ? { scale: 1.08 } : { scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 24 }}>
                     <Icon aria-hidden className="h-5 w-5" />

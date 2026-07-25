@@ -79,6 +79,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const adminConfigured = isPayloadConfigured()
   const footerExtraLine = settings?.footerExtraLine?.trim() || null
   const showMaintenance = Boolean(settings?.maintenanceMode)
+  const journalNavLabel = settings?.journalNavLabel ?? 'Carnet'
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">
@@ -94,7 +95,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {showMaintenance ? (
           <MaintenanceBanner message={settings?.maintenanceMessage} />
         ) : null}
-        <Sidebar logoUrl={logoUrl} siteName={siteName} socialLinks={socialLinks} />
+        <Sidebar
+          journalNavLabel={journalNavLabel}
+          logoUrl={logoUrl}
+          siteName={siteName}
+          socialLinks={socialLinks}
+        />
         <div className="relative z-10 min-h-screen lg:pl-[72px]">
           <main className="min-h-screen pb-20 lg:pb-0" id="main">
             {children}
@@ -110,7 +116,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             siteName={siteName}
           />
         </div>
-        <BottomTabBar />
+        <BottomTabBar journalNavLabel={journalNavLabel} />
         <Toaster position="bottom-center" theme="dark" />
         <Analytics />
         <SpeedInsights />

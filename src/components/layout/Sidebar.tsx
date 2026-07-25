@@ -1,18 +1,28 @@
 'use client'
 
-import { FolderKanban, Github, Home, Linkedin, Mail, UserRound } from 'lucide-react'
+import { FolderKanban, Github, Home, Linkedin, Mail, NotebookPen, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { BrandLogo } from '@/components/layout/BrandLogo'
 import { cn } from '@/lib/utils'
 
-const NAV = [
-  { href: '/', label: 'Accueil', icon: Home },
-  { href: '/projets', label: 'Projets', icon: FolderKanban },
-  { href: '/a-propos', label: 'À propos', icon: UserRound },
-  { href: '/contact', label: 'Contact', icon: Mail },
-] as const
+type NavItem = {
+  href: string
+  label: string
+  icon: typeof Home
+  external?: boolean
+}
+
+function buildNav(journalNavLabel: string): NavItem[] {
+  return [
+    { href: '/', label: 'Accueil', icon: Home },
+    { href: '/projets', label: 'Projets', icon: FolderKanban },
+    { href: '/a-propos', label: 'À propos', icon: UserRound },
+    { href: '/contact', label: 'Contact', icon: Mail },
+    { href: '/carnet', label: journalNavLabel, icon: NotebookPen, external: true },
+  ]
+}
 
 type SocialLink = {
   platform?: string | null
@@ -22,6 +32,7 @@ type SocialLink = {
 
 type SidebarProps = {
   siteName: string
+  journalNavLabel?: string
   socialLinks?: SocialLink[] | null
   logoUrl?: string | null
 }
@@ -32,8 +43,9 @@ function SocialIcon({ platform }: { platform?: string | null }) {
   return <Mail className="h-4 w-4" />
 }
 
-export function Sidebar({ siteName, socialLinks, logoUrl }: SidebarProps) {
+export function Sidebar({ siteName, journalNavLabel = 'Carnet', socialLinks, logoUrl }: SidebarProps) {
   const pathname = usePathname()
+  const nav = buildNav(journalNavLabel)
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 hidden w-[72px] flex-col border-r border-white/10 bg-[var(--background)]/90 backdrop-blur-xl lg:flex">
@@ -42,7 +54,7 @@ export function Sidebar({ siteName, socialLinks, logoUrl }: SidebarProps) {
       </div>
 
       <nav aria-label="Navigation principale" className="mt-10 flex flex-1 flex-col items-center gap-3">
-        {NAV.map(({ href, label, icon: Icon }) => {
+        {nav.map(({ href, label, icon: Icon, external }) => {
           const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
           return (
             <Link
@@ -54,9 +66,11 @@ export function Sidebar({ siteName, socialLinks, logoUrl }: SidebarProps) {
                   ? 'bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-[color:var(--accent)]/30'
                   : 'text-[var(--foreground-secondary)] hover:bg-white/5 hover:text-[var(--foreground)]',
               )}
-              data-cursor="link"
+              data-cursor={external ? 'open' : 'link'}
               href={href}
               key={href}
+              rel={external ? 'noopener noreferrer' : undefined}
+              target={external ? '_blank' : undefined}
               title={label}
             >
               <Icon className="h-5 w-5" />
