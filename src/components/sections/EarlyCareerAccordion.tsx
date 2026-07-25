@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown } from 'lucide-react'
+import { Briefcase, ChevronDown } from 'lucide-react'
 import { useId, useState } from 'react'
 
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
@@ -31,7 +31,8 @@ export function EarlyCareerAccordion({ experiences }: EarlyCareerAccordionProps)
           type="button"
         >
           <div className="max-w-2xl space-y-2">
-            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--accent-soft)] uppercase">
+            <p className="flex items-center gap-2 font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--accent-soft)] uppercase">
+              <Briefcase aria-hidden className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
               2001 — 2013
             </p>
             <h2 className="font-[family-name:var(--font-syne)] text-2xl font-semibold sm:text-3xl">

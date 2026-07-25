@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Lock } from 'lucide-react'
 
+import { ContactLink } from '@/components/ui/ContactLink'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { Container } from '@/components/ui/Container'
 import { cn } from '@/lib/utils'
@@ -12,6 +13,7 @@ function isAdminGatewayHref(href: string): boolean {
 type FooterProps = {
   siteName: string
   email?: string | null
+  phone?: string | null
   footerExtraLine?: string | null
   adminHref?: string | null
   adminLinkTitle?: string
@@ -22,6 +24,7 @@ type FooterProps = {
 export function Footer({
   siteName,
   email,
+  phone,
   footerExtraLine,
   adminHref = '/admin/login',
   adminLinkTitle = 'Backoffice Payload CMS',
@@ -36,15 +39,9 @@ export function Footer({
           <p className="font-[family-name:var(--font-syne)] text-sm font-semibold text-[var(--foreground)]">
             {siteName}
           </p>
-          <div className="flex flex-wrap items-center gap-4">
-            {email ? (
-              <Link
-                className="text-sm text-[var(--foreground-secondary)] transition hover:text-[var(--foreground)]"
-                href={`mailto:${email}`}
-              >
-                {email}
-              </Link>
-            ) : null}
+          <div className="flex flex-wrap items-center gap-3">
+            {email ? <ContactLink size="sm" type="email" value={email} /> : null}
+            {phone ? <ContactLink size="sm" type="phone" value={phone} /> : null}
             {showAdminLink && adminHref ? (
               isAdminGatewayHref(adminHref) ? (
                 <a
@@ -90,7 +87,7 @@ export function Footer({
               ·
             </span>
             <Link
-              className="transition hover:text-[var(--foreground-secondary)]"
+              className="text-link text-xs"
               href="/mentions-legales"
             >
               Mentions légales
@@ -99,7 +96,7 @@ export function Footer({
               ·
             </span>
             <Link
-              className="transition hover:text-[var(--foreground-secondary)]"
+              className="text-link text-xs"
               href="/confidentialite"
             >
               Confidentialité

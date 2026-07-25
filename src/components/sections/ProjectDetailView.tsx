@@ -1,5 +1,6 @@
 'use client'
 
+import { ArrowLeft, Clock, ExternalLink, FolderGit2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -57,11 +58,15 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
       <Container className="py-10 sm:py-12">
         <ReadableSurface bleed={false} strong>
         <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
-          <Link className="transition hover:text-[var(--foreground)]" data-cursor="link" href="/projets">
-            ← Projets
+          <Link className="text-link" data-cursor="link" href="/projets">
+            <ArrowLeft aria-hidden className="h-3.5 w-3.5" strokeWidth={2} />
+            Projets
           </Link>
           <span aria-hidden>·</span>
-          <span>{readingMinutes} min de lecture</span>
+          <span className="icon-label">
+            <Clock aria-hidden className="icon-label__glyph h-3.5 w-3.5" strokeWidth={2} />
+            <span className="icon-label__text">{readingMinutes} min de lecture</span>
+          </span>
         </div>
 
         <div className="lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
@@ -95,9 +100,15 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
             ) : null}
 
             <div className="mt-6 flex flex-wrap gap-3">
-              {project.liveUrl ? <Button href={project.liveUrl}>Voir le site</Button> : null}
+              {project.liveUrl ? (
+                <Button href={project.liveUrl}>
+                  <ExternalLink aria-hidden className="mr-1.5 inline h-4 w-4" strokeWidth={2} />
+                  Voir le site
+                </Button>
+              ) : null}
               {project.repoUrl ? (
                 <Button href={project.repoUrl} variant="glass">
+                  <FolderGit2 aria-hidden className="mr-1.5 inline h-4 w-4" strokeWidth={2} />
                   Code source
                 </Button>
               ) : null}

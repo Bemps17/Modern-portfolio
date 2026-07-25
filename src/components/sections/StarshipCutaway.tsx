@@ -496,6 +496,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         <SectionTitle
           editorial
           eyebrow="Méthode"
+          icon="method"
           subtitle={desktopSubtitle}
           title="Découpez le projet"
         />

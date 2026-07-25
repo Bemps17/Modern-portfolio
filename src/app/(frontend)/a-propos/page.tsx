@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { MapPin } from 'lucide-react'
 import Image from 'next/image'
 
 import { AboutHighlightsAccordion } from '@/components/sections/AboutHighlightsAccordion'
@@ -12,6 +13,8 @@ import { SkillGroupsList } from '@/components/sections/SkillGroupsList'
 import { SoftSkillsStrip } from '@/components/sections/SoftSkillsStrip'
 import { StatsStrip } from '@/components/sections/StatsStrip'
 import { Container } from '@/components/ui/Container'
+import { EmailContactLink, PhoneContactLink } from '@/components/ui/ContactLink'
+import { IconLabel } from '@/components/ui/IconLabel'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import {
@@ -101,15 +104,25 @@ export default async function AboutPage() {
           <SoftSkillsStrip skills={softSkills} />
           <div className="space-y-5 border-t border-[color:var(--border-subtle)] pt-8">
             {settings?.location?.trim() ? (
-              <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+              <IconLabel
+                className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase"
+                icon={MapPin}
+              >
                 {settings.location}
-              </span>
+              </IconLabel>
             ) : null}
             <SectionTitle
               eyebrow="Profil"
+              icon="profile"
               subtitle={settings?.tagline || undefined}
               title={settings?.siteName || 'À propos'}
             />
+            {(settings?.email || settings?.phone) && (
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {settings?.email ? <EmailContactLink email={settings.email} size="sm" /> : null}
+                {settings?.phone ? <PhoneContactLink phone={settings.phone} size="sm" /> : null}
+              </div>
+            )}
             {settings?.aboutIntro ? (
               <p className="max-w-2xl text-lg text-[var(--foreground-secondary)]">{settings.aboutIntro}</p>
             ) : null}
@@ -147,6 +160,7 @@ export default async function AboutPage() {
       <ReadableSurface as="section">
         <SectionTitle
           eyebrow="En chiffres"
+          icon="stats"
           subtitle="Un aperçu rapide du parcours et de la production."
           title="Preuves concrètes"
         />
@@ -158,7 +172,7 @@ export default async function AboutPage() {
       </ReadableSurface>
 
       <ReadableSurface as="section">
-        <SectionTitle title="Parcours" />
+        <SectionTitle icon="journey" title="Parcours" />
         <ExperienceTimeline experiences={recentExperiences} />
       </ReadableSurface>
 
@@ -166,6 +180,7 @@ export default async function AboutPage() {
 
       <ReadableSurface as="section">
         <SectionTitle
+          icon="education"
           subtitle="Diplômes, certifications et bases académiques."
           title="Formation & certifications"
         />
@@ -175,6 +190,7 @@ export default async function AboutPage() {
       {skillGroups.length ? (
         <ReadableSurface as="section">
           <SectionTitle
+            icon="skills"
             subtitle={settings?.skillsSubtitle || 'Design, développement, commercial et relationnel.'}
             title={settings?.skillsTitle || 'Compétences clés'}
           />
@@ -185,6 +201,7 @@ export default async function AboutPage() {
       {technicalSkills.length ? (
         <ReadableSurface as="section">
           <SectionTitle
+            icon="skills"
             subtitle="Les outils avec lesquels je livre le plus souvent."
             title="Stack technique"
           />
@@ -195,6 +212,7 @@ export default async function AboutPage() {
       {personalProjects.length ? (
         <ReadableSurface as="section">
           <SectionTitle
+            icon="portfolio"
             subtitle="Initiatives perso, veille et expérimentation."
             title="Projets personnels"
           />

@@ -1,5 +1,6 @@
 'use client'
 
+import { MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 
@@ -10,6 +11,7 @@ import { AvailabilityBadge, type AvailabilityStatus } from '@/components/ui/Avai
 import { Container } from '@/components/ui/Container'
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { Button } from '@/components/ui/Button'
+import { IconLabel } from '@/components/ui/IconLabel'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { cn } from '@/lib/utils'
 
@@ -103,9 +105,12 @@ export function Hero({
               {/* Unique badge disponibilité du site — uniquement ici. */}
               <AvailabilityBadge label={availabilityLabel} size="sm" status={availability} />
               {location?.trim() ? (
-                <span className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase">
+                <IconLabel
+                  className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.14em] text-[var(--muted)] uppercase"
+                  icon={MapPin}
+                >
                   {location}
-                </span>
+                </IconLabel>
               ) : null}
             </motion.div>
 

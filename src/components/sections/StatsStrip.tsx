@@ -1,8 +1,11 @@
 'use client'
 
+import { Briefcase, Calendar, FolderKanban } from 'lucide-react'
+
 import { Odometer } from '@/components/motion/Odometer'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { GlassCard } from '@/components/ui/GlassCard'
+import { IconLabel } from '@/components/ui/IconLabel'
 
 type StatsStripProps = {
   projectCount: number
@@ -12,9 +15,9 @@ type StatsStripProps = {
 
 const stats = (props: StatsStripProps) =>
   [
-    { value: props.projectCount, label: 'projets livrés', suffix: '' },
-    { value: props.yearsExperience, label: "ans d'expérience", suffix: '+' },
-    { value: props.skillCount, label: 'compétences', suffix: '' },
+    { value: props.projectCount, label: 'projets livrés', suffix: '', icon: FolderKanban },
+    { value: props.yearsExperience, label: "ans d'expérience", suffix: '+', icon: Calendar },
+    { value: props.skillCount, label: 'compétences', suffix: '', icon: Briefcase },
   ] as const
 
 export function StatsStrip({ projectCount, skillCount, yearsExperience }: StatsStripProps) {
@@ -26,9 +29,12 @@ export function StatsStrip({ projectCount, skillCount, yearsExperience }: StatsS
         {items.map((item) => (
           <GlassCard className="p-6 text-center" key={item.label}>
             <Odometer suffix={item.suffix} value={item.value} />
-            <p className="mt-2 font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--muted)] uppercase">
+            <IconLabel
+              className="mt-3 justify-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--muted)] uppercase"
+              icon={item.icon}
+            >
               {item.label}
-            </p>
+            </IconLabel>
           </GlassCard>
         ))}
       </div>

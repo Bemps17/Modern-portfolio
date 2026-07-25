@@ -40,6 +40,7 @@ export default async function ProjetsPage() {
         <SectionTitle
           editorial
           eyebrow="Work"
+          icon="portfolio"
           subtitle="Filtrez par stack si besoin — chaque carte mène au détail."
           title="Projets"
         />

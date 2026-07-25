@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { LegalList, LegalPageShell, LegalSection } from '@/components/legal/LegalPageShell'
+import { ContactLink } from '@/components/ui/ContactLink'
 import { getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
 import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
@@ -30,6 +31,7 @@ export default async function PrivacyPolicyPage() {
   return (
     <LegalPageShell
       eyebrow="Protection des données"
+      icon="privacy"
       subtitle={`Comment ${siteName} traite vos données lors de la visite du site, de la mesure d’audience et de l’utilisation du formulaire de contact.`}
       title="Politique de confidentialité"
     >
@@ -45,11 +47,9 @@ export default async function PrivacyPolicyPage() {
           .
         </p>
         {email ? (
-          <p>
-            Pour toute question relative à vos données :{' '}
-            <Link className="text-[var(--accent-soft)] underline-offset-2 hover:underline" href={`mailto:${email}`}>
-              {email}
-            </Link>
+          <p className="flex flex-wrap items-center gap-2">
+            <span>Pour toute question relative à vos données :</span>
+            <ContactLink size="sm" type="email" value={email} />
           </p>
         ) : null}
       </LegalSection>
@@ -102,7 +102,7 @@ export default async function PrivacyPolicyPage() {
           données à des annonceurs. Les scripts sont chargés depuis l’infrastructure Vercel (`/_vercel/insights/` et
           `/_vercel/speed-insights/`). Pour plus de détail :{' '}
           <a
-            className="text-[var(--accent-soft)] underline-offset-2 hover:underline"
+            className="text-link"
             href="https://vercel.com/docs/analytics"
             rel="noopener noreferrer"
             target="_blank"
@@ -186,15 +186,12 @@ export default async function PrivacyPolicyPage() {
           {email ? (
             <>
               {' '}
-              à{' '}
-              <Link className="text-[var(--accent-soft)] underline-offset-2 hover:underline" href={`mailto:${email}`}>
-                {email}
-              </Link>
+              à <ContactLink className="align-middle" size="sm" type="email" value={email} />
             </>
           ) : null}
           . Vous pouvez également introduire une réclamation auprès de la CNIL (
           <a
-            className="text-[var(--accent-soft)] underline-offset-2 hover:underline"
+            className="text-link"
             href="https://www.cnil.fr"
             rel="noopener noreferrer"
             target="_blank"
@@ -220,7 +217,7 @@ export default async function PrivacyPolicyPage() {
         </p>
         <p className="text-sm text-[var(--muted)]">
           Voir aussi les{' '}
-          <Link className="text-[var(--accent-soft)] underline-offset-2 hover:underline" href="/mentions-legales">
+          <Link className="text-link" href="/mentions-legales">
             mentions légales
           </Link>{' '}
           · {siteUrl}

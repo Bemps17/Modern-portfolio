@@ -1,3 +1,4 @@
+import { ContactLink } from '@/components/ui/ContactLink'
 import { formatCvDateTimeValue, formatCvMonthYear } from '@/lib/cv/format-date-range'
 import type { CvDocumentData, CvExperienceItem } from '@/lib/cv/types'
 
@@ -53,11 +54,11 @@ export function CvHtmlDocument({ data }: { data: CvDocumentData }) {
             {data.location ? <li>{data.location}</li> : null}
             {data.phone ? (
               <li>
-                <a href={`tel:${data.phone.replace(/\s+/g, '')}`}>{data.phone}</a>
+                <ContactLink size="sm" type="phone" value={data.phone} />
               </li>
             ) : null}
             <li>
-              <a href={`mailto:${data.email}`}>{data.email}</a>
+              <ContactLink size="sm" type="email" value={data.email} />
             </li>
             {data.availabilityLabel ? <li>{data.availabilityLabel}</li> : null}
           </ul>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { LegalList, LegalPageShell, LegalSection } from '@/components/legal/LegalPageShell'
+import { ContactLink } from '@/components/ui/ContactLink'
 import { getSeoDefaultsContent, getSiteSettingsContent } from '@/lib/content'
 import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
@@ -41,6 +42,7 @@ export default async function LegalNoticePage() {
   return (
     <LegalPageShell
       eyebrow="Informations légales"
+      icon="legal"
       subtitle={`Document relatif au site ${siteName}, conformément aux obligations d’information en ligne.`}
       title="Mentions légales"
       footer={
@@ -59,14 +61,11 @@ export default async function LegalNoticePage() {
           ) : null}
           .
         </p>
-        {email ? (
-          <p>
-            Contact :{' '}
-            <Link className="text-[var(--accent-soft)] underline-offset-2 hover:underline" href={`mailto:${email}`}>
-              {email}
-            </Link>
-            {phone ? <> · {phone}</> : null}
-          </p>
+        {email || phone ? (
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            {email ? <ContactLink size="sm" type="email" value={email} /> : null}
+            {phone ? <ContactLink size="sm" type="phone" value={phone} /> : null}
+          </div>
         ) : null}
       </LegalSection>
 

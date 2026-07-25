@@ -4,6 +4,7 @@ import { FloatingOrb } from '@/components/motion/FloatingOrb'
 import { Magnetic } from '@/components/motion/Magnetic'
 import { FadeInWhenVisible } from '@/components/motion/FadeInWhenVisible'
 import { Button } from '@/components/ui/Button'
+import { ContactLink } from '@/components/ui/ContactLink'
 import { Container } from '@/components/ui/Container'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -27,20 +28,14 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl space-y-4">
               <SectionTitle
+                icon="contact"
                 subtitle={
                   location?.trim() ||
                   'Un projet, une collab, une opportunité — parlons-en clairement.'
                 }
                 title="Travaillons ensemble"
               />
-              {email ? (
-                <a
-                  className="inline-block font-[family-name:var(--font-space-grotesk)] text-sm tracking-wide text-[var(--foreground-secondary)] underline-offset-4 transition hover:text-[var(--foreground)] hover:underline"
-                  href={`mailto:${email}`}
-                >
-                  {email}
-                </a>
-              ) : null}
+              {email ? <ContactLink size="md" type="email" value={email} /> : null}
             </div>
             <div className="flex flex-wrap gap-3">
               <Magnetic>

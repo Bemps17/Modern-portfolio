@@ -8,7 +8,7 @@ export default function Icon() {
   return (
     <div className="brand-admin-icon">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img alt="Portfolio" className="brand-admin-icon__mark" height={28} src="/brand/favicon.png" width={28} />
+      <img alt="Portfolio" className="brand-admin-icon__mark" height={28} src="/brand/favicon.svg" width={28} />
     </div>
   )
 }

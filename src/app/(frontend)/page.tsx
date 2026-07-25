@@ -101,6 +101,7 @@ export default async function HomePage() {
           <SectionTitle
             editorial
             eyebrow="Portfolio"
+            icon="portfolio"
             subtitle="3 à 5 réalisations choisies — problème, stack, résultat."
             title="Projets à la une"
           />

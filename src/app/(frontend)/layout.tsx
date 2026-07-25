@@ -47,8 +47,14 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(getSiteUrl()),
     icons: {
-      icon: [{ url: favicon }],
-      apple: favicon,
+      icon: [
+        {
+          url: favicon,
+          type: favicon.endsWith('.svg') ? 'image/svg+xml' : undefined,
+        },
+        { url: SITE_IMAGES.faviconPng, type: 'image/png', sizes: '512x512' },
+      ],
+      apple: SITE_IMAGES.faviconPng,
     },
   }
 }
@@ -106,6 +112,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             adminLinkTitle={adminLinkTitle}
             email={email}
             footerExtraLine={footerExtraLine}
+            phone={settings?.phone}
             showAdminLink={showAdminLink}
             siteName={siteName}
           />

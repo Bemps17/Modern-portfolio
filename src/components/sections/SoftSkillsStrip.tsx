@@ -1,9 +1,11 @@
 'use client'
 
+import { Heart } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Badge } from '@/components/ui/Badge'
+import { IconLabel } from '@/components/ui/IconLabel'
 import { cn } from '@/lib/utils'
 import type { Skill } from '@/payload-types'
 
@@ -65,9 +67,13 @@ export function SoftSkillsStrip({ skills, className }: SoftSkillsStripProps) {
 
   return (
     <section aria-label="Soft skills" className={cn('relative', className)}>
-      <p className="mb-5 text-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase">
+      <IconLabel
+        as="p"
+        className="mb-5 justify-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase"
+        icon={Heart}
+      >
         Soft skills
-      </p>
+      </IconLabel>
       <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
         {items.map((skill, index) => {
           const motionConfig = getChipMotion(skill.id, index)

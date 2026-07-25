@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/sections/ContactForm'
+import { ContactLink } from '@/components/ui/ContactLink'
 import { Container } from '@/components/ui/Container'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -33,9 +34,14 @@ export default async function ContactPage() {
       <ReadableSurface className="max-w-2xl" strong>
         <SectionTitle
           eyebrow="Contact"
+          icon="mail"
           subtitle={subtitle}
           title="Parlons de votre projet"
         />
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          {settings?.email ? <ContactLink type="email" value={settings.email} /> : null}
+          {settings?.phone ? <ContactLink type="phone" value={settings.phone} /> : null}
+        </div>
         {showForm ? <ContactForm /> : null}
       </ReadableSurface>
     </Container>

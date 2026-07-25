@@ -8,7 +8,7 @@ export default function Logo() {
   return (
     <div className="brand-admin-logo">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img alt="Portfolio" className="brand-admin-logo__mark" height={40} src="/brand/favicon.png" width={40} />
+      <img alt="Portfolio" className="brand-admin-logo__mark" height={40} src="/brand/favicon.svg" width={40} />
       <span className="brand-admin-logo__wordmark">Portfolio</span>
     </div>
   )

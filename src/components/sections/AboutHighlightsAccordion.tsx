@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Sparkles } from 'lucide-react'
 import { useId, useState } from 'react'
 
 import { FloatingOrb } from '@/components/motion/FloatingOrb'
@@ -44,7 +44,8 @@ export function AboutHighlightsAccordion({ whyMePoints }: WhyMeAccordionProps) {
           type="button"
         >
           <div className="max-w-2xl space-y-2">
-            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--accent-soft)] uppercase">
+            <p className="flex items-center gap-2 font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--accent-soft)] uppercase">
+              <Sparkles aria-hidden className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
               Différenciation
             </p>
             <h2 className="font-[family-name:var(--font-syne)] text-2xl font-semibold sm:text-3xl">

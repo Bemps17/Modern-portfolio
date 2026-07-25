@@ -20,6 +20,26 @@ export function BrandLogo({ siteName, className, compact = false, logoUrl }: Bra
   const [party, setParty] = useState(false)
   const reduceMotion = useReducedMotion()
   const src = logoUrl?.trim() || SITE_IMAGES.brandLogo
+  const isSvg = src.endsWith('.svg')
+
+  const mark = isSvg ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      alt=""
+      className="h-8 w-8 rounded-lg ring-1 ring-[color:var(--accent)]/30"
+      height={compact ? 36 : 32}
+      src={src}
+      width={compact ? 36 : 32}
+    />
+  ) : (
+    <Image
+      alt=""
+      className="rounded-lg ring-1 ring-[color:var(--accent)]/30"
+      height={compact ? 36 : 32}
+      src={src}
+      width={compact ? 36 : 32}
+    />
+  )
 
   const onClick = () => {
     const next = clicks + 1
@@ -52,13 +72,7 @@ export function BrandLogo({ siteName, className, compact = false, logoUrl }: Bra
         className="inline-flex items-center gap-3"
         transition={{ duration: 0.5 }}
       >
-        <Image
-          alt=""
-          className="rounded-lg ring-1 ring-[color:var(--accent)]/30"
-          height={compact ? 36 : 32}
-          src={src}
-          width={compact ? 36 : 32}
-        />
+        {mark}
         {!compact ? (
           <span className={party ? 'text-[var(--accent-soft)]' : undefined}>{siteName}</span>
         ) : null}

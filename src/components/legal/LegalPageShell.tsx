@@ -2,21 +2,22 @@ import type { ReactNode } from 'react'
 
 import { Container } from '@/components/ui/Container'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
-import { SectionTitle } from '@/components/ui/SectionTitle'
+import { SectionTitle, type SectionIconName } from '@/components/ui/SectionTitle'
 
 type LegalPageShellProps = {
   title: string
   eyebrow: string
   subtitle?: string
+  icon?: SectionIconName
   children: ReactNode
   footer?: ReactNode
 }
 
-export function LegalPageShell({ title, eyebrow, subtitle, children, footer }: LegalPageShellProps) {
+export function LegalPageShell({ title, eyebrow, subtitle, icon, children, footer }: LegalPageShellProps) {
   return (
     <Container className="py-12 sm:py-16">
       <ReadableSurface className="max-w-3xl" strong>
-        <SectionTitle eyebrow={eyebrow} subtitle={subtitle} title={title} />
+        <SectionTitle eyebrow={eyebrow} icon={icon} subtitle={subtitle} title={title} />
         <div className="legal-prose space-y-8 text-[var(--foreground-secondary)]">{children}</div>
         {footer ? <div className="mt-12 border-t border-[color:var(--border-subtle)] pt-8">{footer}</div> : null}
       </ReadableSurface>

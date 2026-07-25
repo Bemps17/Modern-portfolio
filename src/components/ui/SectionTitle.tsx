@@ -1,8 +1,39 @@
 'use client'
 
+import {
+  Briefcase,
+  FolderKanban,
+  GraduationCap,
+  Layers,
+  Mail,
+  MessageCircle,
+  Rocket,
+  Scale,
+  Shield,
+  Sparkles,
+  UserRound,
+  type LucideIcon,
+} from 'lucide-react'
+
 import { EditorialTitle } from '@/components/ui/EditorialTitle'
 import { RevealText } from '@/components/motion/RevealText'
 import { cn } from '@/lib/utils'
+
+const SECTION_ICONS = {
+  portfolio: FolderKanban,
+  profile: UserRound,
+  stats: Sparkles,
+  journey: Briefcase,
+  education: GraduationCap,
+  skills: Layers,
+  contact: MessageCircle,
+  mail: Mail,
+  method: Rocket,
+  legal: Scale,
+  privacy: Shield,
+} as const satisfies Record<string, LucideIcon>
+
+export type SectionIconName = keyof typeof SECTION_ICONS
 
 type SectionTitleProps = {
   title: string
@@ -10,17 +41,36 @@ type SectionTitleProps = {
   className?: string
   eyebrow?: string
   editorial?: boolean
+  icon?: SectionIconName
 }
 
-export function SectionTitle({ title, subtitle, className, eyebrow, editorial = false }: SectionTitleProps) {
+export function SectionTitle({
+  title,
+  subtitle,
+  className,
+  eyebrow,
+  editorial = false,
+  icon: iconName,
+}: SectionTitleProps) {
+  const Icon = iconName ? SECTION_ICONS[iconName] : null
+
   return (
     <div className={cn('mb-10 max-w-2xl', editorial && 'max-w-none', className)}>
-      {eyebrow ? (
-        <RevealText
-          as="p"
-          className="mb-3 font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase"
-          text={eyebrow}
-        />
+      {(eyebrow || Icon) ? (
+        <div className="mb-3 flex items-center gap-2.5">
+          {Icon ? (
+            <span aria-hidden className="section-title-icon inline-flex shrink-0">
+              <Icon className="h-4 w-4 text-[var(--accent-soft)]" strokeWidth={2} />
+            </span>
+          ) : null}
+          {eyebrow ? (
+            <RevealText
+              as="p"
+              className="section-eyebrow font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase"
+              text={eyebrow}
+            />
+          ) : null}
+        </div>
       ) : null}
       {editorial ? (
         <EditorialTitle as="h2" bleed className="mb-3" text={title} />

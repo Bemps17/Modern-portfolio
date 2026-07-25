@@ -88,6 +88,7 @@ export function ApproachSection({ steps }: ApproachSectionProps) {
         <SectionTitle
           editorial
           eyebrow="Méthode"
+          icon="method"
           subtitle="Du cadrage au ship — précision, rythme, impact."
           title="Comment je construis"
         />

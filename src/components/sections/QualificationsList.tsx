@@ -1,3 +1,6 @@
+import { GraduationCap } from 'lucide-react'
+
+import { IconLabel } from '@/components/ui/IconLabel'
 import type { Qualification } from '@/payload-types'
 
 type QualificationsListProps = {
@@ -12,12 +15,17 @@ export function QualificationsList({ qualifications }: QualificationsListProps) 
       {qualifications.map((qualification) => (
         <li className="relative" key={qualification.id}>
           <span className="absolute top-1.5 -left-[1.7rem] h-3 w-3 rounded-full bg-[var(--accent)]" />
-          <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--muted)] uppercase">
+          <IconLabel
+            className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--muted)] uppercase"
+            icon={GraduationCap}
+          >
             {qualification.year}
-          </p>
-          <h3 className="mt-1 font-[family-name:var(--font-syne)] text-xl font-semibold">{qualification.title}</h3>
+          </IconLabel>
+          <h3 className="mt-2 font-[family-name:var(--font-syne)] text-xl font-semibold">{qualification.title}</h3>
           {qualification.institution?.trim() ? (
-            <p className="text-sm text-[var(--accent-soft)]">{qualification.institution}</p>
+            <IconLabel className="mt-1 text-sm text-[var(--accent-soft)]" icon={GraduationCap}>
+              {qualification.institution}
+            </IconLabel>
           ) : null}
         </li>
       ))}

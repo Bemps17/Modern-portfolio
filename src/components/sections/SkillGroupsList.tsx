@@ -1,3 +1,7 @@
+import { Layers } from 'lucide-react'
+
+import { IconLabel } from '@/components/ui/IconLabel'
+
 type SkillGroup = {
   title: string
   items: string
@@ -25,9 +29,12 @@ export function SkillGroupsList({ groups }: SkillGroupsListProps) {
         const lines = parseItems(group.items)
         return (
           <li key={group.id ?? `${group.title}-${index}`}>
-            <h3 className="font-[family-name:var(--font-space-grotesk)] text-sm tracking-[0.18em] text-[var(--muted)] uppercase">
+            <IconLabel
+              className="font-[family-name:var(--font-space-grotesk)] text-sm tracking-[0.18em] text-[var(--muted)] uppercase"
+              icon={Layers}
+            >
               {group.title}
-            </h3>
+            </IconLabel>
             {lines.length > 1 ? (
               <ul className="mt-3 space-y-2 border-l border-[color:var(--border-subtle)] pl-4">
                 {lines.map((line) => (
