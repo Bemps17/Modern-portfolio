@@ -29,6 +29,7 @@ export default defineConfig({
             'tests/int/project-cover.int.spec.ts',
             'tests/int/slugify.int.spec.ts',
             'tests/int/contactSchema.int.spec.ts',
+            'tests/int/draft-preview.int.spec.ts',
             'tests/int/cv-format-date.int.spec.ts',
             'tests/int/cv-build-data.int.spec.ts',
             'tests/int/cv-schema.int.spec.ts',

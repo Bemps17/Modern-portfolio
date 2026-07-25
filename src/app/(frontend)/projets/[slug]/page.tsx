@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { PayloadLivePreviewRefresh } from '@/components/cms/PayloadLivePreviewRefresh'
 import { ProjectDetailView } from '@/components/sections/ProjectDetailView'
 import { breadcrumbJsonLd, creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
 import {
@@ -91,6 +92,7 @@ export default async function ProjetDetailPage({ params }: PageProps) {
         ])}
       />
       <ProjectDetailView nextProject={nextProject} prevProject={prevProject} project={project} />
+      <PayloadLivePreviewRefresh />
     </>
   )
 }

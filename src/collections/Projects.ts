@@ -1,6 +1,7 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { slugify } from '../lib/utils'
+import { editorialLivePreviewConfig } from '../lib/payload-editorial-drafts'
 import { revalidateProjects, revalidateProjectsDelete } from '../lib/revalidate'
 import { getSiteUrl } from '../lib/site-url'
 
@@ -41,6 +42,7 @@ export const Projects: CollectionConfig = {
       if (!doc?.slug) return null
       return `${siteUrl}/projets/${doc.slug}`
     },
+    ...editorialLivePreviewConfig('projects').admin,
   },
   access: {
     read: isPublishedOrAuthenticated,

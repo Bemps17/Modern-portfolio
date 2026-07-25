@@ -31,6 +31,12 @@ export default buildConfig({
     user: Users.slug,
     /** Dark only — aligné univers marque (pas de toggle light). */
     theme: 'dark',
+    livePreview: {
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 390, height: 844 },
+        { label: 'Desktop', name: 'desktop', width: 1280, height: 800 },
+      ],
+    },
     meta: {
       titleSuffix: ' — Portfolio',
       description: 'Administration du portfolio — CMS Payload',

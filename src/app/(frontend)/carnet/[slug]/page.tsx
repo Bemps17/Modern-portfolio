@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { PayloadLivePreviewRefresh } from '@/components/cms/PayloadLivePreviewRefresh'
 import { JournalPostDetailView } from '@/components/sections/JournalPostDetailView'
 import {
   getJournalPostBySlug,
@@ -48,6 +49,9 @@ export default async function CarnetDetailPage({ params }: PageProps) {
   if (!post) notFound()
 
   return (
-    <JournalPostDetailView backLabel={settings?.journalNavLabel ?? 'Le Lablog'} post={post} />
+    <>
+      <JournalPostDetailView backLabel={settings?.journalNavLabel ?? 'Le Lablog'} post={post} />
+      <PayloadLivePreviewRefresh />
+    </>
   )
 }

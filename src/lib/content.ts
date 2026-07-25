@@ -1,4 +1,5 @@
 import { portfolioFallback } from '@/data/portfolio-fallback'
+import { isDraftPreviewEnabled } from '@/lib/draft-preview'
 import type {
   Experience,
   JournalPost,
@@ -268,9 +269,23 @@ export async function getFeaturedProjects(): Promise<Project[]> {
   return portfolioFallback.projects.filter((project) => project.featured)
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
+export async function getProjectBySlug(
+  slug: string,
+  options?: { preview?: boolean },
+): Promise<Project | null> {
+  const preview = options?.preview ?? (await isDraftPreviewEnabled())
   const payload = await getPayloadClientSafe()
   if (payload) {
+    if (preview) {
+      const result = await payload.find({
+        collection: 'projects',
+        where: { slug: { equals: slug } },
+        overrideAccess: true,
+        depth: 2,
+        limit: 1,
+      })
+      return result.docs[0] ?? null
+    }
     const result = await payload.find({
       collection: 'projects',
       where: {
@@ -351,10 +366,24 @@ export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
   return portfolioFallback.journalPosts
 }
 
-export async function getJournalPostBySlug(slug: string): Promise<JournalPost | null> {
+export async function getJournalPostBySlug(
+  slug: string,
+  options?: { preview?: boolean },
+): Promise<JournalPost | null> {
+  const preview = options?.preview ?? (await isDraftPreviewEnabled())
   const payload = await getPayloadClientSafe()
   if (payload) {
     try {
+      if (preview) {
+        const result = await payload.find({
+          collection: 'journal-posts',
+          where: { slug: { equals: slug } },
+          overrideAccess: true,
+          depth: 2,
+          limit: 1,
+        })
+        return resolveJournalPostBySlug(result.docs[0], slug, portfolioFallback.journalPosts)
+      }
       const result = await payload.find({
         collection: 'journal-posts',
         where: {

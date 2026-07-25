@@ -1,6 +1,7 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { slugify } from '../lib/utils'
+import { editorialLivePreviewConfig } from '../lib/payload-editorial-drafts'
 import { revalidateJournalPosts, revalidateJournalPostsDelete } from '../lib/revalidate'
 import { getSiteUrl } from '../lib/site-url'
 
@@ -50,6 +51,7 @@ export const JournalPosts: CollectionConfig = {
       if (!doc?.slug) return null
       return `${siteUrl}/carnet/${doc.slug}`
     },
+    ...editorialLivePreviewConfig('journal-posts').admin,
   },
   access: {
     read: isPublishedOrAuthenticated,
