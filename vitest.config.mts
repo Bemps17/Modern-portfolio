@@ -41,7 +41,7 @@ export default defineConfig({
           name: 'jsdom-ui',
           environment: 'jsdom',
           setupFiles,
-          include: ['tests/int/**/*.int.spec.tsx'],
+          include: ['tests/int/**/*.int.spec.tsx', 'tests/int/starship-launch.int.spec.ts'],
         },
       },
     ],
