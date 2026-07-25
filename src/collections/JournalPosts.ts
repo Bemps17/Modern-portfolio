@@ -1,6 +1,8 @@
 import type { Access, CollectionConfig } from 'payload'
 
 import { applyLablogBlueprint } from '../lib/lablog-article-blueprint'
+import { journalLexicalEditor } from '../lib/journal-lexical-editor'
+import { estimateJournalReadingTime } from '../lib/reading-time'
 import { slugify } from '../lib/utils'
 import { editorialLivePreviewConfig } from '../lib/payload-editorial-drafts'
 import { revalidateJournalPosts, revalidateJournalPostsDelete } from '../lib/revalidate'
@@ -111,9 +113,10 @@ export const JournalPosts: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+      editor: journalLexicalEditor(),
       admin: {
         condition: (_, siblingData) => siblingData?.postType === 'article',
-        description: 'Corps de l’article (non requis pour une galerie pure).',
+        description: 'Corps de l’article (non requis pour une galerie pure). Encarts info / attention / astuce disponibles.',
       },
       validate: (value: unknown, { siblingData }: { siblingData?: { postType?: string } }) => {
         if (siblingData?.postType === 'article' && !value) {
@@ -174,6 +177,24 @@ export const JournalPosts: CollectionConfig = {
       options: [...CATEGORY_OPTIONS],
     },
     {
+      name: 'tags',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
+      admin: {
+        description: 'Tags transverses — filtrables sur /carnet?tag=slug',
+      },
+    },
+    {
+      name: 'readingTimeMinutes',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Calculé automatiquement depuis l’extrait et le corps.',
+      },
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       required: true,
@@ -226,6 +247,13 @@ export const JournalPosts: CollectionConfig = {
           if (applied.title) data.title = applied.title
           if (applied.excerpt) data.excerpt = applied.excerpt
           if (applied.category) data.category = applied.category
+        }
+
+        if (data.postType === 'article') {
+          data.readingTimeMinutes = estimateJournalReadingTime({
+            excerpt: data.excerpt,
+            content: data.content,
+          })
         }
 
         return data

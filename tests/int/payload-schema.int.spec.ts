@@ -3,10 +3,12 @@ import { describe, expect, it } from 'vitest'
 
 import { Experiences } from '@/collections/Experiences'
 import { FormSubmissions } from '@/collections/FormSubmissions'
+import { JournalPosts } from '@/collections/JournalPosts'
 import { Media } from '@/collections/Media'
 import { Projects } from '@/collections/Projects'
 import { Qualifications } from '@/collections/Qualifications'
 import { Skills } from '@/collections/Skills'
+import { Tags } from '@/collections/Tags'
 import { Users } from '@/collections/Users'
 import { SEODefaults } from '@/globals/SEODefaults'
 import { SiteSettings } from '@/globals/SiteSettings'
@@ -37,6 +39,7 @@ describe('Payload schema — collections & globals', () => {
     expect(Experiences.slug).toBe('experiences')
     expect(Qualifications.slug).toBe('qualifications')
     expect(FormSubmissions.slug).toBe('form-submissions')
+    expect(Tags.slug).toBe('tags')
   })
 
   it('enregistre les globals Site Settings et SEO', () => {
@@ -133,5 +136,15 @@ describe('Payload schema — collections & globals', () => {
 
   it('Form submissions sont créables publiquement (contact)', () => {
     expect(FormSubmissions.access?.create?.({} as never)).toBe(true)
+  })
+
+  it('Form submissions expose le statut inbox CRM', () => {
+    const names = fieldNames(FormSubmissions.fields as { name?: string }[])
+    expect(names).toContain('inboxStatus')
+  })
+
+  it('Journal posts expose tags et temps de lecture', () => {
+    const names = fieldNames(JournalPosts.fields as { name?: string }[])
+    expect(names).toEqual(expect.arrayContaining(['tags', 'readingTimeMinutes']))
   })
 })

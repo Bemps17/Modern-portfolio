@@ -14,10 +14,12 @@ import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
 import { Qualifications } from './collections/Qualifications'
 import { Skills } from './collections/Skills'
+import { Tags } from './collections/Tags'
 import { Users } from './collections/Users'
 import { LablogTemplate } from './globals/LablogTemplate'
 import { SEODefaults } from './globals/SEODefaults'
 import { SiteSettings } from './globals/SiteSettings'
+import { portfolioSeoPlugin } from './lib/payload-seo-plugin'
 import { getDatabaseUri, getPayloadSecret, syncDatabaseUriEnv } from './lib/payload-env'
 
 const filename = fileURLToPath(import.meta.url)
@@ -58,6 +60,12 @@ export default buildConfig({
           maxWidth: 'full',
         },
         {
+          slug: 'portfolio-stats',
+          Component: '/components/admin/AdminStatsWidget',
+          minWidth: 'full',
+          maxWidth: 'full',
+        },
+        {
           slug: 'collections',
           Component: '@payloadcms/next/rsc#CollectionCards',
           minWidth: 'full',
@@ -65,6 +73,7 @@ export default buildConfig({
       ],
       defaultLayout: [
         { widgetSlug: 'portfolio-welcome', width: 'full' },
+        { widgetSlug: 'portfolio-stats', width: 'full' },
         { widgetSlug: 'collections', width: 'full' },
       ],
     },
@@ -91,7 +100,7 @@ export default buildConfig({
     fallbackLanguage: 'fr',
     supportedLanguages: { fr },
   },
-  collections: [Users, Media, Projects, JournalPosts, Skills, Experiences, Qualifications, FormSubmissions],
+  collections: [Users, Media, Projects, JournalPosts, Skills, Experiences, Qualifications, Tags, FormSubmissions],
   globals: [SiteSettings, SEODefaults, LablogTemplate],
   editor: lexicalEditor(),
   secret: getPayloadSecret(),
@@ -106,6 +115,7 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    portfolioSeoPlugin,
     ...(blobToken
       ? [
           vercelBlobStorage({

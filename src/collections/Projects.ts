@@ -111,6 +111,15 @@ export const Projects: CollectionConfig = {
       options: [...STACK_OPTIONS],
     },
     {
+      name: 'tags',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
+      admin: {
+        description: 'Tags transverses (SEO et filtrage futur).',
+      },
+    },
+    {
       name: 'liveUrl',
       type: 'text',
       validate: (value: string | null | undefined) => {

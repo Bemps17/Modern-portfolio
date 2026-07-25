@@ -823,3 +823,44 @@ a {
   color: var(--foreground);
   font-style: italic;
 }
+
+.lablog-callout {
+  margin: 1.75rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.lablog-callout__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+.lablog-callout__body {
+  margin: 0;
+  color: var(--foreground-secondary);
+  line-height: 1.65;
+}
+
+.lablog-callout--warning {
+  border-color: color-mix(in srgb, #f59e0b 35%, transparent);
+  background: color-mix(in srgb, #f59e0b 8%, transparent);
+}
+
+.lablog-callout--warning .lablog-callout__label {
+  color: color-mix(in srgb, #fbbf24 80%, white);
+}
+
+.lablog-callout--tip {
+  border-color: color-mix(in srgb, #34d399 30%, transparent);
+  background: color-mix(in srgb, #34d399 8%, transparent);
+}
+
+.lablog-callout--tip .lablog-callout__label {
+  color: color-mix(in srgb, #6ee7b7 85%, white);
+}

@@ -13,6 +13,7 @@ import type {
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
 import { resolveJournalCopy, resolveJournalPostBySlug, resolvePublishedJournalPosts } from './journal-content'
+import { filterJournalPostsByTagSlug } from './journal-tags'
 import type { SeoDefaultsContent } from './seo-metadata'
 
 export { type SeoDefaultsContent } from './seo-metadata'
@@ -346,8 +347,11 @@ export async function getProjectSlugs(): Promise<string[]> {
   return projects.map((project) => project.slug)
 }
 
-export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
+export async function getPublishedJournalPosts(options?: {
+  tagSlug?: string | null
+}): Promise<JournalPost[]> {
   const payload = await getPayloadClientSafe()
+  let posts: JournalPost[]
   if (payload) {
     try {
       const result = await payload.find({
@@ -357,13 +361,16 @@ export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
         depth: 1,
         limit: 100,
       })
-      return resolvePublishedJournalPosts(result.docs, portfolioFallback.journalPosts)
+      posts = resolvePublishedJournalPosts(result.docs, portfolioFallback.journalPosts)
     } catch (error) {
       console.warn('[content] journal-posts indisponible — fallback démo', error)
-      return portfolioFallback.journalPosts
+      posts = portfolioFallback.journalPosts
     }
+  } else {
+    posts = portfolioFallback.journalPosts
   }
-  return portfolioFallback.journalPosts
+
+  return filterJournalPostsByTagSlug(posts, options?.tagSlug)
 }
 
 export async function getJournalPostBySlug(

@@ -13,6 +13,10 @@ import { buildPageMetadata } from '@/lib/seo-metadata'
 
 export const revalidate = 3600
 
+type CarnetPageProps = {
+  searchParams: Promise<{ tag?: string }>
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
 
@@ -26,9 +30,10 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default async function CarnetPage() {
+export default async function CarnetPage({ searchParams }: CarnetPageProps) {
+  const { tag } = await searchParams
   const [posts, settings] = await Promise.all([
-    getPublishedJournalPosts(),
+    getPublishedJournalPosts({ tagSlug: tag }),
     getSiteSettingsContent(),
   ])
 
@@ -39,7 +44,11 @@ export default async function CarnetPage() {
           editorial
           eyebrow={settings?.journalEyebrow ?? 'La blague du labo'}
           icon="journal"
-          subtitle={settings?.journalSubtitle ?? undefined}
+          subtitle={
+            tag
+              ? `Filtré par le tag « ${tag} »`
+              : (settings?.journalSubtitle ?? undefined)
+          }
           title={settings?.journalTitle ?? 'Le Lablog'}
         />
         <JournalPostGrid posts={posts} />

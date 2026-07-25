@@ -48,6 +48,12 @@ export function JournalPostDetailView({ post, backLabel = 'Le Lablog' }: Journal
             </Link>
             <span aria-hidden>·</span>
             <time dateTime={post.publishedAt}>{formatJournalPublishedDate(post.publishedAt)}</time>
+            {post.readingTimeMinutes ? (
+              <>
+                <span aria-hidden>·</span>
+                <span>{post.readingTimeMinutes} min de lecture</span>
+              </>
+            ) : null}
             <span aria-hidden>·</span>
             <Badge className="bg-[var(--accent)]/10 text-[var(--accent-soft)]">
               {JOURNAL_CATEGORY_LABELS[post.category]}

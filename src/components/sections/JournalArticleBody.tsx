@@ -1,4 +1,4 @@
-import { RichTextRenderer } from '@/components/sections/RichTextRenderer'
+import { JournalRichTextRenderer } from '@/components/sections/JournalRichTextRenderer'
 import type { JournalPost } from '@/payload-types'
 
 type JournalArticleBodyProps = {
@@ -6,11 +6,11 @@ type JournalArticleBodyProps = {
   className?: string
 }
 
-/** Corps d’article Lablog — typographie aérée alignée design system. */
+/** Corps d’article Lablog — typographie aérée + encarts callout. */
 export function JournalArticleBody({ content, className }: JournalArticleBodyProps) {
   return (
     <div className={className ?? 'lablog-prose mt-10'}>
-      <RichTextRenderer data={content} />
+      <JournalRichTextRenderer data={content} />
     </div>
   )
 }

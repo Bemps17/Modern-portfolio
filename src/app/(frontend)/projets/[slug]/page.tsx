@@ -11,6 +11,7 @@ import {
   getSeoDefaultsContent,
   getSiteSettingsContent,
 } from '@/lib/content'
+import { resolveDocumentSeo } from '@/lib/seo-document'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
 import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
@@ -37,13 +38,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!project) return { title: 'Projet' }
 
   const coverUrl = resolveProjectCoverUrl(project)
+  const docSeo = resolveDocumentSeo({
+    docTitle: project.title,
+    docExcerpt: project.excerpt,
+    meta: project.meta,
+    path: `/projets/${project.slug}`,
+    coverUrl,
+  })
 
   return buildPageMetadata(seo, settings, {
-    title: project.title,
-    description: project.excerpt,
+    title: docSeo.title,
+    description: docSeo.description,
     path: `/projets/${project.slug}`,
-    image: coverUrl,
+    image: docSeo.image,
     type: 'article',
+    noIndex: docSeo.noIndex,
   })
 }
 

@@ -89,6 +89,7 @@ describe('Payload collections — smoke CRUD', () => {
         name: 'Test Contact',
         email: 'test-payload@example.com',
         message: 'Message de la batterie Payload.',
+        inboxStatus: 'new',
       },
     })
     expect(created.id).toBeTruthy()

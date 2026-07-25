@@ -10,6 +10,7 @@ import {
   getSiteSettingsContent,
 } from '@/lib/content'
 import { resolveJournalCoverUrl } from '@/lib/journal-cover'
+import { resolveDocumentSeo } from '@/lib/seo-document'
 import { buildPageMetadata } from '@/lib/seo-metadata'
 
 export const revalidate = 3600
@@ -33,13 +34,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!post) return { title: 'Le Lablog' }
 
   const coverUrl = resolveJournalCoverUrl(post.cover, post.slug)
+  const docSeo = resolveDocumentSeo({
+    docTitle: post.title,
+    docExcerpt: post.excerpt,
+    meta: post.meta,
+    path: `/carnet/${post.slug}`,
+    coverUrl,
+  })
 
   return buildPageMetadata(seo, settings, {
-    title: post.title,
-    description: post.excerpt,
+    title: docSeo.title,
+    description: docSeo.description,
     path: `/carnet/${post.slug}`,
-    image: coverUrl,
+    image: docSeo.image,
     type: 'article',
+    noIndex: docSeo.noIndex,
   })
 }
 

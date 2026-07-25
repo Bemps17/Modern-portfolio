@@ -74,6 +74,7 @@ export interface Config {
     skills: Skill;
     experiences: Experience;
     qualifications: Qualification;
+    tags: Tag;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -89,6 +90,7 @@ export interface Config {
     skills: SkillsSelect<false> | SkillsSelect<true>;
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     qualifications: QualificationsSelect<false> | QualificationsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -112,6 +114,7 @@ export interface Config {
   locale: null;
   widgets: {
     'portfolio-welcome': PortfolioWelcomeWidget;
+    'portfolio-stats': PortfolioStatsWidget;
     collections: CollectionsWidget;
   };
   user: User;
@@ -281,11 +284,47 @@ export interface Project {
         | 'neon'
       )[]
     | null;
+  /**
+   * Tags transverses (SEO et filtrage futur).
+   */
+  tags?: (number | Tag)[] | null;
   liveUrl?: string | null;
   repoUrl?: string | null;
   featured?: boolean | null;
   order?: number | null;
   status: 'draft' | 'published';
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    /**
+     * URL canonique override (laisser vide = URL auto).
+     */
+    canonicalURL?: string | null;
+    /**
+     * Exclure cette page des moteurs de recherche.
+     */
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Tags transverses pour articles Lablog et projets.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  name: string;
+  /**
+   * Généré depuis le nom si laissé vide.
+   */
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -320,7 +359,7 @@ export interface JournalPost {
     | boolean
     | null;
   /**
-   * Corps de l’article (non requis pour une galerie pure).
+   * Corps de l’article (non requis pour une galerie pure). Encarts info / attention / astuce disponibles.
    */
   content?: {
     root: {
@@ -356,9 +395,33 @@ export interface JournalPost {
    */
   galleryLayout?: ('grid' | 'slideshow') | null;
   category: 'ia' | 'design' | 'veille' | 'perso' | 'autre';
+  /**
+   * Tags transverses — filtrables sur /carnet?tag=slug
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Calculé automatiquement depuis l’extrait et le corps.
+   */
+  readingTimeMinutes?: number | null;
   publishedAt: string;
   status: 'draft' | 'published';
   order?: number | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    /**
+     * URL canonique override (laisser vide = URL auto).
+     */
+    canonicalURL?: string | null;
+    /**
+     * Exclure cette page des moteurs de recherche.
+     */
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -416,6 +479,10 @@ export interface FormSubmission {
   name: string;
   email: string;
   message: string;
+  /**
+   * Suivi CRM minimal dans l’inbox.
+   */
+  inboxStatus: 'new' | 'read' | 'replied';
   updatedAt: string;
   createdAt: string;
 }
@@ -470,6 +537,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'qualifications';
         value: number | Qualification;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'form-submissions';
@@ -620,11 +691,21 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   stack?: T;
+  tags?: T;
   liveUrl?: T;
   repoUrl?: T;
   featured?: T;
   order?: T;
   status?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -649,9 +730,20 @@ export interface JournalPostsSelect<T extends boolean = true> {
       };
   galleryLayout?: T;
   category?: T;
+  tags?: T;
+  readingTimeMinutes?: T;
   publishedAt?: T;
   status?: T;
   order?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonicalURL?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -694,12 +786,23 @@ export interface QualificationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions_select".
  */
 export interface FormSubmissionsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   message?: T;
+  inboxStatus?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1176,6 +1279,16 @@ export interface LablogTemplateSelect<T extends boolean = true> {
  * via the `definition` "portfolio-welcome_widget".
  */
 export interface PortfolioWelcomeWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio-stats_widget".
+ */
+export interface PortfolioStatsWidget {
   data?: {
     [k: string]: unknown;
   };

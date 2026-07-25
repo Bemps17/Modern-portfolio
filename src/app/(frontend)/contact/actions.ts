@@ -1,8 +1,9 @@
 'use server'
 
-import { Resend } from 'resend'
+import { headers } from 'next/headers'
 
 import { contactSchema } from '@/lib/contactSchema'
+import { checkContactRateLimit } from '@/lib/contact-rate-limit'
 import { getPayloadClient } from '@/lib/payload'
 
 export type ContactActionState = {
@@ -10,10 +11,25 @@ export type ContactActionState = {
   message: string
 }
 
+function resolveClientKey(headerStore: Awaited<ReturnType<typeof headers>>): string {
+  const forwarded = headerStore.get('x-forwarded-for')
+  if (forwarded) return forwarded.split(',')[0]?.trim() || 'unknown'
+  return headerStore.get('x-real-ip') || 'unknown'
+}
+
 export async function submitContact(
   _prev: ContactActionState,
   formData: FormData,
 ): Promise<ContactActionState> {
+  const headerStore = await headers()
+  const rateLimit = checkContactRateLimit(resolveClientKey(headerStore))
+  if (!rateLimit.allowed) {
+    return {
+      ok: false,
+      message: `Trop de tentatives. Réessayez dans ${rateLimit.retryAfterSeconds} secondes.`,
+    }
+  }
+
   const parsed = contactSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -37,6 +53,7 @@ export async function submitContact(
         name: parsed.data.name,
         email: parsed.data.email,
         message: parsed.data.message,
+        inboxStatus: 'new',
       },
     })
   } catch (error) {
@@ -44,24 +61,6 @@ export async function submitContact(
     return {
       ok: false,
       message: 'Une erreur est survenue lors de l’envoi. Réessayez plus tard.',
-    }
-  }
-
-  const apiKey = process.env.RESEND_API_KEY
-  const to = process.env.CONTACT_TO_EMAIL || process.env.NEXT_PUBLIC_CONTACT_EMAIL
-  if (apiKey && to) {
-    try {
-      const resend = new Resend(apiKey)
-      await resend.emails.send({
-        from: process.env.CONTACT_FROM_EMAIL || 'Portfolio <onboarding@resend.dev>',
-        to: [to],
-        subject: `Nouveau message de ${parsed.data.name}`,
-        replyTo: parsed.data.email,
-        text: parsed.data.message,
-      })
-    } catch (error) {
-      // Le message est déjà persisté : on n'échoue pas la soumission si l'email ne part pas.
-      console.error('[contact] Échec de l’envoi de l’email de notification', error)
     }
   }
 

@@ -10,8 +10,25 @@ export function lexicalToPlainText(value: unknown): string {
     .join(' ')
 }
 
+function countWords(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length
+}
+
+function readingMinutesFromText(text: string): number {
+  return Math.max(1, Math.ceil(countWords(text) / 200))
+}
+
 export function estimateReadingTime(project: Project): number {
   const text = [project.excerpt, lexicalToPlainText(project.content)].filter(Boolean).join(' ')
-  const words = text.trim().split(/\s+/).filter(Boolean).length
-  return Math.max(1, Math.ceil(words / 200))
+  return readingMinutesFromText(text)
+}
+
+type JournalReadingInput = {
+  excerpt?: string | null
+  content?: unknown
+}
+
+export function estimateJournalReadingTime(input: JournalReadingInput): number {
+  const text = [input.excerpt, lexicalToPlainText(input.content)].filter(Boolean).join(' ')
+  return readingMinutesFromText(text)
 }
