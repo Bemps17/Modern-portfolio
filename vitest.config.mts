@@ -34,6 +34,7 @@ export default defineConfig({
             'tests/int/contact-rate-limit.int.spec.ts',
             'tests/int/reading-time.int.spec.ts',
             'tests/int/related-projects.int.spec.ts',
+            'tests/int/stack-skill-sync.int.spec.ts',
             'tests/int/featured-journal.int.spec.ts',
             'tests/int/journal-tags.int.spec.ts',
             'tests/int/draft-preview.int.spec.ts',

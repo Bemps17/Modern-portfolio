@@ -3,6 +3,7 @@ import type { Access, CollectionConfig } from 'payload'
 import { slugify } from '../lib/utils'
 import { editorialLivePreviewConfig } from '../lib/payload-editorial-drafts'
 import { revalidateProjects, revalidateProjectsDelete } from '../lib/revalidate'
+import { syncProjectStackToSkills } from '../lib/stack-skill-sync'
 import { getSiteUrl } from '../lib/site-url'
 
 const siteUrl = getSiteUrl()
@@ -189,7 +190,19 @@ export const Projects: CollectionConfig = {
         return data
       },
     ],
-    afterChange: [revalidateProjects],
+    afterChange: [
+      revalidateProjects,
+      async ({ doc, req }) => {
+        const stack = doc.stack
+        if (!stack?.length) return
+
+        try {
+          await syncProjectStackToSkills(req.payload, stack)
+        } catch (error) {
+          console.error('[projects] Échec sync stack → skills', error)
+        }
+      },
+    ],
     afterDelete: [revalidateProjectsDelete],
   },
 }
