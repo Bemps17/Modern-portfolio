@@ -164,12 +164,12 @@ export function Hero({
               transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <ReadableSurface className="overflow-hidden p-0">
-                <div className="relative aspect-[4/5] w-full max-h-[55vh] sm:aspect-[3/4] sm:max-h-none">
+                <div className="relative aspect-[3/4] w-full max-w-md mx-auto sm:max-w-lg">
                   <Image
                     alt={portraitAlt}
-                    className="object-cover object-[center_15%]"
+                    className="object-cover object-[50%_0%]"
                     fill
-                    sizes="90vw"
+                    sizes="(max-width: 640px) 90vw, 512px"
                     src={portraitSrc}
                   />
                   <span
