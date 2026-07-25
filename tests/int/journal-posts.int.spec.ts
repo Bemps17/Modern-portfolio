@@ -25,6 +25,7 @@ describe('journal-posts collection', () => {
           cover: media.id,
           status: 'published',
           publishedAt: new Date().toISOString(),
+          postType: 'article',
           category: 'ia',
         },
       })
@@ -42,6 +43,42 @@ describe('journal-posts collection', () => {
         await payload.delete({ collection: 'journal-posts', id: existing.docs[0].id })
       }
       await payload.delete({ collection: 'media', id: media.id }).catch(() => undefined)
+    }
+  })
+
+  it('crée une galerie avec layout diaporama', async () => {
+    const cover = await createTestMedia(payload, 'Gallery cover')
+    const shot = await createTestMedia(payload, 'Gallery shot')
+    const slug = `journal-gallery-${Date.now()}`
+    try {
+      const post = await payload.create({
+        collection: 'journal-posts',
+        data: {
+          title: 'Galerie test',
+          slug,
+          postType: 'gallery',
+          galleryLayout: 'slideshow',
+          excerpt: 'Galerie diaporama test.',
+          cover: cover.id,
+          gallery: [{ image: shot.id, caption: 'Légende test' }],
+          status: 'published',
+          publishedAt: new Date().toISOString(),
+          category: 'ia',
+        },
+      })
+      expect(post.postType).toBe('gallery')
+      expect(post.galleryLayout).toBe('slideshow')
+    } finally {
+      const existing = await payload.find({
+        collection: 'journal-posts',
+        where: { slug: { equals: slug } },
+        limit: 1,
+      })
+      if (existing.docs[0]) {
+        await payload.delete({ collection: 'journal-posts', id: existing.docs[0].id })
+      }
+      await payload.delete({ collection: 'media', id: cover.id }).catch(() => undefined)
+      await payload.delete({ collection: 'media', id: shot.id }).catch(() => undefined)
     }
   })
 })

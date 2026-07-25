@@ -25,17 +25,27 @@ const CATEGORY_OPTIONS = [
   { label: 'Autre', value: 'autre' },
 ] as const
 
+const POST_TYPE_OPTIONS = [
+  { label: 'Article', value: 'article' },
+  { label: 'Galerie photos', value: 'gallery' },
+] as const
+
+const GALLERY_LAYOUT_OPTIONS = [
+  { label: 'Grille de vignettes', value: 'grid' },
+  { label: 'Diaporama', value: 'slideshow' },
+] as const
+
 export const JournalPosts: CollectionConfig = {
   slug: 'journal-posts',
   labels: {
-    singular: 'Carnet',
-    plural: 'Carnet',
+    singular: 'Le Lablog',
+    plural: 'Le Lablog',
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'status', 'publishedAt', 'order', 'updatedAt'],
+    defaultColumns: ['title', 'postType', 'category', 'status', 'publishedAt', 'updatedAt'],
     group: 'Contenu',
-    description: 'Articles du carnet créatif (publics uniquement si published).',
+    description: 'Articles et galeries du Lablog (publics uniquement si published).',
     preview: (doc) => {
       if (!doc?.slug) return null
       return `${siteUrl}/carnet/${doc.slug}`
@@ -48,6 +58,17 @@ export const JournalPosts: CollectionConfig = {
     delete: isAuthenticated,
   },
   fields: [
+    {
+      name: 'postType',
+      type: 'select',
+      required: true,
+      defaultValue: 'article',
+      options: [...POST_TYPE_OPTIONS],
+      admin: {
+        position: 'sidebar',
+        description: 'Article classique ou galerie d’images (grille ou diaporama).',
+      },
+    },
     {
       name: 'title',
       type: 'text',
@@ -73,7 +94,16 @@ export const JournalPosts: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
-      required: true,
+      admin: {
+        condition: (_, siblingData) => siblingData?.postType === 'article',
+        description: 'Corps de l’article (non requis pour une galerie pure).',
+      },
+      validate: (value: unknown, { siblingData }: { siblingData?: { postType?: string } }) => {
+        if (siblingData?.postType === 'article' && !value) {
+          return 'Le contenu est requis pour un article.'
+        }
+        return true
+      },
     },
     {
       name: 'cover',
@@ -84,6 +114,10 @@ export const JournalPosts: CollectionConfig = {
     {
       name: 'gallery',
       type: 'array',
+      admin: {
+        condition: (_, siblingData) => siblingData?.postType === 'gallery',
+        description: 'Images de la galerie — affichées en grille ou diaporama.',
+      },
       fields: [
         {
           name: 'image',
@@ -91,7 +125,29 @@ export const JournalPosts: CollectionConfig = {
           relationTo: 'media',
           required: true,
         },
+        {
+          name: 'caption',
+          type: 'text',
+          admin: { description: 'Légende optionnelle (diaporama).' },
+        },
       ],
+      validate: (value: unknown[] | null | undefined, { siblingData }: { siblingData?: { postType?: string } }) => {
+        if (siblingData?.postType === 'gallery' && (!value || value.length === 0)) {
+          return 'Ajoutez au moins une image pour une galerie.'
+        }
+        return true
+      },
+    },
+    {
+      name: 'galleryLayout',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [...GALLERY_LAYOUT_OPTIONS],
+      admin: {
+        position: 'sidebar',
+        condition: (_, siblingData) => siblingData?.postType === 'gallery',
+        description: 'Grille de vignettes ou diaporama plein écran.',
+      },
     },
     {
       name: 'category',

@@ -514,11 +514,11 @@ export const portfolioFallback = {
     footerExtraLine: null,
     maintenanceMode: false,
     maintenanceMessage: null,
-    journalNavLabel: 'Carnet',
-    journalTitle: 'Carnet',
-    journalEyebrow: 'Créations & veille',
+    journalNavLabel: 'Le Lablog',
+    journalTitle: 'Le Lablog',
+    journalEyebrow: 'La blague du labo',
     journalSubtitle:
-      'Créations IA, expérimentations visuelles et notes du moment — un skyblog 2026.',
+      'Entre le labo, le blog et la blague — créations IA, galeries visuelles et articles du moment. Skyblog 2026, version sérieuse (enfin, on essaie).',
   },
   seoDefaults: {
     defaultTitle: 'Bertrand Fouquet | Développeur Web & Designer Junior',
@@ -546,15 +546,17 @@ export const portfolioFallback = {
   journalPosts: [
     {
       id: 1,
+      postType: 'article',
       title: 'Première génération d’illustrations IA',
       slug: 'premiere-generation-ia',
       excerpt:
-        'Tests Midjourney et Flux sur des prompts visuels — notes de bord d’un carnet skyblog 2026.',
+        'Tests Midjourney et Flux sur des prompts visuels — notes de bord du Lablog.',
       content: lexicalParagraph(
         'Première série d’expérimentations : palettes néon, compositions type affiche et itérations rapides avec des prompts courts.',
       ),
       cover: legacyMedia('/images/profil-picNb.png', 'Illustration IA expérimentale') as Media,
       gallery: [],
+      galleryLayout: 'grid',
       category: 'ia',
       publishedAt: '2026-07-20T10:00:00.000Z',
       status: 'published',
@@ -564,19 +566,68 @@ export const portfolioFallback = {
     },
     {
       id: 2,
-      title: 'Veille outils créatifs — juillet 2026',
-      slug: 'veille-outils-creatifs-juillet-2026',
-      excerpt:
-        'Cursor, Payload 3 et nouveaux modèles image — ce qui retient l’attention ce mois-ci.',
-      content: lexicalParagraph(
-        'Un tour d’horizon rapide : agents de code, CMS headless et pipelines image-to-image pour prototyper plus vite.',
-      ),
-      cover: legacyMedia('/projects/modern-portfolio-cover.webp', 'Veille outils créatifs') as Media,
-      gallery: [],
+      postType: 'gallery',
+      galleryLayout: 'slideshow',
+      title: 'Série visuelle IA — juillet 2026',
+      slug: 'serie-visuelle-ia-juillet-2026',
+      excerpt: 'Diaporama de créations du moment — entre tests de prompts et happy accidents.',
+      content: null,
+      cover: legacyMedia('/projects/modern-portfolio-cover.webp', 'Création IA — couverture') as Media,
+      gallery: [
+        {
+          id: 'g1',
+          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Variante 1') as Media,
+          caption: 'Variante palette chaude',
+        },
+        {
+          id: 'g2',
+          image: legacyMedia('/images/profil-picNb.png', 'Variante 2') as Media,
+          caption: 'Portrait stylisé',
+        },
+        {
+          id: 'g3',
+          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Variante 3') as Media,
+          caption: 'Composition finale',
+        },
+      ],
+      category: 'ia',
+      publishedAt: '2026-07-18T16:00:00.000Z',
+      status: 'published',
+      order: 1,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 3,
+      postType: 'gallery',
+      galleryLayout: 'grid',
+      title: 'Moodboard veille créative',
+      slug: 'moodboard-veille-creative',
+      excerpt: 'Grille de références et captures — veille outils, UI et trends visuelles.',
+      content: null,
+      cover: legacyMedia('/projects/modern-portfolio-cover.webp', 'Moodboard veille') as Media,
+      gallery: [
+        {
+          id: 'g4',
+          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Référence UI') as Media,
+        },
+        {
+          id: 'g5',
+          image: legacyMedia('/images/profil-picNb.png', 'Référence typo') as Media,
+        },
+        {
+          id: 'g6',
+          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Référence couleur') as Media,
+        },
+        {
+          id: 'g7',
+          image: legacyMedia('/images/profil-picNb.png', 'Référence layout') as Media,
+        },
+      ],
       category: 'veille',
       publishedAt: '2026-07-15T14:30:00.000Z',
       status: 'published',
-      order: 1,
+      order: 2,
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     },

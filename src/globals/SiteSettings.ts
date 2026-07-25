@@ -357,25 +357,25 @@ const journalFields: Field[] = [
   {
     name: 'journalNavLabel',
     type: 'text',
-    defaultValue: 'Carnet',
+    defaultValue: 'Le Lablog',
     admin: { description: 'Libellé navigation (sidebar / mobile).' },
   },
   {
     name: 'journalTitle',
     type: 'text',
-    defaultValue: 'Carnet',
+    defaultValue: 'Le Lablog',
     admin: { description: 'Titre H1 page listing.' },
   },
   {
     name: 'journalEyebrow',
     type: 'text',
-    defaultValue: 'Créations & veille',
+    defaultValue: 'La blague du labo',
   },
   {
     name: 'journalSubtitle',
     type: 'textarea',
     defaultValue:
-      'Créations IA, expérimentations visuelles et notes du moment — un skyblog 2026.',
+      'Entre le labo, le blog et la blague — créations IA, galeries visuelles et articles du moment. Skyblog 2026, version sérieuse (enfin, on essaie).',
   },
 ]
 
@@ -414,7 +414,7 @@ export const SiteSettings: GlobalConfig = {
     { type: 'collapsible', label: 'Contenu', admin: { initCollapsed: true }, fields: contentFields },
     { type: 'collapsible', label: 'CV', admin: { initCollapsed: true }, fields: cvFields },
     { type: 'collapsible', label: 'Légal', admin: { initCollapsed: true }, fields: legalFields },
-    { type: 'collapsible', label: 'Carnet', admin: { initCollapsed: true }, fields: journalFields },
+    { type: 'collapsible', label: 'Le Lablog', admin: { initCollapsed: true }, fields: journalFields },
     { type: 'collapsible', label: 'Avancé', admin: { initCollapsed: true }, fields: advancedFields },
   ],
   hooks: {

@@ -30,6 +30,7 @@ describe('content.ts — carnet CMS pour le front', () => {
       data: {
         title: 'Test content layer carnet',
         slug,
+        postType: 'article',
         excerpt: 'Excerpt pour le test content layer carnet.',
         content: lexicalParagraph('Contenu carnet content layer.'),
         cover: mediaId,

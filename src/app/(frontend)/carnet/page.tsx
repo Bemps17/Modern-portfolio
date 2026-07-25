@@ -17,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const [settings, seo] = await Promise.all([getSiteSettingsContent(), getSeoDefaultsContent()])
 
   return buildPageMetadata(seo, settings, {
-    title: settings?.journalTitle ?? 'Carnet',
+    title: settings?.journalTitle ?? 'Le Lablog',
     description:
       settings?.journalSubtitle ??
       seo?.defaultDescription ??
-      `Carnet créatif de ${settings?.siteName || 'portfolio'}.`,
+      `Le Lablog de ${settings?.siteName || 'portfolio'}.`,
     path: '/carnet',
   })
 }
@@ -37,10 +37,10 @@ export default async function CarnetPage() {
       <ReadableSurface strong>
         <SectionTitle
           editorial
-          eyebrow={settings?.journalEyebrow ?? 'Créations & veille'}
+          eyebrow={settings?.journalEyebrow ?? 'La blague du labo'}
           icon="journal"
           subtitle={settings?.journalSubtitle ?? undefined}
-          title={settings?.journalTitle ?? 'Carnet'}
+          title={settings?.journalTitle ?? 'Le Lablog'}
         />
         <JournalPostGrid posts={posts} />
       </ReadableSurface>

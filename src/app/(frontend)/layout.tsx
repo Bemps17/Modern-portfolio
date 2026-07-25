@@ -79,7 +79,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const adminConfigured = isPayloadConfigured()
   const footerExtraLine = settings?.footerExtraLine?.trim() || null
   const showMaintenance = Boolean(settings?.maintenanceMode)
-  const journalNavLabel = settings?.journalNavLabel ?? 'Carnet'
+  const journalNavLabel = settings?.journalNavLabel ?? 'Le Lablog'
 
   return (
     <html className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable}`} lang="fr">

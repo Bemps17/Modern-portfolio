@@ -288,20 +288,27 @@ export interface Project {
   createdAt: string;
 }
 /**
- * Articles du carnet créatif (publics uniquement si published).
+ * Articles et galeries du Lablog (publics uniquement si published).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journal-posts".
  */
 export interface JournalPost {
   id: number;
+  /**
+   * Article classique ou galerie d’images (grille ou diaporama).
+   */
+  postType: 'article' | 'gallery';
   title: string;
   /**
    * Généré automatiquement depuis le titre si laissé vide.
    */
   slug: string;
   excerpt: string;
-  content: {
+  /**
+   * Corps de l’article (non requis pour une galerie pure).
+   */
+  content?: {
     root: {
       type: string;
       children: {
@@ -315,14 +322,25 @@ export interface JournalPost {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   cover: number | Media;
+  /**
+   * Images de la galerie — affichées en grille ou diaporama.
+   */
   gallery?:
     | {
         image: number | Media;
+        /**
+         * Légende optionnelle (diaporama).
+         */
+        caption?: string | null;
         id?: string | null;
       }[]
     | null;
+  /**
+   * Grille de vignettes ou diaporama plein écran.
+   */
+  galleryLayout?: ('grid' | 'slideshow') | null;
   category: 'ia' | 'design' | 'veille' | 'perso' | 'autre';
   publishedAt: string;
   status: 'draft' | 'published';
@@ -601,6 +619,7 @@ export interface ProjectsSelect<T extends boolean = true> {
  * via the `definition` "journal-posts_select".
  */
 export interface JournalPostsSelect<T extends boolean = true> {
+  postType?: T;
   title?: T;
   slug?: T;
   excerpt?: T;
@@ -610,8 +629,10 @@ export interface JournalPostsSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
+        caption?: T;
         id?: T;
       };
+  galleryLayout?: T;
   category?: T;
   publishedAt?: T;
   status?: T;

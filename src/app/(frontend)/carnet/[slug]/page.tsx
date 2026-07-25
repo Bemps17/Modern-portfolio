@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     getSiteSettingsContent(),
     getSeoDefaultsContent(),
   ])
-  if (!post) return { title: 'Carnet' }
+  if (!post) return { title: 'Le Lablog' }
 
   const coverUrl = resolveMediaUrl(post.cover)
 
@@ -44,8 +44,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CarnetDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const post = await getJournalPostBySlug(slug)
+  const [post, settings] = await Promise.all([getJournalPostBySlug(slug), getSiteSettingsContent()])
   if (!post) notFound()
 
-  return <JournalPostDetailView post={post} />
+  return (
+    <JournalPostDetailView backLabel={settings?.journalNavLabel ?? 'Le Lablog'} post={post} />
+  )
 }
