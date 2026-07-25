@@ -20,7 +20,7 @@ function buildNav(journalNavLabel: string): NavItem[] {
     { href: '/projets', label: 'Projets', icon: FolderKanban },
     { href: '/a-propos', label: 'À propos', icon: UserRound },
     { href: '/contact', label: 'Contact', icon: Mail },
-    { href: '/carnet', label: journalNavLabel, icon: NotebookPen, external: true },
+    { href: '/carnet', label: journalNavLabel, icon: NotebookPen },
   ]
 }
 

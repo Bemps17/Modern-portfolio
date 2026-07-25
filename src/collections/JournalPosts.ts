@@ -1,5 +1,6 @@
 import type { Access, CollectionConfig } from 'payload'
 
+import { applyLablogBlueprint } from '../lib/lablog-article-blueprint'
 import { slugify } from '../lib/utils'
 import { editorialLivePreviewConfig } from '../lib/payload-editorial-drafts'
 import { revalidateJournalPosts, revalidateJournalPostsDelete } from '../lib/revalidate'
@@ -35,6 +36,8 @@ const GALLERY_LAYOUT_OPTIONS = [
   { label: 'Grille de vignettes', value: 'grid' },
   { label: 'Diaporama', value: 'slideshow' },
 ] as const
+
+const JSON_TEXTAREA_FIELD = '/components/admin/JsonTextareaField#default'
 
 export const JournalPosts: CollectionConfig = {
   slug: 'journal-posts',
@@ -92,6 +95,18 @@ export const JournalPosts: CollectionConfig = {
       type: 'textarea',
       maxLength: 220,
       required: true,
+    },
+    {
+      name: 'contentBlueprint',
+      type: 'json',
+      admin: {
+        condition: (_, siblingData) => siblingData?.postType === 'article',
+        description:
+          'Blueprint JSON (title, excerpt, category, blocks). À la sauvegarde, régénère le corps si le JSON a changé. Modèle de référence : Global « Modèle article Lablog ».',
+        components: {
+          Field: JSON_TEXTAREA_FIELD,
+        },
+      },
     },
     {
       name: 'content',
@@ -188,13 +203,31 @@ export const JournalPosts: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      ({ data }) => {
+      ({ data, operation, originalDoc }) => {
         if (!data) return data
         if (!data.slug && data.title) {
           data.slug = slugify(data.title)
         } else if (data.slug) {
           data.slug = slugify(data.slug)
         }
+
+        const blueprint = data.contentBlueprint
+        const blueprintChanged =
+          blueprint != null &&
+          JSON.stringify(blueprint) !== JSON.stringify(originalDoc?.contentBlueprint ?? null)
+
+        if (data.postType === 'article' && blueprint && (operation === 'create' || blueprintChanged)) {
+          const applied = applyLablogBlueprint(blueprint, {
+            title: data.title,
+            excerpt: data.excerpt,
+            category: data.category,
+          })
+          data.content = applied.content
+          if (applied.title) data.title = applied.title
+          if (applied.excerpt) data.excerpt = applied.excerpt
+          if (applied.category) data.category = applied.category
+        }
+
         return data
       },
     ],
