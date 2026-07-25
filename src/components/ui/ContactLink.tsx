@@ -39,6 +39,7 @@ function ContactLinkInner({
   className,
   size = 'md',
   showIcon = true,
+  kind,
 }: {
   href: string
   icon: LucideIcon
@@ -46,8 +47,10 @@ function ContactLinkInner({
   className?: string
   size?: 'sm' | 'md'
   showIcon?: boolean
+  kind: 'email' | 'phone'
 }) {
   const isExternalScheme = href.startsWith('mailto:') || href.startsWith('tel:')
+  const kindClass = kind === 'email' ? 'contact-link--email' : 'contact-link--phone'
 
   const content = (
     <>
@@ -62,14 +65,14 @@ function ContactLinkInner({
 
   if (isExternalScheme) {
     return (
-      <a className={cn(sizeClasses[size], className)} href={href} rel={undefined}>
+      <a className={cn(sizeClasses[size], kindClass, className)} href={href} rel={undefined}>
         {content}
       </a>
     )
   }
 
   return (
-    <Link className={cn(sizeClasses[size], className)} href={href}>
+    <Link className={cn(sizeClasses[size], kindClass, className)} href={href}>
       {content}
     </Link>
   )
@@ -84,6 +87,7 @@ export function ContactLink(props: ContactLinkProps) {
         className={props.className}
         href={`mailto:${email}`}
         icon={Mail}
+        kind="email"
         label={email}
         showIcon={props.showIcon}
         size={props.size}
@@ -98,6 +102,7 @@ export function ContactLink(props: ContactLinkProps) {
       className={props.className}
       href={normalizePhoneHref(phone)}
       icon={Phone}
+      kind="phone"
       label={phone}
       showIcon={props.showIcon}
       size={props.size}

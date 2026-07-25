@@ -118,7 +118,7 @@ export default async function AboutPage() {
               title={settings?.siteName || 'À propos'}
             />
             {(settings?.email || settings?.phone) && (
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap">
                 {settings?.email ? <EmailContactLink email={settings.email} size="sm" /> : null}
                 {settings?.phone ? <PhoneContactLink phone={settings.phone} size="sm" /> : null}
               </div>

@@ -26,7 +26,7 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
           />
 
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl space-y-4">
+            <div className="min-w-0 max-w-2xl space-y-4">
               <SectionTitle
                 icon="contact"
                 subtitle={
@@ -35,7 +35,7 @@ export function ContactCTA({ location, email }: ContactCTAProps) {
                 }
                 title="Travaillons ensemble"
               />
-              {email ? <ContactLink size="md" type="email" value={email} /> : null}
+              {email ? <ContactLink className="sm:max-w-full" size="md" type="email" value={email} /> : null}
             </div>
             <div className="flex flex-wrap gap-3">
               <Magnetic>

@@ -30,7 +30,7 @@ export function StatsStrip({ projectCount, skillCount, yearsExperience }: StatsS
           <GlassCard className="p-6 text-center" key={item.label}>
             <Odometer suffix={item.suffix} value={item.value} />
             <IconLabel
-              className="mt-3 justify-center font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--muted)] uppercase"
+              className="mt-3 justify-center font-[family-name:var(--font-space-grotesk)] text-[clamp(0.625rem,2.4vw,0.75rem)] tracking-[0.12em] text-[var(--muted)] uppercase sm:tracking-[0.18em]"
               icon={item.icon}
             >
               {item.label}

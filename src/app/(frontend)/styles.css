@@ -84,6 +84,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
+  max-width: 100%;
+  min-width: 0;
   min-height: 44px;
   padding: 0.45rem 0.85rem;
   border-radius: 0.75rem;
@@ -91,9 +93,10 @@
   background: color-mix(in srgb, var(--accent) 8%, var(--surface-glass));
   color: var(--accent-soft);
   font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.9375rem;
+  font-size: clamp(0.8125rem, 2.6vw + 0.45rem, 0.9375rem);
   font-weight: 600;
   letter-spacing: 0.01em;
+  line-height: 1.35;
   text-decoration: none;
   transition:
     color 160ms ease,
@@ -118,7 +121,7 @@
 .contact-link--sm {
   min-height: 40px;
   padding: 0.35rem 0.65rem;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2.35vw + 0.4rem, 0.875rem);
 }
 
 .contact-link__icon {
@@ -139,13 +142,53 @@
 }
 
 .contact-link__label {
+  min-width: 0;
+  flex: 1 1 auto;
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--accent-soft) 45%, transparent);
   text-underline-offset: 3px;
 }
 
+.contact-link--email .contact-link__label {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.contact-link--phone .contact-link__label {
+  white-space: nowrap;
+}
+
 .contact-link:hover .contact-link__label {
   text-decoration-color: currentColor;
+}
+
+@media (max-width: 639px) {
+  .contact-link {
+    width: 100%;
+    gap: 0.5rem;
+    padding-inline: 0.65rem;
+  }
+
+  .contact-link__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .contact-link--sm .contact-link__icon {
+    width: 1.625rem;
+    height: 1.625rem;
+  }
+
+  .contact-link--sm .contact-link__glyph {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .contact-link {
+    width: auto;
+  }
 }
 
 /* Labels avec icône — repères de section */
@@ -173,6 +216,8 @@
 }
 
 .icon-label__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: inherit;
 }
 

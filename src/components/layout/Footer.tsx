@@ -35,11 +35,11 @@ export function Footer({
     <footer className="mt-16 border-t border-[color:var(--border-subtle)]">
       <Container className="pb-24 lg:pb-10">
         <ReadableSurface as="footer" bleed={false} strong>
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-[family-name:var(--font-syne)] text-sm font-semibold text-[var(--foreground)]">
             {siteName}
           </p>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             {email ? <ContactLink size="sm" type="email" value={email} /> : null}
             {phone ? <ContactLink size="sm" type="phone" value={phone} /> : null}
             {showAdminLink && adminHref ? (

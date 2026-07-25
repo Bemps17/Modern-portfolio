@@ -38,7 +38,7 @@ export default async function ContactPage() {
           subtitle={subtitle}
           title="Parlons de votre projet"
         />
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="mb-8 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap">
           {settings?.email ? <ContactLink type="email" value={settings.email} /> : null}
           {settings?.phone ? <ContactLink type="phone" value={settings.phone} /> : null}
         </div>
