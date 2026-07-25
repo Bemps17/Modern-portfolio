@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 
 import { PayloadLivePreviewRefresh } from '@/components/cms/PayloadLivePreviewRefresh'
 import { ProjectDetailView } from '@/components/sections/ProjectDetailView'
-import { breadcrumbJsonLd, creativeWorkJsonLd, JsonLd } from '@/lib/json-ld'
+import { JsonLd } from '@/lib/json-ld'
+import { breadcrumbJsonLd, buildProjectJsonLdFromDoc } from '@/lib/json-ld-document'
 import {
   getProjectBySlug,
   getProjectSlugs,
@@ -15,7 +16,14 @@ import { resolveDocumentSeo } from '@/lib/seo-document'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
 import { buildPageMetadata } from '@/lib/seo-metadata'
 import { getSiteUrl } from '@/lib/site-url'
-import type { Project } from '@/payload-types'
+import type { Project, Tag } from '@/payload-types'
+
+function resolveProjectTagNames(tags: Project['tags']): string[] {
+  if (!tags?.length) return []
+  return tags
+    .map((tag) => (typeof tag === 'object' && tag !== null ? (tag as Tag).name : null))
+    .filter((name): name is string => Boolean(name))
+}
 
 export const revalidate = 3600
 
@@ -80,17 +88,17 @@ export default async function ProjetDetailPage({ params }: PageProps) {
 
   const siteUrl = getSiteUrl()
   const projectUrl = `${siteUrl}/projets/${project.slug}`
+  const coverUrl = resolveProjectCoverUrl(project)
 
   return (
     <>
       <JsonLd
-        data={creativeWorkJsonLd({
-          name: project.title,
-          description: project.excerpt,
-          url: projectUrl,
-          image: resolveProjectCoverUrl(project),
-          datePublished: project.createdAt,
+        data={buildProjectJsonLdFromDoc({
+          project,
+          siteUrl,
           authorName: settings?.siteName,
+          coverUrl,
+          tagNames: resolveProjectTagNames(project.tags),
         })}
       />
       <JsonLd

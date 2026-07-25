@@ -37,6 +37,7 @@ export default defineConfig({
             'tests/int/draft-preview.int.spec.ts',
             'tests/int/seo-document.int.spec.ts',
             'tests/int/json-ld-document.int.spec.ts',
+            'tests/int/json-ld-pages.int.spec.ts',
             'tests/int/cv-format-date.int.spec.ts',
             'tests/int/cv-build-data.int.spec.ts',
             'tests/int/cv-schema.int.spec.ts',

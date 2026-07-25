@@ -9,9 +9,15 @@ import {
   getSeoDefaultsContent,
   getSiteSettingsContent,
 } from '@/lib/content'
+import {
+  breadcrumbJsonLd,
+  buildArticleJsonLdFromDoc,
+} from '@/lib/json-ld-document'
+import { JsonLd } from '@/lib/json-ld'
 import { resolveJournalCoverUrl } from '@/lib/journal-cover'
 import { resolveDocumentSeo } from '@/lib/seo-document'
 import { buildPageMetadata } from '@/lib/seo-metadata'
+import { getSiteUrl } from '@/lib/site-url'
 
 export const revalidate = 3600
 
@@ -57,9 +63,29 @@ export default async function CarnetDetailPage({ params }: PageProps) {
   const [post, settings] = await Promise.all([getJournalPostBySlug(slug), getSiteSettingsContent()])
   if (!post) notFound()
 
+  const siteUrl = getSiteUrl()
+  const coverUrl = resolveJournalCoverUrl(post.cover, post.slug)
+  const postUrl = `${siteUrl}/carnet/${post.slug}`
+  const journalLabel = settings?.journalNavLabel ?? 'Le Lablog'
+
   return (
     <>
-      <JournalPostDetailView backLabel={settings?.journalNavLabel ?? 'Le Lablog'} post={post} />
+      <JsonLd
+        data={buildArticleJsonLdFromDoc({
+          post,
+          siteUrl,
+          authorName: settings?.siteName,
+          coverUrl,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Accueil', url: `${siteUrl}/` },
+          { name: journalLabel, url: `${siteUrl}/carnet` },
+          { name: post.title, url: postUrl },
+        ])}
+      />
+      <JournalPostDetailView backLabel={journalLabel} post={post} />
       <PayloadLivePreviewRefresh />
     </>
   )
