@@ -781,6 +781,52 @@ body {
   font-size: 0.85rem;
 }
 
+.portfolio-admin__shortcuts {
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--style-radius-l);
+  border: 1px solid var(--brand-border-subtle);
+  background: var(--brand-surface);
+}
+
+.portfolio-admin__shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.portfolio-admin__shortcut-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--brand-border);
+  background: var(--brand-surface-2);
+  color: var(--brand-text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.portfolio-admin__shortcut-link:hover,
+.portfolio-admin__shortcut-link:focus-visible {
+  border-color: var(--brand-accent);
+  background: var(--brand-accent-muted);
+  color: var(--brand-text);
+  box-shadow: 0 0 0 3px var(--brand-accent-ring);
+  outline: none;
+}
+
 .portfolio-admin__security {
   margin-bottom: 1rem;
   padding: 0.9rem 1.1rem;
@@ -809,9 +855,14 @@ body {
 
 @media (max-width: 768px) {
   .portfolio-admin__welcome,
+  .portfolio-admin__shortcuts,
   .portfolio-admin__security {
     margin-inline: 0;
     border-radius: var(--style-radius-m);
+  }
+
+  .portfolio-admin__shortcuts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .doc-controls__wrapper,

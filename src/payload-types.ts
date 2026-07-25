@@ -115,6 +115,7 @@ export interface Config {
   widgets: {
     'portfolio-welcome': PortfolioWelcomeWidget;
     'portfolio-stats': PortfolioStatsWidget;
+    'portfolio-shortcuts': PortfolioShortcutsWidget;
     collections: CollectionsWidget;
   };
   user: User;
@@ -1318,6 +1319,16 @@ export interface PortfolioWelcomeWidget {
  * via the `definition` "portfolio-stats_widget".
  */
 export interface PortfolioStatsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio-shortcuts_widget".
+ */
+export interface PortfolioShortcutsWidget {
   data?: {
     [k: string]: unknown;
   };

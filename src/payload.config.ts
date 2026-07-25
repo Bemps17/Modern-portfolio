@@ -66,6 +66,12 @@ export default buildConfig({
           maxWidth: 'full',
         },
         {
+          slug: 'portfolio-shortcuts',
+          Component: '/components/admin/AdminShortcutsWidget',
+          minWidth: 'full',
+          maxWidth: 'full',
+        },
+        {
           slug: 'collections',
           Component: '@payloadcms/next/rsc#CollectionCards',
           minWidth: 'full',
@@ -74,6 +80,7 @@ export default buildConfig({
       defaultLayout: [
         { widgetSlug: 'portfolio-welcome', width: 'full' },
         { widgetSlug: 'portfolio-stats', width: 'full' },
+        { widgetSlug: 'portfolio-shortcuts', width: 'full' },
         { widgetSlug: 'collections', width: 'full' },
       ],
     },
