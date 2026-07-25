@@ -34,6 +34,7 @@ import { default as default_caa1618058b0d91ac86368a4b26b8c36 } from '../../../co
 import { default as default_b285ebec604c3425771e35779f5bff26 } from '../../../components/admin/TrustedDevicePanel'
 import { default as default_3c23bb8b7400c7bc02092a1b68884a76 } from '../../../components/admin/AdminWelcomeWidget'
 import { default as default_4e68c2e8d2bd742f9e7870da1132c0fb } from '../../../components/admin/AdminStatsWidget'
+import { default as default_1e91f69ea24be4812bae24bd544f9b57 } from '../../../components/admin/AdminShortcutsWidget'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -74,5 +75,6 @@ export const importMap = {
   "/components/admin/TrustedDevicePanel#default": default_b285ebec604c3425771e35779f5bff26,
   "/components/admin/AdminWelcomeWidget#default": default_3c23bb8b7400c7bc02092a1b68884a76,
   "/components/admin/AdminStatsWidget#default": default_4e68c2e8d2bd742f9e7870da1132c0fb,
+  "/components/admin/AdminShortcutsWidget#default": default_1e91f69ea24be4812bae24bd544f9b57,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
