@@ -36,6 +36,8 @@ const GALLERY_LAYOUT_OPTIONS = [
   { label: 'Diaporama', value: 'slideshow' },
 ] as const
 
+const JSON_TEXTAREA_FIELD = '/components/admin/JsonTextareaField#default'
+
 export const JournalPosts: CollectionConfig = {
   slug: 'journal-posts',
   labels: {
@@ -99,6 +101,9 @@ export const JournalPosts: CollectionConfig = {
         condition: (_, siblingData) => siblingData?.postType === 'article',
         description:
           'Blueprint JSON (title, excerpt, category, blocks). À la sauvegarde, régénère le corps si le JSON a changé. Modèle de référence : Global « Modèle article Lablog ».',
+        components: {
+          Field: JSON_TEXTAREA_FIELD,
+        },
       },
     },
     {

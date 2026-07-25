@@ -57,7 +57,9 @@ export const LABLOG_ARTICLE_JSON_TEMPLATE: LablogArticleBlueprint = {
 }
 
 export function parseLablogBlueprint(input: unknown): LablogArticleBlueprint {
-  return lablogArticleBlueprintSchema.parse(input)
+  const normalized =
+    typeof input === 'string' && input.trim().length > 0 ? JSON.parse(input) : input
+  return lablogArticleBlueprintSchema.parse(normalized)
 }
 
 export function blueprintBlocksToLexical(blocks: LablogArticleBlueprint['blocks']) {

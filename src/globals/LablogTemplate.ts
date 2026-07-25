@@ -2,6 +2,8 @@ import type { GlobalConfig } from 'payload'
 
 import { LABLOG_ARTICLE_JSON_TEMPLATE } from '@/lib/lablog-article-blueprint'
 
+const JSON_TEXTAREA_FIELD = '/components/admin/JsonTextareaField#default'
+
 export const LablogTemplate: GlobalConfig = {
   slug: 'lablog-template',
   label: 'Modèle article Lablog',
@@ -23,6 +25,9 @@ export const LablogTemplate: GlobalConfig = {
       admin: {
         description:
           'Structure JSON à reproduire (title, excerpt, category, blocks). Utilisable par une IA ou copié dans le champ « Blueprint JSON » d’un article.',
+        components: {
+          Field: JSON_TEXTAREA_FIELD,
+        },
       },
     },
     {
@@ -35,4 +40,14 @@ export const LablogTemplate: GlobalConfig = {
       },
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (data && (data.jsonTemplate === null || data.jsonTemplate === undefined)) {
+          data.jsonTemplate = LABLOG_ARTICLE_JSON_TEMPLATE
+        }
+        return data
+      },
+    ],
+  },
 }

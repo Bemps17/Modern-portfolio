@@ -19,6 +19,11 @@ describe('lablog-article-blueprint', () => {
     expect(result.title).toBe(LABLOG_ARTICLE_JSON_TEMPLATE.title)
   })
 
+  it('parse une chaîne JSON', () => {
+    const parsed = parseLablogBlueprint(JSON.stringify(LABLOG_ARTICLE_JSON_TEMPLATE))
+    expect(parsed.title).toBe(LABLOG_ARTICLE_JSON_TEMPLATE.title)
+  })
+
   it('rejette un blueprint sans blocks', () => {
     expect(() => parseLablogBlueprint({ title: 'Sans corps' })).toThrow()
   })
