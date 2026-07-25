@@ -19,6 +19,7 @@ type RocketSliceProps = {
   isLaunching: boolean
   isIgniting: boolean
   isActive: boolean
+  stacked?: boolean
   onSelect: (index: number) => void
   children: React.ReactNode
 }
@@ -29,25 +30,28 @@ function RocketSlice({
   isLaunching,
   isIgniting,
   isActive,
+  stacked = false,
   onSelect,
   children,
 }: RocketSliceProps) {
-  const spread = activeStage >= index ? index * LAYER_SPREAD : 0
+  const spread = stacked ? 0 : activeStage >= index ? index * LAYER_SPREAD : 0
   const bounds = SLICE_BOUNDS[index]
   const stageLabel = String(index + 1).padStart(2, '0')
 
   return (
     <motion.g
       animate={
-        isLaunching
-          ? {
-              y: -620 - index * 36,
-              opacity: 0,
-              rotate: index % 2 === 0 ? -5 : 5,
-            }
-          : isIgniting
-            ? { y: spread - 2, scale: 0.985, opacity: 1 }
-            : { y: spread, scale: 1, opacity: 1, rotate: 0 }
+        stacked
+          ? { y: 0, scale: 1, opacity: 1, rotate: 0 }
+          : isLaunching
+            ? {
+                y: -620 - index * 36,
+                opacity: 0,
+                rotate: index % 2 === 0 ? -5 : 5,
+              }
+            : isIgniting
+              ? { y: spread - 2, scale: 0.985, opacity: 1 }
+              : { y: spread, scale: 1, opacity: 1, rotate: 0 }
       }
       aria-label={`Étage ${index + 1} : ${PROJECT_CUTAWAY_STEPS[index]?.title}`}
       onClick={() => onSelect(index)}
@@ -98,11 +102,18 @@ type StarshipSvgProps = {
   activeStage: number
   isLaunching: boolean
   isIgniting: boolean
+  stacked?: boolean
   onSelect: (index: number) => void
 }
 
 /** Fusée hybride rétro-technique : ogive, damier, hublots, ailerons, buses. */
-export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: StarshipSvgProps) {
+export function StarshipSvg({
+  activeStage,
+  isLaunching,
+  isIgniting,
+  stacked = false,
+  onSelect,
+}: StarshipSvgProps) {
   const stroke = (index: number) => (activeStage === index ? 'var(--accent-soft)' : STARSHIP_STROKE)
   const portholeOpacity = (index: number) => (activeStage === index ? 0.35 : 0.12)
 
@@ -132,6 +143,7 @@ export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: 
         isActive={activeStage === 0}
         isIgniting={isIgniting}
         isLaunching={isLaunching}
+        stacked={stacked}
         onSelect={onSelect}
       >
         <path
@@ -152,6 +164,7 @@ export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: 
         isActive={activeStage === 1}
         isIgniting={isIgniting}
         isLaunching={isLaunching}
+        stacked={stacked}
         onSelect={onSelect}
       >
         <path d="M90 90 H 150 V 180 H 90 Z" fill="url(#starship-body-fill)" stroke={stroke(1)} strokeWidth="1.5" />
@@ -174,6 +187,7 @@ export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: 
         isActive={activeStage === 2}
         isIgniting={isIgniting}
         isLaunching={isLaunching}
+        stacked={stacked}
         onSelect={onSelect}
       >
         <path d="M90 180 H 150 V 280 H 90 Z" fill="url(#starship-body-fill)" stroke={stroke(2)} strokeWidth="1.5" />
@@ -192,6 +206,7 @@ export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: 
         isActive={activeStage === 3}
         isIgniting={isIgniting}
         isLaunching={isLaunching}
+        stacked={stacked}
         onSelect={onSelect}
       >
         <path d="M90 280 H 150 V 380 H 90 Z" fill="url(#starship-body-fill)" stroke={stroke(3)} strokeWidth="1.5" />
@@ -213,6 +228,7 @@ export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: 
         isActive={activeStage === 4}
         isIgniting={isIgniting}
         isLaunching={isLaunching}
+        stacked={stacked}
         onSelect={onSelect}
       >
         <path d="M90 380 H 150 V 440 H 90 Z" fill="url(#starship-body-fill)" stroke={stroke(4)} strokeWidth="1.5" />
@@ -238,16 +254,18 @@ export function StarshipSvg({ activeStage, isLaunching, isIgniting, onSelect }: 
         <path d="M128 480 L 126 505 L 140 505 L 138 480 Z" fill="none" stroke={stroke(4)} strokeWidth="1.2" />
       </RocketSlice>
 
-      <line
-        stroke={activeStage >= 0 ? 'var(--accent-soft)' : STARSHIP_STROKE_DIM}
-        strokeDasharray="4 3"
-        strokeOpacity={activeStage >= 0 ? 0.55 : 0.35}
-        strokeWidth="0.8"
-        x1="120"
-        x2="120"
-        y1="22"
-        y2="480"
-      />
+      {!stacked ? (
+        <line
+          stroke={activeStage >= 0 ? 'var(--accent-soft)' : STARSHIP_STROKE_DIM}
+          strokeDasharray="4 3"
+          strokeOpacity={activeStage >= 0 ? 0.55 : 0.35}
+          strokeWidth="0.8"
+          x1="120"
+          x2="120"
+          y1="22"
+          y2="480"
+        />
+      ) : null}
     </svg>
   )
 }
