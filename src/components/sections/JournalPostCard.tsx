@@ -58,7 +58,9 @@ function ArticleCardPreview({ post }: JournalPostCardProps) {
             {formatJournalPublishedDate(post.publishedAt)}
           </time>
         </div>
-        <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">{post.title}</h3>
+        <h3 className="min-w-0 font-[family-name:var(--font-syne)] text-xl font-semibold break-words hyphens-auto line-clamp-3">
+          {post.title}
+        </h3>
         {excerpt ? (
           <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">{excerpt}</p>
         ) : null}
@@ -128,7 +130,9 @@ function GalleryCardPreview({ post }: JournalPostCardProps) {
             {formatJournalPublishedDate(post.publishedAt)}
           </time>
         </div>
-        <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold">{post.title}</h3>
+        <h3 className="min-w-0 font-[family-name:var(--font-syne)] text-xl font-semibold break-words hyphens-auto line-clamp-3">
+          {post.title}
+        </h3>
         {excerpt ? (
           <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">{excerpt}</p>
         ) : galleryItems.length ? (
@@ -149,13 +153,7 @@ export function JournalPostCard({ post }: JournalPostCardProps) {
       as="article"
       className="group relative flex h-full flex-col overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-[color:var(--accent)]/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]"
     >
-      <Link
-        className="relative flex h-full flex-col"
-        data-cursor="view"
-        href={`/carnet/${post.slug}`}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
+      <Link className="relative flex h-full min-w-0 flex-col" data-cursor="link" href={`/carnet/${post.slug}`}>
         {isGallery ? <GalleryCardPreview post={post} /> : <ArticleCardPreview post={post} />}
       </Link>
     </GlassCard>

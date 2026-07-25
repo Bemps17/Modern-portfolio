@@ -102,10 +102,12 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     'seo-defaults': SeoDefault;
+    'lablog-template': LablogTemplate;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'seo-defaults': SeoDefaultsSelect<false> | SeoDefaultsSelect<true>;
+    'lablog-template': LablogTemplateSelect<false> | LablogTemplateSelect<true>;
   };
   locale: null;
   widgets: {
@@ -305,6 +307,18 @@ export interface JournalPost {
    */
   slug: string;
   excerpt: string;
+  /**
+   * Blueprint JSON (title, excerpt, category, blocks). À la sauvegarde, régénère le corps si le JSON a changé. Modèle de référence : Global « Modèle article Lablog ».
+   */
+  contentBlueprint?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   /**
    * Corps de l’article (non requis pour une galerie pure).
    */
@@ -623,6 +637,7 @@ export interface JournalPostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   excerpt?: T;
+  contentBlueprint?: T;
   content?: T;
   cover?: T;
   gallery?:
@@ -998,6 +1013,33 @@ export interface SeoDefault {
   createdAt?: string | null;
 }
 /**
+ * Schéma JSON de référence pour générer des articles conformes à la direction artistique du Lablog.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lablog-template".
+ */
+export interface LablogTemplate {
+  id: number;
+  /**
+   * Structure JSON à reproduire (title, excerpt, category, blocks). Utilisable par une IA ou copié dans le champ « Blueprint JSON » d’un article.
+   */
+  jsonTemplate:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Consignes pour la génération IA ou rédaction assistée.
+   */
+  generationHints?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
@@ -1114,6 +1156,17 @@ export interface SeoDefaultsSelect<T extends boolean = true> {
   enablePersonJsonLd?: T;
   enableWebsiteJsonLd?: T;
   schemaAuthorName?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lablog-template_select".
+ */
+export interface LablogTemplateSelect<T extends boolean = true> {
+  jsonTemplate?: T;
+  generationHints?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

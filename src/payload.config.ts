@@ -15,6 +15,7 @@ import { Projects } from './collections/Projects'
 import { Qualifications } from './collections/Qualifications'
 import { Skills } from './collections/Skills'
 import { Users } from './collections/Users'
+import { LablogTemplate } from './globals/LablogTemplate'
 import { SEODefaults } from './globals/SEODefaults'
 import { SiteSettings } from './globals/SiteSettings'
 import { getDatabaseUri, getPayloadSecret, syncDatabaseUriEnv } from './lib/payload-env'
@@ -85,7 +86,7 @@ export default buildConfig({
     supportedLanguages: { fr },
   },
   collections: [Users, Media, Projects, JournalPosts, Skills, Experiences, Qualifications, FormSubmissions],
-  globals: [SiteSettings, SEODefaults],
+  globals: [SiteSettings, SEODefaults, LablogTemplate],
   editor: lexicalEditor(),
   secret: getPayloadSecret(),
   typescript: {

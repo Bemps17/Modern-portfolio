@@ -4,9 +4,9 @@ import { ArrowLeft } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { JournalArticleBody } from '@/components/sections/JournalArticleBody'
 import { JournalGalleryGrid } from '@/components/sections/JournalGalleryGrid'
 import { JournalGallerySlideshow } from '@/components/sections/JournalGallerySlideshow'
-import { RichTextRenderer } from '@/components/sections/RichTextRenderer'
 import { ScrollProgress } from '@/components/motion/ScrollProgress'
 import { Badge } from '@/components/ui/Badge'
 import { Container } from '@/components/ui/Container'
@@ -61,10 +61,10 @@ export function JournalPostDetailView({ post, backLabel = 'Le Lablog' }: Journal
           </div>
 
           {isGallery ? (
-            <div className="max-w-4xl">
-              <EditorialTitle as="h1" bleed className="mb-4" text={post.title} />
+            <div className="min-w-0 max-w-4xl">
+              <EditorialTitle as="h1" contained className="mb-4" text={post.title} />
               {excerpt ? (
-                <p className="text-lg text-[var(--foreground-secondary)]">{excerpt}</p>
+                <p className="text-lg leading-relaxed text-[var(--foreground-secondary)]">{excerpt}</p>
               ) : null}
 
               {layout === 'slideshow' ? (
@@ -73,15 +73,11 @@ export function JournalPostDetailView({ post, backLabel = 'Le Lablog' }: Journal
                 <JournalGalleryGrid items={galleryItems} />
               )}
 
-              {post.content ? (
-                <div className="prose prose-invert mt-10 max-w-none">
-                  <RichTextRenderer data={post.content} />
-                </div>
-              ) : null}
+              {post.content ? <JournalArticleBody content={post.content} /> : null}
             </div>
           ) : (
-            <div className="lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
-              <div className="lg:sticky lg:top-24 lg:self-start">
+            <div className="min-w-0 lg:grid lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
+              <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
                 {coverUrl ? (
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 lg:aspect-[3/4]">
                     <Image
@@ -96,17 +92,13 @@ export function JournalPostDetailView({ post, backLabel = 'Le Lablog' }: Journal
                 ) : null}
               </div>
 
-              <div className="mt-10 lg:mt-0">
-                <EditorialTitle as="h1" bleed className="mb-4" text={post.title} />
+              <div className="mt-10 min-w-0 lg:mt-0">
+                <EditorialTitle as="h1" contained className="mb-4" text={post.title} />
                 {excerpt ? (
-                  <p className="text-lg text-[var(--foreground-secondary)]">{excerpt}</p>
+                  <p className="text-lg leading-relaxed text-[var(--foreground-secondary)]">{excerpt}</p>
                 ) : null}
 
-                {post.content ? (
-                  <div className="prose prose-invert mt-10 max-w-none">
-                    <RichTextRenderer data={post.content} />
-                  </div>
-                ) : null}
+                {post.content ? <JournalArticleBody content={post.content} /> : null}
               </div>
             </div>
           )}

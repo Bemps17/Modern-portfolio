@@ -742,3 +742,84 @@ a {
     color: #333;
   }
 }
+
+/* ——— Lablog — corps d’article aéré ——— */
+.lablog-prose {
+  min-width: 0;
+  max-width: 42rem;
+  color: var(--foreground-secondary);
+  font-size: clamp(1rem, 0.35vw + 0.95rem, 1.0625rem);
+  line-height: 1.78;
+  letter-spacing: 0.01em;
+}
+
+.lablog-prose > * + * {
+  margin-top: 1.35rem;
+}
+
+.lablog-prose h2 {
+  margin: 2.75rem 0 0.85rem;
+  font-family: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.lablog-prose h3 {
+  margin: 2rem 0 0.65rem;
+  font-family: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.125rem, 2.2vw, 1.35rem);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--foreground);
+}
+
+.lablog-prose p {
+  margin: 0;
+}
+
+.lablog-prose ul,
+.lablog-prose ol {
+  margin: 0.5rem 0 0;
+  padding-left: 1.35rem;
+}
+
+.lablog-prose li {
+  margin-bottom: 0.55rem;
+  padding-left: 0.25rem;
+}
+
+.lablog-prose li::marker {
+  color: var(--accent-soft);
+}
+
+.lablog-prose a {
+  color: var(--accent-soft);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+.lablog-prose a:hover {
+  color: var(--foreground);
+  text-decoration-color: currentColor;
+}
+
+.lablog-prose strong {
+  color: var(--foreground);
+  font-weight: 650;
+}
+
+.lablog-prose blockquote {
+  margin: 1.75rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  color: var(--foreground);
+  font-style: italic;
+}

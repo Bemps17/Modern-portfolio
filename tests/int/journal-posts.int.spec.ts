@@ -2,6 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 import type { Payload } from 'payload'
 
+import { LABLOG_ARTICLE_JSON_TEMPLATE } from '@/lib/lablog-article-blueprint'
 import { createTestMedia, getTestPayload, lexicalParagraph } from './helpers/payload'
 
 describe('journal-posts collection', () => {
@@ -79,6 +80,40 @@ describe('journal-posts collection', () => {
       }
       await payload.delete({ collection: 'media', id: cover.id }).catch(() => undefined)
       await payload.delete({ collection: 'media', id: shot.id }).catch(() => undefined)
+    }
+  })
+
+  it('applique contentBlueprint à la création', async () => {
+    const media = await createTestMedia(payload, 'Blueprint cover')
+    const slug = `journal-blueprint-${Date.now()}`
+    try {
+      const post = await payload.create({
+        collection: 'journal-posts',
+        data: {
+          title: 'Placeholder',
+          slug,
+          excerpt: 'Placeholder excerpt.',
+          contentBlueprint: LABLOG_ARTICLE_JSON_TEMPLATE,
+          cover: media.id,
+          status: 'published',
+          publishedAt: new Date().toISOString(),
+          postType: 'article',
+          category: 'ia',
+        },
+      })
+      expect(post.title).toBe(LABLOG_ARTICLE_JSON_TEMPLATE.title)
+      expect(post.excerpt).toBe(LABLOG_ARTICLE_JSON_TEMPLATE.excerpt)
+      expect(post.content?.root?.children?.length).toBe(LABLOG_ARTICLE_JSON_TEMPLATE.blocks.length)
+    } finally {
+      const existing = await payload.find({
+        collection: 'journal-posts',
+        where: { slug: { equals: slug } },
+        limit: 1,
+      })
+      if (existing.docs[0]) {
+        await payload.delete({ collection: 'journal-posts', id: existing.docs[0].id })
+      }
+      await payload.delete({ collection: 'media', id: media.id }).catch(() => undefined)
     }
   })
 })

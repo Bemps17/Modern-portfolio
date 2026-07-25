@@ -58,7 +58,7 @@ export function RevealText({
 
   return (
     <Tag className={className} ref={ref as never}>
-      <span className="inline-flex flex-wrap gap-x-[0.35em] gap-y-1">
+      <span className="inline-flex min-w-0 max-w-full flex-wrap gap-x-[0.35em] gap-y-1">
         {words.map((word, index) => (
           <motion.span
             className="inline-block"
