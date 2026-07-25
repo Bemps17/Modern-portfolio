@@ -49,7 +49,6 @@ export function useLaunchSequence({ onComplete, reduceMotion }: UseLaunchSequenc
       }, COUNTDOWN_TICK_MS)
     }
 
-    setCountdown(COUNTDOWN_START)
     scheduleTick()
 
     return () => {
