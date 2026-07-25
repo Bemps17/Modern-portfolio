@@ -28,7 +28,7 @@ type BottomTabBarProps = {
   journalNavLabel?: string
 }
 
-export function BottomTabBar({ journalNavLabel = 'Carnet' }: BottomTabBarProps) {
+export function BottomTabBar({ journalNavLabel = 'Le Lablog' }: BottomTabBarProps) {
   const pathname = usePathname()
   const tabs = buildTabs(journalNavLabel)
 
@@ -46,22 +46,23 @@ export function BottomTabBar({ journalNavLabel = 'Carnet' }: BottomTabBarProps) 
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white/[0.05] to-transparent"
         />
-        <ul className="relative grid grid-cols-5 px-2 py-2">
+        <ul className="relative grid grid-cols-5 px-1.5 py-1.5">
           {tabs.map(({ href, label, icon: Icon, external }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
             return (
               <li className="relative" key={href}>
                 {active ? (
                   <motion.span
-                    className="absolute inset-x-2 inset-y-1 rounded-xl bg-[var(--accent)]/15 ring-1 ring-[color:var(--accent)]/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+                    className="absolute inset-x-1 inset-y-0.5 rounded-xl bg-[var(--accent)]/15 ring-1 ring-[color:var(--accent)]/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
                     layoutId="mobile-tab-pill"
                     transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                   />
                 ) : null}
                 <Link
                   aria-current={active ? 'page' : undefined}
+                  aria-label={label}
                   className={cn(
-                    'relative z-[1] flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition',
+                    'relative z-[1] flex min-h-11 min-w-11 items-center justify-center rounded-xl transition',
                     active ? 'text-[var(--accent)]' : 'text-[var(--foreground-secondary)]',
                   )}
                   data-cursor={external ? 'open' : 'link'}
@@ -72,7 +73,6 @@ export function BottomTabBar({ journalNavLabel = 'Carnet' }: BottomTabBarProps) 
                   <motion.span animate={active ? { scale: 1.08 } : { scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 24 }}>
                     <Icon aria-hidden className="h-5 w-5" />
                   </motion.span>
-                  <span>{label}</span>
                 </Link>
               </li>
             )

@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { cleanup, render, screen, within } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
@@ -8,12 +8,26 @@ vi.mock('next/navigation', () => ({
 import { BottomTabBar } from '@/components/layout/BottomTabBar'
 
 describe('BottomTabBar', () => {
-  it('renders the four primary navigation links', () => {
-    render(<BottomTabBar />)
-    expect(screen.getByText('Accueil')).toBeTruthy()
-    expect(screen.getByText('Projets')).toBeTruthy()
-    expect(screen.getByText('À propos')).toBeTruthy()
-    expect(screen.getByText('Contact')).toBeTruthy()
+  afterEach(() => {
+    cleanup()
+  })
+  it('does not render visible tab labels (icons only)', () => {
+    render(<BottomTabBar journalNavLabel="Le Lablog" />)
+    expect(screen.queryByText('Accueil')).toBeNull()
+    expect(screen.queryByText('Projets')).toBeNull()
+    expect(screen.queryByText('À propos')).toBeNull()
+    expect(screen.queryByText('Contact')).toBeNull()
+    expect(screen.queryByText('Le Lablog')).toBeNull()
+  })
+
+  it('exposes accessible aria-label on each tab link', () => {
+    render(<BottomTabBar journalNavLabel="Le Lablog" />)
+    const nav = screen.getByRole('navigation', { name: 'Navigation mobile' })
+    expect(within(nav).getByRole('link', { name: 'Accueil' })).toBeTruthy()
+    expect(within(nav).getByRole('link', { name: 'Projets' })).toBeTruthy()
+    expect(within(nav).getByRole('link', { name: 'À propos' })).toBeTruthy()
+    expect(within(nav).getByRole('link', { name: 'Contact' })).toBeTruthy()
+    expect(within(nav).getByRole('link', { name: 'Le Lablog' })).toBeTruthy()
   })
 
   it('is hidden on large screens via lg:hidden', () => {
