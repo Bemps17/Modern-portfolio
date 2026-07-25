@@ -7,6 +7,7 @@ import {
   Layers,
   Mail,
   MessageCircle,
+  NotebookPen,
   Rocket,
   Scale,
   Shield,
@@ -31,6 +32,7 @@ const SECTION_ICONS = {
   method: Rocket,
   legal: Scale,
   privacy: Shield,
+  journal: NotebookPen,
 } as const satisfies Record<string, LucideIcon>
 
 export type SectionIconName = keyof typeof SECTION_ICONS
