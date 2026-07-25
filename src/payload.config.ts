@@ -35,7 +35,7 @@ export default buildConfig({
       description: 'Administration du portfolio — CMS Payload',
       icons: {
         icon: '/brand/favicon.svg',
-        apple: '/brand/favicon.png',
+        apple: '/apple-icon.png',
       },
       openGraph: {
         images: [{ url: '/brand/favicon.png' }],

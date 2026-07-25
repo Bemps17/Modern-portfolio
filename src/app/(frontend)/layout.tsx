@@ -40,21 +40,14 @@ const spaceGrotesk = Space_Grotesk({
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettingsContent()
-  const favicon =
-    resolveMediaUrl('favicon' in settings ? settings.favicon : null) || SITE_IMAGES.favicon
-
   return {
     metadataBase: new URL(getSiteUrl()),
     icons: {
       icon: [
-        {
-          url: favicon,
-          type: favicon.endsWith('.svg') ? 'image/svg+xml' : undefined,
-        },
+        { url: SITE_IMAGES.favicon, type: 'image/svg+xml' },
         { url: SITE_IMAGES.faviconPng, type: 'image/png', sizes: '512x512' },
       ],
-      apple: SITE_IMAGES.faviconPng,
+      apple: SITE_IMAGES.appleIcon,
     },
   }
 }
