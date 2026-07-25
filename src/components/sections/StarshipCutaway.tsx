@@ -1,93 +1,24 @@
 'use client'
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Rocket } from 'lucide-react'
+import { Rocket } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { LaunchEffects } from '@/components/sections/starship/LaunchEffects'
 import { LaunchPad } from '@/components/sections/starship/LaunchPad'
-import { MiniRocket } from '@/components/sections/starship/MiniRocket'
 import { StarshipLiftoffPortal } from '@/components/sections/starship/StarshipLiftoffPortal'
 import { StarshipSvg } from '@/components/sections/starship/StarshipSvg'
 import { useLaunchSequence } from '@/components/sections/starship/useLaunchSequence'
 import type { LaunchPhase } from '@/components/sections/starship/constants'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
-import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { PROJECT_CUTAWAY_STEPS, type CutawayStep } from '@/lib/project-cutaway'
 import { cn } from '@/lib/utils'
 
 type StarshipCutawayProps = {
   subtitle?: string | null
-}
-
-const METHOD_LEAD =
-  'Du brief client au frontend final : voici comment j’organise un projet, étape par étape — la même logique que le découpage d’une fusée en étages.'
-
-const MOBILE_STEP_SHORT_LABELS = ['Brief', 'UX', 'UI', 'Code', 'Ship'] as const
-
-function MobileStepProgress({
-  activeStage,
-  onSelect,
-}: {
-  activeStage: number
-  onSelect: (index: number) => void
-}) {
-  return (
-    <div aria-label="Étapes de la méthode" className="space-y-3" role="tablist">
-      <div className="flex gap-1">
-        {PROJECT_CUTAWAY_STEPS.map((step, index) => {
-          const isActive = activeStage === index
-          const isPast = index < activeStage
-
-          return (
-            <button
-              aria-label={`Étape ${index + 1} : ${step.title}`}
-              aria-selected={isActive}
-              className={cn(
-                'group relative min-w-0 flex-1 border px-1 py-2 text-center transition',
-                index === 0 && 'rounded-l-full',
-                index === PROJECT_CUTAWAY_STEPS.length - 1 && 'rounded-r-lg',
-                isActive
-                  ? 'border-[color:var(--accent)] bg-[var(--accent)]/20 shadow-[0_0_12px_var(--accent-glow)]'
-                  : isPast
-                    ? 'border-[color:var(--accent)]/30 bg-[var(--accent)]/8'
-                    : 'border-[color:var(--border-subtle)] bg-black/10 hover:border-[color:var(--border)]',
-              )}
-              key={step.id}
-              onClick={() => onSelect(index)}
-              role="tab"
-              type="button"
-            >
-              <span
-                className={cn(
-                  'mx-auto mb-1 flex size-5 items-center justify-center rounded-full text-[10px] font-semibold tabular-nums',
-                  isActive
-                    ? 'bg-[var(--accent)] text-black'
-                    : 'border border-[color:var(--border)] text-[var(--muted)]',
-                )}
-              >
-                {index + 1}
-              </span>
-              <span
-                className={cn(
-                  'block truncate font-[family-name:var(--font-space-grotesk)] text-[9px] tracking-[0.08em] uppercase',
-                  isActive ? 'text-[var(--accent-soft)]' : 'text-[var(--muted)]',
-                )}
-              >
-                {MOBILE_STEP_SHORT_LABELS[index]}
-              </span>
-            </button>
-          )
-        })}
-      </div>
-      <p className="text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.14em] text-[var(--muted)]">
-        Chaque segment = une phase du projet
-      </p>
-    </div>
-  )
 }
 
 function StageDetailCard({ step, className }: { step: CutawayStep; className?: string }) {
@@ -101,104 +32,6 @@ function StageDetailCard({ step, className }: { step: CutawayStep; className?: s
       </p>
       <p className="mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
     </div>
-  )
-}
-
-function MobileMethodPanel({
-  activeStage,
-  onSelect,
-  onPrev,
-  onNext,
-}: {
-  activeStage: number
-  onSelect: (index: number) => void
-  onPrev: () => void
-  onNext: () => void
-}) {
-  const step = PROJECT_CUTAWAY_STEPS[activeStage]
-
-  return (
-    <ReadableSurface as="section" aria-labelledby="method-mobile-title" bleed strong className="mt-8 xl:hidden">
-      <div className="space-y-6">
-        <div className="flex items-start gap-4">
-          <div
-            aria-hidden
-            className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-[color:var(--accent)]/35 bg-[var(--accent)]/10 text-[var(--accent-soft)]"
-          >
-            <Rocket className="size-5" />
-          </div>
-          <div className="min-w-0 space-y-2">
-            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--muted)] uppercase">
-              Méthode · {PROJECT_CUTAWAY_STEPS.length} étapes
-            </p>
-            <h2
-              className="font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight tracking-tight text-[var(--foreground)] sm:text-3xl"
-              id="method-mobile-title"
-            >
-              Ma méthode de travail
-            </h2>
-            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)] sm:text-base">{METHOD_LEAD}</p>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-[color:var(--border-subtle)] bg-black/15 p-4">
-          <div className="flex justify-center pb-4">
-            <MiniRocket activeStage={activeStage} />
-          </div>
-          <MobileStepProgress activeStage={activeStage} onSelect={onSelect} />
-
-          <div className="mt-5 flex items-center justify-between gap-3">
-            <p className="font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
-              Étape {String(activeStage + 1).padStart(2, '0')} · {step.title}
-            </p>
-            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tabular-nums text-[var(--accent-soft)]">
-              {String(activeStage + 1).padStart(2, '0')} / {String(PROJECT_CUTAWAY_STEPS.length).padStart(2, '0')}
-            </p>
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-3"
-              exit={{ opacity: 0, y: 8 }}
-              initial={{ opacity: 0, y: 8 }}
-              key={step.id}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-            >
-              <StageDetailCard step={step} className="border-[color:var(--accent)]/40" />
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="mt-4 flex items-center justify-between gap-2">
-            <button
-              aria-label="Étape précédente"
-              className="inline-flex size-10 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
-              disabled={activeStage === 0}
-              onClick={onPrev}
-              type="button"
-            >
-              <ChevronLeft aria-hidden className="size-5" />
-            </button>
-            <p className="text-center text-xs text-[var(--muted)]">Touchez une étape ou utilisez les flèches</p>
-            <button
-              aria-label="Étape suivante"
-              className="inline-flex size-10 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface-glass)] text-[var(--foreground-secondary)] disabled:opacity-40"
-              disabled={activeStage === PROJECT_CUTAWAY_STEPS.length - 1}
-              onClick={onNext}
-              type="button"
-            >
-              <ChevronRight aria-hidden className="size-5" />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex justify-center pt-1">
-          <Button href="/contact" variant="glass">
-            Discuter de votre projet
-          </Button>
-        </div>
-      </div>
-    </ReadableSurface>
   )
 }
 
@@ -291,36 +124,19 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
     setActiveStage(index)
   }, [launchDisabled])
 
-  const goPrev = useCallback(() => {
-    setActiveStage((current) => Math.max(0, current - 1))
-  }, [])
-
-  const goNext = useCallback(() => {
-    setActiveStage((current) => Math.min(PROJECT_CUTAWAY_STEPS.length - 1, current + 1))
-  }, [])
-
   const activeStep = PROJECT_CUTAWAY_STEPS[activeStage]
   const desktopSubtitle =
     subtitle ||
     'Je centre chaque projet sur vos besoins — du brief au frontend final, étape par étape.'
 
   return (
-    <Container as="section" className="py-12 sm:py-16 lg:py-20">
-      <div className="hidden xl:block">
-        <SectionTitle
-          editorial
-          eyebrow="Méthode"
-          icon="method"
-          subtitle={desktopSubtitle}
-          title="Découpez le projet"
-        />
-      </div>
-
-      <MobileMethodPanel
-        activeStage={activeStage}
-        onNext={goNext}
-        onPrev={goPrev}
-        onSelect={selectStage}
+    <Container as="section" className="hidden py-12 sm:py-16 lg:py-20 xl:block">
+      <SectionTitle
+        editorial
+        eyebrow="Méthode"
+        icon="method"
+        subtitle={desktopSubtitle}
+        title="Découpez le projet"
       />
 
       <StarshipLiftoffPortal
@@ -331,7 +147,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
 
       <div
         className={cn(
-          'mt-8 hidden rounded-3xl border border-[color:var(--border)] bg-[var(--background-elevated)] xl:block sm:mt-10',
+          'mt-8 rounded-3xl border border-[color:var(--border)] bg-[var(--background-elevated)] sm:mt-10',
           isFullScreenFlight ? 'overflow-visible' : 'overflow-hidden',
         )}
       >
