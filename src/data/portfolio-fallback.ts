@@ -1,4 +1,4 @@
-import type { Experience, Media, Project, Qualification, Skill } from '@/payload-types'
+import type { Experience, JournalPost, Media, Project, Qualification, Skill } from '@/payload-types'
 
 const LEGACY_SITE = 'https://projet-refonte-portfolio-persov1-0.vercel.app'
 
@@ -16,6 +16,37 @@ function legacyMedia(path: string | null, alt: string): Media | null {
     updatedAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
   } as Media
+}
+
+function lexicalParagraph(text: string): JournalPost['content'] {
+  return {
+    root: {
+      type: 'root',
+      format: '',
+      indent: 0,
+      version: 1,
+      children: [
+        {
+          type: 'paragraph',
+          format: '',
+          indent: 0,
+          version: 1,
+          children: [
+            {
+              type: 'text',
+              detail: 0,
+              format: 0,
+              mode: 'normal',
+              style: '',
+              text,
+              version: 1,
+            },
+          ],
+        },
+      ],
+      direction: 'ltr',
+    },
+  }
 }
 
 type LegacyProject = {
@@ -483,6 +514,11 @@ export const portfolioFallback = {
     footerExtraLine: null,
     maintenanceMode: false,
     maintenanceMessage: null,
+    journalNavLabel: 'Carnet',
+    journalTitle: 'Carnet',
+    journalEyebrow: 'Créations & veille',
+    journalSubtitle:
+      'Créations IA, expérimentations visuelles et notes du moment — un skyblog 2026.',
   },
   seoDefaults: {
     defaultTitle: 'Bertrand Fouquet | Développeur Web & Designer Junior',
@@ -507,6 +543,44 @@ export const portfolioFallback = {
     schemaAuthorName: 'Bertrand Fouquet',
   },
   projects: legacyProjects.map(toProject),
+  journalPosts: [
+    {
+      id: 1,
+      title: 'Première génération d’illustrations IA',
+      slug: 'premiere-generation-ia',
+      excerpt:
+        'Tests Midjourney et Flux sur des prompts visuels — notes de bord d’un carnet skyblog 2026.',
+      content: lexicalParagraph(
+        'Première série d’expérimentations : palettes néon, compositions type affiche et itérations rapides avec des prompts courts.',
+      ),
+      cover: legacyMedia('/images/profil-picNb.png', 'Illustration IA expérimentale') as Media,
+      gallery: [],
+      category: 'ia',
+      publishedAt: '2026-07-20T10:00:00.000Z',
+      status: 'published',
+      order: 0,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 2,
+      title: 'Veille outils créatifs — juillet 2026',
+      slug: 'veille-outils-creatifs-juillet-2026',
+      excerpt:
+        'Cursor, Payload 3 et nouveaux modèles image — ce qui retient l’attention ce mois-ci.',
+      content: lexicalParagraph(
+        'Un tour d’horizon rapide : agents de code, CMS headless et pipelines image-to-image pour prototyper plus vite.',
+      ),
+      cover: legacyMedia('/projects/modern-portfolio-cover.webp', 'Veille outils créatifs') as Media,
+      gallery: [],
+      category: 'veille',
+      publishedAt: '2026-07-15T14:30:00.000Z',
+      status: 'published',
+      order: 1,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    },
+  ] satisfies JournalPost[],
   experiences: [
     {
       id: 1,

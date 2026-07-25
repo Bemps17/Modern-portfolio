@@ -890,6 +890,16 @@ export interface SiteSetting {
    * Ligne optionnelle sous le copyright du footer.
    */
   footerExtraLine?: string | null;
+  /**
+   * Libellé navigation (sidebar / mobile).
+   */
+  journalNavLabel?: string | null;
+  /**
+   * Titre H1 page listing.
+   */
+  journalTitle?: string | null;
+  journalEyebrow?: string | null;
+  journalSubtitle?: string | null;
   maintenanceMode?: boolean | null;
   /**
    * Message affiché dans le bandeau maintenance.
@@ -1050,6 +1060,10 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   legalDirector?: T;
   legalHostingProvider?: T;
   footerExtraLine?: T;
+  journalNavLabel?: T;
+  journalTitle?: T;
+  journalEyebrow?: T;
+  journalSubtitle?: T;
   maintenanceMode?: T;
   maintenanceMessage?: T;
   updatedAt?: T;

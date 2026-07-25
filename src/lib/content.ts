@@ -1,5 +1,13 @@
 import { portfolioFallback } from '@/data/portfolio-fallback'
-import type { Experience, Media, Project, Qualification, SiteSetting, Skill } from '@/payload-types'
+import type {
+  Experience,
+  JournalPost,
+  Media,
+  Project,
+  Qualification,
+  SiteSetting,
+  Skill,
+} from '@/payload-types'
 
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
@@ -55,6 +63,10 @@ export type SiteSettingsContent = {
   footerExtraLine?: string | null
   maintenanceMode?: boolean | null
   maintenanceMessage?: string | null
+  journalNavLabel?: string | null
+  journalTitle?: string | null
+  journalEyebrow?: string | null
+  journalSubtitle?: string | null
 }
 
 /** Complète les champs éditoriaux absents du CMS sans écraser avatar / identité. */
@@ -88,6 +100,13 @@ function withEditorialFallback(
         : fb.showRqthOnCv,
     languages: settings.languages?.length ? settings.languages : fb.languages,
     cvCompetencies: settings.cvCompetencies?.length ? settings.cvCompetencies : fb.cvCompetencies,
+    journalNavLabel:
+      ('journalNavLabel' in settings && settings.journalNavLabel?.trim()) || fb.journalNavLabel,
+    journalTitle: ('journalTitle' in settings && settings.journalTitle?.trim()) || fb.journalTitle,
+    journalEyebrow:
+      ('journalEyebrow' in settings && settings.journalEyebrow?.trim()) || fb.journalEyebrow,
+    journalSubtitle:
+      ('journalSubtitle' in settings && settings.journalSubtitle?.trim()) || fb.journalSubtitle,
   }
 }
 
@@ -298,4 +317,40 @@ export async function getSkills(): Promise<Skill[]> {
 export async function getProjectSlugs(): Promise<string[]> {
   const projects = await getPublishedProjects()
   return projects.map((project) => project.slug)
+}
+
+export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
+  const payload = await getPayloadClientSafe()
+  if (payload) {
+    const result = await payload.find({
+      collection: 'journal-posts',
+      where: { status: { equals: 'published' } },
+      sort: '-publishedAt',
+      depth: 1,
+      limit: 100,
+    })
+    return result.docs
+  }
+  return portfolioFallback.journalPosts
+}
+
+export async function getJournalPostBySlug(slug: string): Promise<JournalPost | null> {
+  const payload = await getPayloadClientSafe()
+  if (payload) {
+    const result = await payload.find({
+      collection: 'journal-posts',
+      where: {
+        and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }],
+      },
+      depth: 2,
+      limit: 1,
+    })
+    return result.docs[0] ?? null
+  }
+  return portfolioFallback.journalPosts.find((post) => post.slug === slug) ?? null
+}
+
+export async function getJournalSlugs(): Promise<string[]> {
+  const posts = await getPublishedJournalPosts()
+  return posts.map((post) => post.slug)
 }
