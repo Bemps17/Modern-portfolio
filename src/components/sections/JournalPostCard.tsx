@@ -16,7 +16,7 @@ import {
   resolveJournalPreviewImages,
 } from '@/lib/journal-gallery'
 import { resolveJournalCoverUrl } from '@/lib/journal-cover'
-import { isMedia, resolveMediaUrl } from '@/lib/media'
+import { isMedia } from '@/lib/media'
 import type { JournalPost } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
