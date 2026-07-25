@@ -1,6 +1,6 @@
 'use client'
 
-import { Download, Eye, Link2, Linkedin, Mail, Share2 } from 'lucide-react'
+import { Download, Eye, FileText, Link2, Linkedin, Mail, Share2 } from 'lucide-react'
 import { useCallback, useState, useSyncExternalStore } from 'react'
 import { toast } from 'sonner'
 
@@ -136,34 +136,59 @@ export function CvActions({ shareUrl, fullName }: CvActionsProps) {
 
   return (
     <>
-      <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
-        <a aria-label="Visualiser le CV" className={glassAction} href="/cv">
-          <Eye aria-hidden className="size-4 shrink-0" />
-          <span className="hidden sm:inline">Visualiser</span>
-        </a>
+      <section
+        aria-labelledby="cv-actions-title"
+        className="cv-actions-panel mt-6 max-w-2xl rounded-2xl border border-[color:var(--border-subtle)] bg-[var(--surface-glass)] p-4 backdrop-blur-md sm:p-5"
+      >
+        <div className="flex items-start gap-3">
+          <span
+            aria-hidden
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--accent)]/30 bg-[var(--accent)]/10 text-[var(--accent-soft)]"
+          >
+            <FileText className="size-5" strokeWidth={2} />
+          </span>
+          <div className="min-w-0 space-y-1">
+            <h3
+              className="font-[family-name:var(--font-syne)] text-lg font-semibold text-[var(--foreground)]"
+              id="cv-actions-title"
+            >
+              Mon CV
+            </h3>
+            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">
+              Visualisez la version web, partagez le lien ou téléchargez le PDF.
+            </p>
+          </div>
+        </div>
 
-        <button
-          aria-label="Partager le CV"
-          aria-pressed={shareOpen}
-          className={glassAction}
-          onClick={() => setShareOpen(true)}
-          type="button"
-        >
-          <Share2 aria-hidden className="size-4 shrink-0" />
-          <span className="hidden sm:inline">Partager</span>
-        </button>
+        <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
+          <a aria-label="Visualiser le CV en ligne" className={cn(glassAction, 'w-full sm:w-auto')} href="/cv">
+            <Eye aria-hidden className="size-4 shrink-0" />
+            <span>Visualiser</span>
+          </a>
 
-        <button
-          aria-busy={downloading}
-          aria-label="Télécharger le CV PDF"
-          className={primaryAction}
-          onClick={onDownload}
-          type="button"
-        >
-          <Download aria-hidden className="size-4 shrink-0" />
-          <span className="hidden sm:inline">{downloading ? 'Téléchargement…' : 'Télécharger'}</span>
-        </button>
-      </div>
+          <button
+            aria-label="Partager le CV"
+            aria-pressed={shareOpen}
+            className={cn(glassAction, 'w-full sm:w-auto')}
+            onClick={() => setShareOpen(true)}
+            type="button"
+          >
+            <Share2 aria-hidden className="size-4 shrink-0" />
+            <span>Partager</span>
+          </button>
+
+          <button
+            aria-busy={downloading}
+            aria-label="Télécharger le CV PDF"
+            className={cn(primaryAction, 'w-full sm:w-auto')}
+            onClick={onDownload}
+            type="button"
+          >
+            <Download aria-hidden className="size-4 shrink-0" />
+            <span>{downloading ? 'Téléchargement…' : 'Télécharger le PDF'}</span>
+          </button>
+        </div>
+      </section>
 
       <Modal onClose={() => setShareOpen(false)} open={shareOpen} title="Partager le CV">
         <div className="grid gap-2">
