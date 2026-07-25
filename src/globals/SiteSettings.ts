@@ -130,6 +130,35 @@ const contactFields: Field[] = [
     defaultValue: true,
     label: 'Activer le formulaire de contact',
   },
+  {
+    name: 'contactAutoReplyEnabled',
+    type: 'checkbox',
+    defaultValue: false,
+    label: 'Envoyer un accusé de réception automatique',
+    admin: {
+      description:
+        'Envoie un email de confirmation au visiteur après soumission du formulaire de contact (nécessite Resend).',
+    },
+  },
+  {
+    name: 'contactAutoReplySubject',
+    type: 'text',
+    defaultValue: 'Merci pour votre message, {{name}}',
+    admin: {
+      description: 'Objet de l’accusé de réception. Placeholder disponible : {{name}}.',
+      condition: (_, siblingData) => Boolean(siblingData?.contactAutoReplyEnabled),
+    },
+  },
+  {
+    name: 'contactAutoReplyBody',
+    type: 'textarea',
+    defaultValue:
+      'Bonjour {{name}},\n\nNous avons bien reçu votre message et vous répondrons dès que possible.\n\nCordialement.',
+    admin: {
+      description: 'Corps du message d’accusé de réception. Placeholder disponible : {{name}}.',
+      condition: (_, siblingData) => Boolean(siblingData?.contactAutoReplyEnabled),
+    },
+  },
 ]
 
 const contentFields: Field[] = [

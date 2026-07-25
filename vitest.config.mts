@@ -31,6 +31,7 @@ export default defineConfig({
             'tests/int/slugify.int.spec.ts',
             'tests/int/contactSchema.int.spec.ts',
             'tests/int/form-submission-notify.int.spec.ts',
+            'tests/int/contact-auto-reply.int.spec.ts',
             'tests/int/contact-rate-limit.int.spec.ts',
             'tests/int/reading-time.int.spec.ts',
             'tests/int/related-projects.int.spec.ts',

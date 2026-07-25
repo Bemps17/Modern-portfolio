@@ -909,6 +909,18 @@ export interface SiteSetting {
   contactPageSubtitle?: string | null;
   enableContactForm?: boolean | null;
   /**
+   * Envoie un email de confirmation au visiteur après soumission du formulaire de contact (nécessite Resend).
+   */
+  contactAutoReplyEnabled?: boolean | null;
+  /**
+   * Objet de l’accusé de réception. Placeholder disponible : {{name}}.
+   */
+  contactAutoReplySubject?: string | null;
+  /**
+   * Corps du message d’accusé de réception. Placeholder disponible : {{name}}.
+   */
+  contactAutoReplyBody?: string | null;
+  /**
    * Résumé court (Hero + intro À propos).
    */
   aboutIntro?: string | null;
@@ -1189,6 +1201,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
       };
   contactPageSubtitle?: T;
   enableContactForm?: T;
+  contactAutoReplyEnabled?: T;
+  contactAutoReplySubject?: T;
+  contactAutoReplyBody?: T;
   aboutIntro?: T;
   aboutHeadline?: T;
   aboutBody?: T;

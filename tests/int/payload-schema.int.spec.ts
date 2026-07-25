@@ -74,6 +74,9 @@ describe('Payload schema — collections & globals', () => {
         'legalPublisher',
         'footerLinks',
         'maintenanceMode',
+        'contactAutoReplyEnabled',
+        'contactAutoReplySubject',
+        'contactAutoReplyBody',
       ]),
     )
     const findField = (fieldName: string) =>

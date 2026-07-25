@@ -1,6 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
-import { sendFormSubmissionNotification, shouldNotifyFormSubmission } from '@/lib/form-submission-notify'
+import {
+  sendContactAutoReply,
+  sendFormSubmissionNotification,
+  shouldNotifyFormSubmission,
+} from '@/lib/form-submission-notify'
 
 const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user)
 
@@ -54,7 +58,7 @@ export const FormSubmissions: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      async ({ doc, operation }) => {
+      async ({ doc, operation, req }) => {
         if (!shouldNotifyFormSubmission({ operation })) return doc
         if (!doc?.name || !doc?.email || !doc?.message) return doc
 
@@ -66,6 +70,20 @@ export const FormSubmissions: CollectionConfig = {
           toEmail: process.env.CONTACT_TO_EMAIL || process.env.NEXT_PUBLIC_CONTACT_EMAIL,
           fromEmail: process.env.CONTACT_FROM_EMAIL,
         })
+
+        const settings = await req.payload.findGlobal({ slug: 'site-settings', depth: 0 })
+        if (settings?.contactAutoReplyEnabled) {
+          await sendContactAutoReply({
+            name: String(doc.name),
+            email: String(doc.email),
+            subject: String(settings.contactAutoReplySubject ?? ''),
+            body: String(settings.contactAutoReplyBody ?? ''),
+            enabled: true,
+            resendApiKey: process.env.RESEND_API_KEY,
+            fromEmail: process.env.CONTACT_FROM_EMAIL,
+          })
+        }
+
         return doc
       },
     ],
