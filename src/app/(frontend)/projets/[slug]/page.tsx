@@ -12,6 +12,7 @@ import {
   getSeoDefaultsContent,
   getSiteSettingsContent,
 } from '@/lib/content'
+import { resolveRelatedProjects } from '@/lib/related-projects'
 import { resolveDocumentSeo } from '@/lib/seo-document'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
 import { buildPageMetadata } from '@/lib/seo-metadata'
@@ -85,6 +86,7 @@ export default async function ProjetDetailPage({ params }: PageProps) {
   const index = allProjects.findIndex((item) => item.slug === slug)
   const prevProject = toAdjacent(allProjects[index - 1])
   const nextProject = toAdjacent(allProjects[index + 1])
+  const relatedProjects = resolveRelatedProjects(project, allProjects)
 
   const siteUrl = getSiteUrl()
   const projectUrl = `${siteUrl}/projets/${project.slug}`
@@ -108,7 +110,12 @@ export default async function ProjetDetailPage({ params }: PageProps) {
           { name: project.title, url: projectUrl },
         ])}
       />
-      <ProjectDetailView nextProject={nextProject} prevProject={prevProject} project={project} />
+      <ProjectDetailView
+        nextProject={nextProject}
+        prevProject={prevProject}
+        project={project}
+        relatedProjects={relatedProjects}
+      />
       <PayloadLivePreviewRefresh />
     </>
   )

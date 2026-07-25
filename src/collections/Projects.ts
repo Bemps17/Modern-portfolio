@@ -146,6 +146,14 @@ export const Projects: CollectionConfig = {
       },
     },
     {
+      name: 'relatedProjects',
+      type: 'relationship',
+      relationTo: 'projects',
+      hasMany: true,
+      maxRows: 3,
+      admin: { description: 'Projets suggérés en bas de fiche (publiés uniquement).' },
+    },
+    {
       name: 'featured',
       type: 'checkbox',
       defaultValue: false,

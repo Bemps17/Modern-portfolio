@@ -290,6 +290,10 @@ export interface Project {
   tags?: (number | Tag)[] | null;
   liveUrl?: string | null;
   repoUrl?: string | null;
+  /**
+   * Projets suggérés en bas de fiche (publiés uniquement).
+   */
+  relatedProjects?: (number | Project)[] | null;
   featured?: boolean | null;
   order?: number | null;
   status: 'draft' | 'published';
@@ -694,6 +698,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   tags?: T;
   liveUrl?: T;
   repoUrl?: T;
+  relatedProjects?: T;
   featured?: T;
   order?: T;
   status?: T;

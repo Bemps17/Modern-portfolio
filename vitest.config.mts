@@ -33,6 +33,7 @@ export default defineConfig({
             'tests/int/form-submission-notify.int.spec.ts',
             'tests/int/contact-rate-limit.int.spec.ts',
             'tests/int/reading-time.int.spec.ts',
+            'tests/int/related-projects.int.spec.ts',
             'tests/int/journal-tags.int.spec.ts',
             'tests/int/draft-preview.int.spec.ts',
             'tests/int/seo-document.int.spec.ts',

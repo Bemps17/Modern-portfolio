@@ -4,6 +4,7 @@ import { ArrowLeft, Clock, ExternalLink, FolderGit2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { RelatedProjects } from '@/components/sections/RelatedProjects'
 import { RichTextRenderer } from '@/components/sections/RichTextRenderer'
 import { ScrollProgress } from '@/components/motion/ScrollProgress'
 import { Badge } from '@/components/ui/Badge'
@@ -14,6 +15,7 @@ import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { estimateReadingTime, lexicalToPlainText } from '@/lib/reading-time'
 import { isMedia } from '@/lib/media'
 import { resolveProjectCoverUrl } from '@/lib/project-cover'
+import type { AdjacentProject } from '@/lib/related-projects'
 import { isDuplicateCopy } from '@/lib/text-dedupe'
 import type { Project } from '@/payload-types'
 
@@ -30,19 +32,19 @@ const STACK_LABELS: Record<string, string> = {
   neon: 'Neon',
 }
 
-type AdjacentProject = {
-  slug: string
-  title: string
-  coverUrl: string | null
-}
-
 type ProjectDetailViewProps = {
   project: Project
   prevProject: AdjacentProject | null
   nextProject: AdjacentProject | null
+  relatedProjects?: AdjacentProject[]
 }
 
-export function ProjectDetailView({ project, prevProject, nextProject }: ProjectDetailViewProps) {
+export function ProjectDetailView({
+  project,
+  prevProject,
+  nextProject,
+  relatedProjects = [],
+}: ProjectDetailViewProps) {
   const coverUrl = resolveProjectCoverUrl(project)
   const coverAlt =
     (isMedia(project.cover) ? project.cover.alt : null) || project.title
@@ -143,6 +145,8 @@ export function ProjectDetailView({ project, prevProject, nextProject }: Project
             ) : null}
           </div>
         </div>
+
+        <RelatedProjects projects={relatedProjects} />
 
         <nav
           aria-label="Navigation entre projets"
