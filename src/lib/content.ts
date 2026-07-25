@@ -322,14 +322,19 @@ export async function getProjectSlugs(): Promise<string[]> {
 export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
   const payload = await getPayloadClientSafe()
   if (payload) {
-    const result = await payload.find({
-      collection: 'journal-posts',
-      where: { status: { equals: 'published' } },
-      sort: '-publishedAt',
-      depth: 1,
-      limit: 100,
-    })
-    return result.docs
+    try {
+      const result = await payload.find({
+        collection: 'journal-posts',
+        where: { status: { equals: 'published' } },
+        sort: '-publishedAt',
+        depth: 1,
+        limit: 100,
+      })
+      return result.docs
+    } catch (error) {
+      console.warn('[content] journal-posts indisponible — fallback démo', error)
+      return portfolioFallback.journalPosts
+    }
   }
   return portfolioFallback.journalPosts
 }
@@ -337,15 +342,20 @@ export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
 export async function getJournalPostBySlug(slug: string): Promise<JournalPost | null> {
   const payload = await getPayloadClientSafe()
   if (payload) {
-    const result = await payload.find({
-      collection: 'journal-posts',
-      where: {
-        and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }],
-      },
-      depth: 2,
-      limit: 1,
-    })
-    return result.docs[0] ?? null
+    try {
+      const result = await payload.find({
+        collection: 'journal-posts',
+        where: {
+          and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }],
+        },
+        depth: 2,
+        limit: 1,
+      })
+      return result.docs[0] ?? null
+    } catch (error) {
+      console.warn('[content] journal-posts indisponible — fallback démo', error)
+      return portfolioFallback.journalPosts.find((post) => post.slug === slug) ?? null
+    }
   }
   return portfolioFallback.journalPosts.find((post) => post.slug === slug) ?? null
 }

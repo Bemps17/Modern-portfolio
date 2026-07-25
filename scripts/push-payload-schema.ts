@@ -26,11 +26,26 @@ async function main() {
     process.exit(1)
   }
 
+  // Payload n'exécute pushDevSchema que hors production (connect.ts).
+  // Sur Vercel, NODE_ENV=production : forcer development le temps du push.
+  const previousNodeEnv = process.env.NODE_ENV
   process.env.PAYLOAD_DB_PUSH = 'true'
+  process.env.NODE_ENV = 'development'
 
   console.log('[db:push] Synchronisation du schéma Payload…')
-  await getPayload({ config })
-  console.log('[db:push] Schéma synchronisé.')
+
+  try {
+    const payload = await getPayload({ config })
+    // Sanity check : la table journal_posts doit exister après push.
+    await payload.find({ collection: 'journal-posts', limit: 0, overrideAccess: true })
+    console.log('[db:push] Schéma synchronisé.')
+  } finally {
+    if (previousNodeEnv === undefined) {
+      delete process.env.NODE_ENV
+    } else {
+      process.env.NODE_ENV = previousNodeEnv
+    }
+  }
 }
 
 main()
