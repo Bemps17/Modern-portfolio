@@ -65,6 +65,7 @@ export type SiteSettingsContent = {
   legalDirector?: string | null
   legalHostingProvider?: string | null
   footerExtraLine?: string | null
+  footerLinks?: SiteSetting['footerLinks']
   maintenanceMode?: boolean | null
   maintenanceMessage?: string | null
   journalNavLabel?: string | null

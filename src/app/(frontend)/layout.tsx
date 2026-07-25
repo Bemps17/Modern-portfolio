@@ -12,6 +12,7 @@ import { CommandPalette } from '@/components/motion/CommandPalette'
 import { FunEffects } from '@/components/motion/FunEffects'
 import { getAdminHref, getAdminLinkTitle, isAdminLinkVisible } from '@/lib/admin-test-access'
 import { getPublishedProjects, getSiteSettingsContent } from '@/lib/content'
+import { resolveFooterLinks } from '@/lib/footer-links'
 import { resolveMediaUrl } from '@/lib/media'
 import { isPayloadConfigured } from '@/lib/payload-env'
 import { SITE_IMAGES } from '@/lib/site-images'
@@ -78,6 +79,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const adminLinkTitle = getAdminLinkTitle()
   const adminConfigured = isPayloadConfigured()
   const footerExtraLine = settings?.footerExtraLine?.trim() || null
+  const footerLinks = resolveFooterLinks(settings?.footerLinks)
   const showMaintenance = Boolean(settings?.maintenanceMode)
   const journalNavLabel = settings?.journalNavLabel ?? 'Le Lablog'
 
@@ -111,6 +113,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             adminLinkTitle={adminLinkTitle}
             email={email}
             footerExtraLine={footerExtraLine}
+            footerLinks={footerLinks}
             phone={settings?.phone}
             showAdminLink={showAdminLink}
             siteName={siteName}

@@ -1035,6 +1035,17 @@ export interface SiteSetting {
    */
   footerExtraLine?: string | null;
   /**
+   * Liens affichés dans le footer (ex. mentions légales, confidentialité, GitHub). Si vide, les liens légaux par défaut sont utilisés.
+   */
+  footerLinks?:
+    | {
+        label: string;
+        href: string;
+        openInNewTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * Libellé navigation (sidebar / mobile).
    */
   journalNavLabel?: string | null;
@@ -1235,6 +1246,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   legalDirector?: T;
   legalHostingProvider?: T;
   footerExtraLine?: T;
+  footerLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        openInNewTab?: T;
+        id?: T;
+      };
   journalNavLabel?: T;
   journalTitle?: T;
   journalEyebrow?: T;

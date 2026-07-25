@@ -4,10 +4,34 @@ import { Lock } from 'lucide-react'
 import { ContactLink } from '@/components/ui/ContactLink'
 import { ReadableSurface } from '@/components/ui/ReadableSurface'
 import { Container } from '@/components/ui/Container'
+import type { FooterLink } from '@/lib/footer-links'
 import { cn } from '@/lib/utils'
 
 function isAdminGatewayHref(href: string): boolean {
   return href.startsWith('/api/admin/')
+}
+
+function isExternalHref(href: string): boolean {
+  return /^https?:\/\//i.test(href) || href.startsWith('//')
+}
+
+function FooterNavLink({ link }: { link: FooterLink }) {
+  const className = 'text-link text-xs'
+  const openInNewTab = Boolean(link.openInNewTab) || isExternalHref(link.href)
+
+  if (openInNewTab) {
+    return (
+      <a className={className} href={link.href} rel="noopener noreferrer" target="_blank">
+        {link.label}
+      </a>
+    )
+  }
+
+  return (
+    <Link className={className} href={link.href}>
+      {link.label}
+    </Link>
+  )
 }
 
 type FooterProps = {
@@ -15,6 +39,7 @@ type FooterProps = {
   email?: string | null
   phone?: string | null
   footerExtraLine?: string | null
+  footerLinks?: FooterLink[]
   adminHref?: string | null
   adminLinkTitle?: string
   showAdminLink?: boolean
@@ -26,6 +51,7 @@ export function Footer({
   email,
   phone,
   footerExtraLine,
+  footerLinks = [],
   adminHref = '/admin/login',
   adminLinkTitle = 'Backoffice Payload CMS',
   showAdminLink = true,
@@ -83,24 +109,14 @@ export function Footer({
                 <span>{footerExtraLine}</span>
               </>
             ) : null}
-            <span aria-hidden className="text-[var(--muted-subtle)]">
-              ·
-            </span>
-            <Link
-              className="text-link text-xs"
-              href="/mentions-legales"
-            >
-              Mentions légales
-            </Link>
-            <span aria-hidden className="text-[var(--muted-subtle)]">
-              ·
-            </span>
-            <Link
-              className="text-link text-xs"
-              href="/confidentialite"
-            >
-              Confidentialité
-            </Link>
+            {footerLinks.map((link, index) => (
+              <span className="contents" key={`${link.href}-${link.label}-${index}`}>
+                <span aria-hidden className="text-[var(--muted-subtle)]">
+                  ·
+                </span>
+                <FooterNavLink link={link} />
+              </span>
+            ))}
           </div>
         </div>
       </ReadableSurface>

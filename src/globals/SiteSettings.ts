@@ -351,6 +351,24 @@ const legalFields: Field[] = [
       description: 'Ligne optionnelle sous le copyright du footer.',
     },
   },
+  {
+    name: 'footerLinks',
+    type: 'array',
+    labels: { singular: 'Lien footer', plural: 'Liens footer' },
+    admin: {
+      description:
+        'Liens affichés dans le footer (ex. mentions légales, confidentialité, GitHub). Si vide, les liens légaux par défaut sont utilisés.',
+    },
+    fields: [
+      { name: 'label', type: 'text', required: true, label: 'Libellé' },
+      { name: 'href', type: 'text', required: true, label: 'URL' },
+      {
+        name: 'openInNewTab',
+        type: 'checkbox',
+        label: 'Ouvrir dans un nouvel onglet',
+      },
+    ],
+  },
 ]
 
 const journalFields: Field[] = [

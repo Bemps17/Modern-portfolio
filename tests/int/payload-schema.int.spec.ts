@@ -72,6 +72,7 @@ describe('Payload schema — collections & globals', () => {
         'skillsSubtitle',
         'themeColor',
         'legalPublisher',
+        'footerLinks',
         'maintenanceMode',
       ]),
     )
