@@ -43,7 +43,8 @@ export function StarshipLiftoffPortal({ active, origin, activeStage }: StarshipL
         <StarshipSvg
           activeStage={activeStage}
           isIgniting={false}
-          isLaunching
+          isLaunching={false}
+          stacked
           onSelect={() => undefined}
         />
       </motion.div>

@@ -284,6 +284,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   }, [phase])
 
   const isFullScreenFlight = phase === 'liftoff' || phase === 'mission'
+  const isStacked = phase !== 'idle'
 
   const selectStage = useCallback((index: number) => {
     if (launchDisabled) return
@@ -382,6 +383,7 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
                         activeStage={activeStage}
                         isIgniting={isIgniting}
                         isLaunching={false}
+                        stacked={isStacked}
                         onSelect={selectStage}
                       />
                     </motion.div>
