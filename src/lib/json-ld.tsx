@@ -61,6 +61,54 @@ export function creativeWorkJsonLd(input: {
   }
 }
 
+export type ArticleJsonLdInput = {
+  headline: string
+  description?: string | null
+  url: string
+  datePublished?: string | null
+  dateModified?: string | null
+  authorName?: string | null
+  image?: string | null
+}
+
+export function articleJsonLd(input: ArticleJsonLdInput) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: input.headline,
+    description: input.description || undefined,
+    url: input.url,
+    datePublished: input.datePublished || undefined,
+    dateModified: input.dateModified || undefined,
+    image: input.image || undefined,
+    author: input.authorName ? { '@type': 'Person', name: input.authorName } : undefined,
+  }
+}
+
+export type ProjectJsonLdInput = {
+  name: string
+  description?: string | null
+  url?: string | null
+  image?: string | null
+  datePublished?: string | null
+  authorName?: string | null
+  keywords?: string[]
+}
+
+export function projectJsonLd(input: ProjectJsonLdInput) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: input.name,
+    description: input.description || undefined,
+    url: input.url || undefined,
+    image: input.image || undefined,
+    datePublished: input.datePublished || undefined,
+    author: input.authorName ? { '@type': 'Person', name: input.authorName } : undefined,
+    keywords: input.keywords?.length ? input.keywords.join(', ') : undefined,
+  }
+}
+
 export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
   return {
     '@context': 'https://schema.org',
