@@ -221,6 +221,69 @@
   color: inherit;
 }
 
+/* Timeline expériences — puce centrée sur l'axe, au-dessus du trait */
+.experience-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.experience-timeline__item {
+  display: flex;
+  gap: 1rem;
+}
+
+.experience-timeline__item + .experience-timeline__item {
+  margin-top: 2rem;
+}
+
+.experience-timeline__track {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  width: 1.125rem;
+}
+
+.experience-timeline__track::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.experience-timeline__item:first-child .experience-timeline__track::before {
+  top: 0.5rem;
+}
+
+.experience-timeline__item:last-child .experience-timeline__track::before {
+  bottom: auto;
+  height: 0.5rem;
+}
+
+.experience-timeline__marker {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0.35rem;
+  border: 2px solid var(--background);
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.experience-timeline__content {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 /* Lien texte accentué (mentions légales, etc.) */
 .text-link {
   display: inline-flex;
