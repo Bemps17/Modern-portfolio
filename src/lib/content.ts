@@ -11,6 +11,7 @@ import type {
 
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
+import { resolveJournalCopy, resolvePublishedJournalPosts } from './journal-content'
 import type { SeoDefaultsContent } from './seo-metadata'
 
 export { type SeoDefaultsContent } from './seo-metadata'
@@ -100,13 +101,24 @@ function withEditorialFallback(
         : fb.showRqthOnCv,
     languages: settings.languages?.length ? settings.languages : fb.languages,
     cvCompetencies: settings.cvCompetencies?.length ? settings.cvCompetencies : fb.cvCompetencies,
-    journalNavLabel:
-      ('journalNavLabel' in settings && settings.journalNavLabel?.trim()) || fb.journalNavLabel,
-    journalTitle: ('journalTitle' in settings && settings.journalTitle?.trim()) || fb.journalTitle,
-    journalEyebrow:
-      ('journalEyebrow' in settings && settings.journalEyebrow?.trim()) || fb.journalEyebrow,
-    journalSubtitle:
-      ('journalSubtitle' in settings && settings.journalSubtitle?.trim()) || fb.journalSubtitle,
+    journalNavLabel: resolveJournalCopy(
+      'journalNavLabel' in settings ? settings.journalNavLabel : null,
+      fb.journalNavLabel ?? 'Le Lablog',
+    ),
+    journalTitle: resolveJournalCopy(
+      'journalTitle' in settings ? settings.journalTitle : null,
+      fb.journalTitle ?? 'Le Lablog',
+    ),
+    journalEyebrow: resolveJournalCopy(
+      'journalEyebrow' in settings ? settings.journalEyebrow : null,
+      fb.journalEyebrow ?? 'La blague du labo',
+      ['Créations & veille'],
+    ),
+    journalSubtitle: resolveJournalCopy(
+      'journalSubtitle' in settings ? settings.journalSubtitle : null,
+      fb.journalSubtitle ?? '',
+      ['Créations IA, expérimentations visuelles et notes du moment — un skyblog 2026.'],
+    ),
   }
 }
 
@@ -330,7 +342,7 @@ export async function getPublishedJournalPosts(): Promise<JournalPost[]> {
         depth: 1,
         limit: 100,
       })
-      return result.docs
+      return resolvePublishedJournalPosts(result.docs, portfolioFallback.journalPosts)
     } catch (error) {
       console.warn('[content] journal-posts indisponible — fallback démo', error)
       return portfolioFallback.journalPosts

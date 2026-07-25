@@ -11,6 +11,7 @@ import { getPayload } from 'payload'
 
 import { LABLOG_ARTICLES } from '../src/data/lablog-articles'
 import { lablogCoverPublicPath } from '../src/data/lablog-article-types'
+import { portfolioFallback } from '../src/data/portfolio-fallback'
 import { blocksToLexical } from '../src/lib/lexical-content'
 import config from '../src/payload.config'
 
@@ -78,8 +79,26 @@ async function upsertJournalPost(
   })
 }
 
+async function syncJournalSiteSettings(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const { journalNavLabel, journalTitle, journalEyebrow, journalSubtitle } =
+    portfolioFallback.siteSettings
+
+  await payload.updateGlobal({
+    slug: 'site-settings',
+    data: {
+      journalNavLabel,
+      journalTitle,
+      journalEyebrow,
+      journalSubtitle,
+    },
+  })
+  console.log('✓ site-settings journal (Le Lablog)')
+}
+
 async function main() {
   const payload = await getPayload({ config: await config })
+
+  await syncJournalSiteSettings(payload)
 
   const coversDir = path.join(process.cwd(), 'public/carnet')
   if (!fs.existsSync(coversDir)) {

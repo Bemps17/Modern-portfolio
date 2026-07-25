@@ -348,6 +348,10 @@ async function seed() {
       footerExtraLine: siteSettings.footerExtraLine,
       maintenanceMode: siteSettings.maintenanceMode,
       maintenanceMessage: siteSettings.maintenanceMessage,
+      journalNavLabel: siteSettings.journalNavLabel,
+      journalTitle: siteSettings.journalTitle,
+      journalEyebrow: siteSettings.journalEyebrow,
+      journalSubtitle: siteSettings.journalSubtitle,
       // Ne jamais écraser l’avatar CMS (PictureProfile1, etc.)
       ...(existingSettings.avatar != null ? { avatar: existingSettings.avatar } : {}),
     },

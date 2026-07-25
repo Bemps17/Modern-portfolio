@@ -43,7 +43,7 @@ function SocialIcon({ platform }: { platform?: string | null }) {
   return <Mail className="h-4 w-4" />
 }
 
-export function Sidebar({ siteName, journalNavLabel = 'Carnet', socialLinks, logoUrl }: SidebarProps) {
+export function Sidebar({ siteName, journalNavLabel = 'Le Lablog', socialLinks, logoUrl }: SidebarProps) {
   const pathname = usePathname()
   const nav = buildNav(journalNavLabel)
 
