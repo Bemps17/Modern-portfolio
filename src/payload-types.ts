@@ -1044,6 +1044,10 @@ export interface SiteSetting {
   journalTitle?: string | null;
   journalEyebrow?: string | null;
   journalSubtitle?: string | null;
+  /**
+   * Articles Lablog mis en avant sur l’accueil (max 3).
+   */
+  featuredJournalPosts?: (number | JournalPost)[] | null;
   maintenanceMode?: boolean | null;
   /**
    * Message affiché dans le bandeau maintenance.
@@ -1235,6 +1239,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   journalTitle?: T;
   journalEyebrow?: T;
   journalSubtitle?: T;
+  featuredJournalPosts?: T;
   maintenanceMode?: T;
   maintenanceMessage?: T;
   updatedAt?: T;

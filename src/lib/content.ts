@@ -13,6 +13,7 @@ import type {
 import { getPayloadClientSafe } from './payload'
 import { isPayloadConfigured } from './payload-env'
 import { resolveJournalCopy, resolveJournalPostBySlug, resolvePublishedJournalPosts } from './journal-content'
+import { resolveFeaturedJournalPosts } from './featured-journal'
 import { filterJournalPostsByTagSlug } from './journal-tags'
 import type { SeoDefaultsContent } from './seo-metadata'
 
@@ -411,4 +412,32 @@ export async function getJournalPostBySlug(
 export async function getJournalSlugs(): Promise<string[]> {
   const posts = await getPublishedJournalPosts()
   return posts.map((post) => post.slug)
+}
+
+export async function getFeaturedJournalPosts(): Promise<JournalPost[]> {
+  const payload = await getPayloadClientSafe()
+  if (!payload) return []
+
+  try {
+    const settings = await payload.findGlobal({ slug: 'site-settings', depth: 0 })
+    const featuredRefs = settings.featuredJournalPosts
+    if (!featuredRefs?.length) return []
+
+    const featuredIds = featuredRefs.map((ref) =>
+      typeof ref === 'number' ? ref : ref.id,
+    )
+
+    const result = await payload.find({
+      collection: 'journal-posts',
+      where: { status: { equals: 'published' } },
+      sort: '-publishedAt',
+      depth: 1,
+      limit: 100,
+    })
+
+    return resolveFeaturedJournalPosts(featuredIds, result.docs)
+  } catch (error) {
+    console.warn('[content] featured journal-posts indisponible', error)
+    return []
+  }
 }

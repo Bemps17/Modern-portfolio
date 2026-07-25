@@ -377,6 +377,14 @@ const journalFields: Field[] = [
     defaultValue:
       'Entre le labo, le blog et la blague — créations IA, galeries visuelles et articles du moment. Skyblog 2026, version sérieuse (enfin, on essaie).',
   },
+  {
+    name: 'featuredJournalPosts',
+    type: 'relationship',
+    relationTo: 'journal-posts',
+    hasMany: true,
+    maxRows: 3,
+    admin: { description: 'Articles Lablog mis en avant sur l’accueil (max 3).' },
+  },
 ]
 
 const advancedFields: Field[] = [

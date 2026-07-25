@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import { BootSequence } from '@/components/motion/BootSequence'
 import { ContactCTA } from '@/components/sections/ContactCTA'
+import { FeaturedJournalPosts } from '@/components/sections/FeaturedJournalPosts'
 import { Hero } from '@/components/sections/Hero'
 import { ProjectGrid } from '@/components/sections/ProjectGrid'
 import { StarshipCutaway } from '@/components/sections/StarshipCutaway'
@@ -12,6 +13,7 @@ import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Button } from '@/components/ui/Button'
 import type { AvailabilityStatus } from '@/components/ui/AvailabilityBadge'
 import {
+  getFeaturedJournalPosts,
   getFeaturedProjects,
   getSeoDefaultsContent,
   getSiteSettingsContent,
@@ -32,10 +34,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [settings, seo, featured, skills] = await Promise.all([
+  const [settings, seo, featured, featuredJournalPosts, skills] = await Promise.all([
     getSiteSettingsContent(),
     getSeoDefaultsContent(),
     getFeaturedProjects(),
+    getFeaturedJournalPosts(),
     getSkills(),
   ])
 
@@ -119,6 +122,16 @@ export default async function HomePage() {
           </div>
         </ReadableSurface>
       </Container>
+      {featuredJournalPosts.length > 0 ? (
+        <Container className="py-10 sm:py-12" id="lablog-une">
+          <FeaturedJournalPosts
+            eyebrow={settings?.journalEyebrow}
+            posts={featuredJournalPosts}
+            subtitle={settings?.journalSubtitle}
+            title={settings?.journalTitle}
+          />
+        </Container>
+      ) : null}
       <ContactCTA email={settings?.email} location={settings?.location} />
     </BootSequence>
   )
