@@ -242,6 +242,7 @@ export const JournalPosts: CollectionConfig = {
             title: data.title,
             excerpt: data.excerpt,
             category: data.category,
+            content: data.content ?? originalDoc?.content,
           })
           data.content = applied.content
           if (applied.title) data.title = applied.title
