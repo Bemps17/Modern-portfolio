@@ -22,6 +22,8 @@
     "db:push": "cross-env PAYLOAD_DB_PUSH=true NODE_OPTIONS=--no-deprecation tsx scripts/push-payload-schema.ts",
     "sync:github": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/sync-github-projects.ts",
     "generate:covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/generate-project-covers.ts",
+    "generate:lablog-covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/generate-lablog-covers.ts",
+    "seed:lablog": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-lablog-articles.ts",
     "resync:covers": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/resync-project-covers.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts --no-file-parallelism",
     "test:payload": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts --project node-payload --no-file-parallelism",

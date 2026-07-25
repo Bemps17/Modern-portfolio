@@ -1,5 +1,7 @@
 import type { Experience, JournalPost, Media, Project, Qualification, Skill } from '@/payload-types'
 
+import { buildLablogFallbackPosts } from './lablog-fallback'
+
 const LEGACY_SITE = 'https://projet-refonte-portfolio-persov1-0.vercel.app'
 
 function legacyMedia(path: string | null, alt: string): Media | null {
@@ -16,37 +18,6 @@ function legacyMedia(path: string | null, alt: string): Media | null {
     updatedAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
   } as Media
-}
-
-function lexicalParagraph(text: string): JournalPost['content'] {
-  return {
-    root: {
-      type: 'root',
-      format: '',
-      indent: 0,
-      version: 1,
-      children: [
-        {
-          type: 'paragraph',
-          format: '',
-          indent: 0,
-          version: 1,
-          children: [
-            {
-              type: 'text',
-              detail: 0,
-              format: 0,
-              mode: 'normal',
-              style: '',
-              text,
-              version: 1,
-            },
-          ],
-        },
-      ],
-      direction: 'ltr',
-    },
-  }
 }
 
 type LegacyProject = {
@@ -543,95 +514,7 @@ export const portfolioFallback = {
     schemaAuthorName: 'Bertrand Fouquet',
   },
   projects: legacyProjects.map(toProject),
-  journalPosts: [
-    {
-      id: 1,
-      postType: 'article',
-      title: 'Première génération d’illustrations IA',
-      slug: 'premiere-generation-ia',
-      excerpt:
-        'Tests Midjourney et Flux sur des prompts visuels — notes de bord du Lablog.',
-      content: lexicalParagraph(
-        'Première série d’expérimentations : palettes néon, compositions type affiche et itérations rapides avec des prompts courts.',
-      ),
-      cover: legacyMedia('/images/profil-picNb.png', 'Illustration IA expérimentale') as Media,
-      gallery: [],
-      galleryLayout: 'grid',
-      category: 'ia',
-      publishedAt: '2026-07-20T10:00:00.000Z',
-      status: 'published',
-      order: 0,
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 2,
-      postType: 'gallery',
-      galleryLayout: 'slideshow',
-      title: 'Série visuelle IA — juillet 2026',
-      slug: 'serie-visuelle-ia-juillet-2026',
-      excerpt: 'Diaporama de créations du moment — entre tests de prompts et happy accidents.',
-      content: null,
-      cover: legacyMedia('/projects/modern-portfolio-cover.webp', 'Création IA — couverture') as Media,
-      gallery: [
-        {
-          id: 'g1',
-          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Variante 1') as Media,
-          caption: 'Variante palette chaude',
-        },
-        {
-          id: 'g2',
-          image: legacyMedia('/images/profil-picNb.png', 'Variante 2') as Media,
-          caption: 'Portrait stylisé',
-        },
-        {
-          id: 'g3',
-          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Variante 3') as Media,
-          caption: 'Composition finale',
-        },
-      ],
-      category: 'ia',
-      publishedAt: '2026-07-18T16:00:00.000Z',
-      status: 'published',
-      order: 1,
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 3,
-      postType: 'gallery',
-      galleryLayout: 'grid',
-      title: 'Moodboard veille créative',
-      slug: 'moodboard-veille-creative',
-      excerpt: 'Grille de références et captures — veille outils, UI et trends visuelles.',
-      content: null,
-      cover: legacyMedia('/projects/modern-portfolio-cover.webp', 'Moodboard veille') as Media,
-      gallery: [
-        {
-          id: 'g4',
-          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Référence UI') as Media,
-        },
-        {
-          id: 'g5',
-          image: legacyMedia('/images/profil-picNb.png', 'Référence typo') as Media,
-        },
-        {
-          id: 'g6',
-          image: legacyMedia('/projects/modern-portfolio-cover.webp', 'Référence couleur') as Media,
-        },
-        {
-          id: 'g7',
-          image: legacyMedia('/images/profil-picNb.png', 'Référence layout') as Media,
-        },
-      ],
-      category: 'veille',
-      publishedAt: '2026-07-15T14:30:00.000Z',
-      status: 'published',
-      order: 2,
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    },
-  ] satisfies JournalPost[],
+  journalPosts: buildLablogFallbackPosts() satisfies JournalPost[],
   experiences: [
     {
       id: 1,

@@ -21,6 +21,9 @@ const nextConfig: NextConfig = {
       {
         pathname: '/projects/**',
       },
+      {
+        pathname: '/carnet/**',
+      },
     ],
     remotePatterns: [
       {
