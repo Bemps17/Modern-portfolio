@@ -369,6 +369,42 @@
   backdrop-filter: blur(6px);
 }
 
+/* Vol plein écran — au-dessus sidebar/header, sous curseur custom */
+.starship-liftoff-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: visible;
+}
+
+.starship-liftoff-layer__craft {
+  position: fixed;
+  z-index: 2;
+}
+
+.starship-liftoff-layer__trail {
+  pointer-events: none;
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  width: min(28vw, 220px);
+  height: 100vh;
+  translate: -50% 0;
+  background: linear-gradient(
+    to top,
+    rgb(255 107 26 / 0.22) 0%,
+    rgb(255 194 102 / 0.12) 35%,
+    transparent 72%
+  );
+  filter: blur(18px);
+}
+
+.starship-pad--liftoff {
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+
 /* Lien texte accentué (mentions légales, etc.) */
 .text-link {
   display: inline-flex;

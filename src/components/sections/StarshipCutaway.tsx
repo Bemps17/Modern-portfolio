@@ -3,11 +3,12 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Rocket } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { LaunchEffects } from '@/components/sections/starship/LaunchEffects'
 import { LaunchPad } from '@/components/sections/starship/LaunchPad'
 import { MiniRocket } from '@/components/sections/starship/MiniRocket'
+import { StarshipLiftoffPortal } from '@/components/sections/starship/StarshipLiftoffPortal'
 import { StarshipSvg } from '@/components/sections/starship/StarshipSvg'
 import { useLaunchSequence } from '@/components/sections/starship/useLaunchSequence'
 import type { LaunchPhase } from '@/components/sections/starship/constants'
@@ -256,12 +257,33 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
   const router = useRouter()
   const reduceMotion = useReducedMotion()
   const [activeStage, setActiveStage] = useState(0)
+  const rocketAnchorRef = useRef<HTMLDivElement>(null)
+  const [liftoffOrigin, setLiftoffOrigin] = useState<DOMRect | null>(null)
 
-  const { phase, countdown, handleLaunch, launchDisabled, isLaunching, isIgniting, isMission } =
+  const { phase, countdown, handleLaunch, launchDisabled, isIgniting, isMission } =
     useLaunchSequence({
       reduceMotion,
       onComplete: () => router.push('/contact'),
     })
+
+  useEffect(() => {
+    if (phase === 'liftoff') {
+      const frame = requestAnimationFrame(() => {
+        const node = rocketAnchorRef.current
+        if (node) setLiftoffOrigin(node.getBoundingClientRect())
+      })
+      return () => cancelAnimationFrame(frame)
+    }
+
+    if (phase === 'idle') {
+      const frame = requestAnimationFrame(() => setLiftoffOrigin(null))
+      return () => cancelAnimationFrame(frame)
+    }
+
+    return undefined
+  }, [phase])
+
+  const isFullScreenFlight = phase === 'liftoff' || phase === 'mission'
 
   const selectStage = useCallback((index: number) => {
     if (launchDisabled) return
@@ -300,7 +322,18 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
         onSelect={selectStage}
       />
 
-      <div className="mt-8 hidden overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[var(--background-elevated)] xl:block sm:mt-10">
+      <StarshipLiftoffPortal
+        active={isFullScreenFlight && liftoffOrigin !== null}
+        activeStage={activeStage}
+        origin={liftoffOrigin}
+      />
+
+      <div
+        className={cn(
+          'mt-8 hidden rounded-3xl border border-[color:var(--border)] bg-[var(--background-elevated)] xl:block sm:mt-10',
+          isFullScreenFlight ? 'overflow-visible' : 'overflow-hidden',
+        )}
+      >
         <div className="relative px-8 py-10">
           <AnimatePresence>
             {isMission ? (
@@ -324,38 +357,37 @@ export function StarshipCutaway({ subtitle }: StarshipCutawayProps) {
 
           <div className="grid items-start gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
             <div className="flex flex-col items-center">
-              <motion.div
-                animate={phase === 'liftoff' ? { y: -24 } : { y: 0 }}
-                className="relative w-full max-w-[340px]"
-                transition={{ duration: 2.2, ease: 'easeIn' }}
-              >
-                <LaunchPad phase={phase}>
+              <div className="relative w-full max-w-[340px]">
+                <LaunchPad className={isFullScreenFlight ? 'starship-pad--liftoff' : undefined} phase={phase}>
                   <LaunchEffects countdown={countdown} phase={phase} />
-                  <motion.div
-                    animate={
-                      phase === 'liftoff'
-                        ? { y: [0, -48], opacity: [1, 0], filter: ['blur(0px)', 'blur(2px)'] }
-                        : phase === 'countdown' || phase === 'ignition'
-                          ? { y: [-1.5, 1.5, -1.5] }
-                          : { y: [0, -3, 0] }
-                    }
-                    transition={
-                      phase === 'idle'
-                        ? { duration: 4, repeat: Infinity, ease: 'easeInOut' }
-                        : phase === 'countdown' || phase === 'ignition'
-                          ? { duration: 0.18, repeat: Infinity, ease: 'easeInOut' }
-                          : { duration: 2.2, ease: 'easeIn' }
-                    }
-                  >
-                    <StarshipSvg
-                      activeStage={activeStage}
-                      isIgniting={isIgniting}
-                      isLaunching={isLaunching}
-                      onSelect={selectStage}
-                    />
-                  </motion.div>
+                  <div ref={rocketAnchorRef}>
+                    <motion.div
+                      animate={
+                        isFullScreenFlight
+                          ? { opacity: 0 }
+                          : phase === 'countdown' || phase === 'ignition'
+                            ? { y: [-1.5, 1.5, -1.5], opacity: 1 }
+                            : { y: [0, -3, 0], opacity: 1 }
+                      }
+                      className={cn(isFullScreenFlight && 'pointer-events-none')}
+                      transition={
+                        phase === 'idle'
+                          ? { duration: 4, repeat: Infinity, ease: 'easeInOut' }
+                          : phase === 'countdown' || phase === 'ignition'
+                            ? { duration: 0.18, repeat: Infinity, ease: 'easeInOut' }
+                            : { duration: 0.25 }
+                      }
+                    >
+                      <StarshipSvg
+                        activeStage={activeStage}
+                        isIgniting={isIgniting}
+                        isLaunching={false}
+                        onSelect={selectStage}
+                      />
+                    </motion.div>
+                  </div>
                 </LaunchPad>
-              </motion.div>
+              </div>
               <p className="mt-3 text-center font-[family-name:var(--font-space-grotesk)] text-[10px] tracking-[0.18em] text-[var(--muted)] uppercase">
                 Cliquez un étage pour séparer les couches
               </p>

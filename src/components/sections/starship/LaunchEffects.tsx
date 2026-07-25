@@ -7,6 +7,7 @@ import type { LaunchPhase } from './constants'
 type LaunchEffectsProps = {
   phase: LaunchPhase
   countdown: number | null
+  variant?: 'embedded' | 'flight'
 }
 
 const SMOKE_PARTICLES = [
@@ -16,15 +17,21 @@ const SMOKE_PARTICLES = [
   { id: 'd', x: -6, delay: 0.42 },
 ] as const
 
-export function LaunchEffects({ phase, countdown }: LaunchEffectsProps) {
-  const showCountdown = phase === 'countdown' && countdown !== null
-  const showPreIgnition = phase === 'countdown' || phase === 'ignition'
-  const showLiftoff = phase === 'liftoff'
+export function LaunchEffects({ phase, countdown, variant = 'embedded' }: LaunchEffectsProps) {
+  const showCountdown = variant === 'embedded' && phase === 'countdown' && countdown !== null
+  const showPreIgnition = variant === 'embedded' && (phase === 'countdown' || phase === 'ignition')
+  const showLiftoff = phase === 'liftoff' && variant === 'flight'
+  const exhaustPositionClass =
+    variant === 'flight'
+      ? 'pointer-events-none absolute -bottom-10 left-1/2 z-0 flex -translate-x-1/2 flex-col items-center'
+      : 'pointer-events-none absolute -bottom-8 left-1/2 z-0 flex -translate-x-1/2 flex-col items-center'
 
   return (
     <>
-      <AnimatePresence>
-        {showCountdown ? (
+      {variant === 'embedded' ? (
+        <>
+          <AnimatePresence>
+            {showCountdown ? (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
             className="starship-countdown-ring"
@@ -41,20 +48,22 @@ export function LaunchEffects({ phase, countdown }: LaunchEffectsProps) {
               T−{countdown}
             </span>
           </motion.div>
-        ) : null}
-      </AnimatePresence>
+            ) : null}
+          </AnimatePresence>
 
-      <AnimatePresence>
-        {phase === 'ignition' ? (
-          <motion.div
-            animate={{ opacity: [0, 0.38, 0] }}
-            className="pointer-events-none absolute inset-0 z-[15] rounded-[1.25rem] bg-[var(--accent)]"
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          />
-        ) : null}
-      </AnimatePresence>
+          <AnimatePresence>
+            {phase === 'ignition' ? (
+              <motion.div
+                animate={{ opacity: [0, 0.38, 0] }}
+                className="pointer-events-none absolute inset-0 z-[15] rounded-[1.25rem] bg-[var(--accent)]"
+                exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+              />
+            ) : null}
+          </AnimatePresence>
+        </>
+      ) : null}
 
       {showPreIgnition ? (
         <div aria-hidden className="pointer-events-none absolute -bottom-2 left-1/2 z-0 -translate-x-1/2">
@@ -81,7 +90,7 @@ export function LaunchEffects({ phase, countdown }: LaunchEffectsProps) {
       ) : null}
 
       {showLiftoff ? (
-        <div aria-hidden className="pointer-events-none absolute -bottom-8 left-1/2 z-0 flex -translate-x-1/2 flex-col items-center">
+        <div aria-hidden className={exhaustPositionClass}>
           <motion.div
             animate={{ opacity: [0.95, 1, 0.8], scaleY: [0.85, 1.6, 2.4], scaleX: [0.9, 1.15, 1.35] }}
             className="h-20 w-5 rounded-full bg-gradient-to-t from-white via-[var(--accent-soft)] to-transparent blur-[1px]"
