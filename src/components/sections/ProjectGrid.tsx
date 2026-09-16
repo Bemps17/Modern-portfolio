@@ -30,14 +30,11 @@ type ProjectGridProps = {
   enableFilters?: boolean
   breatheFeatured?: boolean
   layoutMode?: 'grid' | 'masonry'
-  enablePreview?: boolean
   showStackChips?: boolean
   /** Affiche « 01 — » sur les cartes. */
   showIndex?: boolean
   /** Limite le nombre de projets affichés (accueil). */
   limit?: number
-  /** Tilt 3D — off recommandé sur /projets (beaucoup de cartes). */
-  enableTilt?: boolean
 }
 
 function masonryClass(project: Project, index: number): string {
@@ -51,11 +48,9 @@ export function ProjectGrid({
   enableFilters = false,
   breatheFeatured = false,
   layoutMode = 'grid',
-  enablePreview = false,
   showStackChips = true,
   showIndex = false,
   limit,
-  enableTilt = true,
 }: ProjectGridProps) {
   const [active, setActive] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -200,8 +195,6 @@ export function ProjectGrid({
           const large = layoutMode === 'masonry' && !!project.featured && index < 2
           const card = (
             <ProjectCard
-              enablePreview={enablePreview}
-              enableTilt={enableTilt}
               index={showIndex ? index + 1 : undefined}
               large={large}
               project={project}

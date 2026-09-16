@@ -583,14 +583,6 @@ a {
   color: white;
 }
 
-@media (pointer: fine) {
-  body.custom-cursor-active,
-  body.custom-cursor-active a,
-  body.custom-cursor-active button {
-    cursor: none;
-  }
-}
-
 ::-webkit-scrollbar {
   width: 10px;
 }

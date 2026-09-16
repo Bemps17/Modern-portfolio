@@ -44,13 +44,7 @@ export default async function ProjetsPage() {
           subtitle="Filtrez par stack si besoin — chaque carte mène au détail."
           title="Projets"
         />
-        <ProjectGrid
-          enableFilters
-          enableTilt={false}
-          layoutMode="grid"
-          projects={projects}
-          showStackChips
-        />
+        <ProjectGrid enableFilters layoutMode="grid" projects={projects} showStackChips />
       </ReadableSurface>
     </Container>
   )

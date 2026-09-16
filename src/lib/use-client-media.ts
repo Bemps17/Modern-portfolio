@@ -16,9 +16,3 @@ export function useMediaQuery(query: string, serverFallback = false) {
   )
 }
 
-/** Desktop pointer + motion autorisée (mesh, glow, curseur custom). */
-export function useRichMotionEffects() {
-  const finePointer = useMediaQuery('(pointer: fine)')
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-  return finePointer && !reduceMotion
-}

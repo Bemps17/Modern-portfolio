@@ -1,7 +1,6 @@
 'use client'
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 
 import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren'
 import { Container } from '@/components/ui/Container'
@@ -20,49 +19,14 @@ type ApproachSectionProps = {
 }
 
 function ApproachCard({ step, index }: { step: ApproachStep; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
-  const rotateX = useMotionValue(0)
-  const rotateY = useMotionValue(0)
-  const springX = useSpring(rotateX, { stiffness: 220, damping: 20 })
-  const springY = useSpring(rotateY, { stiffness: 220, damping: 20 })
-  const [glow, setGlow] = useState({ x: 50, y: 50 })
 
   return (
     <motion.div
       className="h-full"
-      onMouseLeave={() => {
-        rotateX.set(0)
-        rotateY.set(0)
-        setGlow({ x: 50, y: 50 })
-      }}
-      onMouseMove={(event) => {
-        if (reduceMotion || !ref.current) return
-        const rect = ref.current.getBoundingClientRect()
-        const x = event.clientX - rect.left
-        const y = event.clientY - rect.top
-        rotateX.set((y - rect.height / 2) / 16)
-        rotateY.set((rect.width / 2 - x) / 16)
-        setGlow({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 })
-      }}
-      ref={ref}
-      style={
-        reduceMotion
-          ? undefined
-          : { rotateX: springX, rotateY: springY, transformStyle: 'preserve-3d', perspective: 900 }
-      }
       whileHover={reduceMotion ? undefined : { y: -6 }}
     >
-          <GlassCard className="group relative h-full overflow-hidden p-6">
-        {!reduceMotion ? (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            style={{
-              background: `radial-gradient(220px circle at ${glow.x}% ${glow.y}%, var(--accent-glow), transparent 70%)`,
-            }}
-          />
-        ) : null}
+      <GlassCard className="group relative h-full overflow-hidden p-6">
         <motion.span
           aria-hidden
           className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.2em] text-[var(--accent-soft)] uppercase"
@@ -73,7 +37,9 @@ function ApproachCard({ step, index }: { step: ApproachStep; index: number }) {
         <h3 className="relative mt-3 font-[family-name:var(--font-syne)] text-xl font-semibold">
           {step.title}
         </h3>
-        <p className="relative mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">{step.description}</p>
+        <p className="relative mt-2 text-sm leading-relaxed text-[var(--foreground-secondary)]">
+          {step.description}
+        </p>
       </GlassCard>
     </motion.div>
   )
